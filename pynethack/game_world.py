@@ -56,7 +56,7 @@ class GameWorld(esper.World):
         self.add_processor(InputProcessor(), 2)
         self.add_processor(RenderProcessor(), 1)
 
-        dungeon = DungeonConfig(5, 25, 5, 10, 50, 50)
+        dungeon = DungeonConfig(4, 10, 8, 16, 50, 50)
         self.publish(DungeonGenerationEvent(dungeon))
 
     def is_running(self) -> bool:
