@@ -6,13 +6,79 @@ from typing import Tuple, List
 import pygame
 
 
-class Tile(Enum):
+class TileType(Enum):
     VOID = 0,
     WALL = 1,
     GROUND = 2,
-    HDOOR = 3,
-    VDOOR = 4,
-    CORRIDOR = 5,
+    DOOR = 3
+
+
+class WallType(Enum):
+    HORIZONTAL_WALL = 0,
+    VERTICAL_WALL = 1,
+    TOP_LEFT_CORNER_WALL = 2,
+    TOP_RIGHT_CORNER_WALL = 3,
+    BOTTOM_LEFT_CORNER_WALL = 4,
+    BOTTOM_RIGHT_CORNER_WALL = 5,
+
+
+class DoorType(Enum):
+    HDOOR = 0,
+    VDOOR = 1,
+
+
+class GroundType(Enum):
+    GROUND = 0,
+    CORRIDOR = 1,
+
+
+class VoidType(Enum):
+    VOID = 0,
+
+
+class Tile:
+    def __init__(self):
+        pass
+
+
+class VoidTile(Tile):
+    def __init__(self, void_type: VoidType = VoidType.VOID):
+        super().__init__()
+        self.void_type = void_type
+
+
+class WallTile(Tile):
+    def __init__(self, wall_type: WallType):
+        super().__init__()
+        self.wall_type = wall_type
+
+
+class GroundTile(Tile):
+    def __init__(self, ground_type: GroundType):
+        super().__init__()
+        self.ground_type = ground_type
+
+
+class DoorTile(Tile):
+    def __init__(self, door_type: DoorType):
+        super().__init__()
+        self.door_type = door_type
+
+
+VOID_TILE = VoidTile()
+
+VWALL_TILE = WallTile(WallType.VERTICAL_WALL)
+HWALL_TILE = WallTile(WallType.HORIZONTAL_WALL)
+TLWALL_TILE = WallTile(WallType.TOP_LEFT_CORNER_WALL)
+BLWALL_TILE = WallTile(WallType.BOTTOM_LEFT_CORNER_WALL)
+TRWALL_TILE = WallTile(WallType.TOP_RIGHT_CORNER_WALL)
+BRWALL_TILE = WallTile(WallType.BOTTOM_RIGHT_CORNER_WALL)
+
+GROUND_TILE = GroundTile(GroundType.GROUND)
+CORRIDOR_TILE = GroundTile(GroundType.CORRIDOR)
+
+HDOOR_TILE = DoorTile(DoorType.HDOOR)
+VDOOR_TILE = DoorTile(DoorType.VDOOR)
 
 
 class Room:

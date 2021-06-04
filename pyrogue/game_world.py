@@ -4,6 +4,8 @@ from roguengine import esper
 from roguengine.component.ai import AIComponent, State
 from roguengine.component.armor import ArmorComponent
 from roguengine.component.armor_slot import ArmorSlotComponent
+from roguengine.component.dungeon import VWALL_TILE, HWALL_TILE, TLWALL_TILE, BLWALL_TILE, TRWALL_TILE, BRWALL_TILE, GROUND_TILE, CORRIDOR_TILE, \
+    HDOOR_TILE, VDOOR_TILE
 from roguengine.component.dungeon_resident import DungeonResidentComponent
 from roguengine.component.fighter import FighterComponent, Type
 from roguengine.component.gold import GoldComponent
@@ -15,7 +17,7 @@ from roguengine.component.weapon_slot import WeaponSlotComponent
 from roguengine.component.window import WindowComponent
 from roguengine.event.dungeon_generation import DungeonGenerationEvent
 from roguengine.processor.ai import AIProcessor
-from roguengine.processor.dungeon import DungeonGenerator, DungeonConfig, Tile, DungeonCreator, \
+from roguengine.processor.dungeon import DungeonGenerator, DungeonConfig, DungeonCreator, \
     DungeonFiller, DungeonResidents, \
     DungeonResident
 from roguengine.processor.fight import FightProcessor
@@ -126,20 +128,36 @@ class GameWorld(esper.World):
         yellow_char_sprites = get_char_sprites(pygame.Color(128, 128, 0))
         grey_char_sprites = get_char_sprites(pygame.Color(128, 128, 128))
 
+        wall_sprite = pygame.transform.scale2x(get_sprite(32 * 8, 2 * 8, 8, 8, pygame.Color(80, 80, 100)))
+        ground_sprite = pygame.transform.scale2x(get_sprite(11 * 8, 2 * 8, 8, 8, pygame.Color(0, 192, 32)))
+        hdoor_sprite = pygame.transform.scale2x(get_sprite(46 * 8, 2 * 8, 8, 8, pygame.Color(135, 113, 69)))
+        vdoor_sprite = pygame.transform.scale2x(get_sprite(45 * 8, 2 * 8, 8, 8, pygame.Color(135, 113, 69)))
+        corridor_sprite = pygame.transform.scale2x(get_sprite(41 * 8, 2 * 8, 8, 8, pygame.Color(140, 140, 140)))
+
         tile_sprites = {
-            Tile.WALL: pygame.transform.scale2x(get_sprite(32 * 8, 2 * 8, 8, 8, pygame.Color(80, 80, 100))),
-            Tile.GROUND: pygame.transform.scale2x(get_sprite(11 * 8, 2 * 8, 8, 8, pygame.Color(0, 192, 32))),
-            Tile.HDOOR: pygame.transform.scale2x(get_sprite(46 * 8, 2 * 8, 8, 8, pygame.Color(135, 113, 69))),
-            Tile.VDOOR: pygame.transform.scale2x(get_sprite(45 * 8, 2 * 8, 8, 8, pygame.Color(135, 113, 69))),
-            Tile.CORRIDOR: pygame.transform.scale2x(get_sprite(41 * 8, 2 * 8, 8, 8, pygame.Color(140, 140, 140)))
+            VWALL_TILE: wall_sprite,
+            HWALL_TILE: wall_sprite,
+            TLWALL_TILE: wall_sprite,
+            BLWALL_TILE: wall_sprite,
+            TRWALL_TILE: wall_sprite,
+            BRWALL_TILE: wall_sprite,
+            GROUND_TILE: ground_sprite,
+            CORRIDOR_TILE: ground_sprite,
+            HDOOR_TILE: hdoor_sprite,
+            VDOOR_TILE: vdoor_sprite,
         }
 
         tile_components = {
-            Tile.WALL: [],
-            Tile.GROUND: [MovableComponent()],
-            Tile.HDOOR: [MovableComponent()],
-            Tile.VDOOR: [MovableComponent()],
-            Tile.CORRIDOR: [MovableComponent()],
+            VWALL_TILE: [],
+            HWALL_TILE: [],
+            TLWALL_TILE: [],
+            BLWALL_TILE: [],
+            TRWALL_TILE: [],
+            BRWALL_TILE: [],
+            GROUND_TILE: [MovableComponent()],
+            CORRIDOR_TILE: [MovableComponent()],
+            HDOOR_TILE: [MovableComponent()],
+            VDOOR_TILE: [MovableComponent()],
         }
 
         self.add_processor(AIProcessor(), 13)

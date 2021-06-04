@@ -6,7 +6,8 @@ from typing import List, Dict, Tuple
 
 import pygame
 
-from roguengine.component.dungeon import DungeonComponent, Room, Tile
+from roguengine.component.dungeon import DungeonComponent, Room, Tile, VoidTile, VOID_TILE, TLWALL_TILE, BLWALL_TILE, TRWALL_TILE, BRWALL_TILE, \
+    HWALL_TILE, VWALL_TILE, GROUND_TILE, WallTile, VDOOR_TILE, HDOOR_TILE, CORRIDOR_TILE
 from roguengine.component.position import PositionComponent
 from roguengine.component.sprite import SpriteComponent
 from roguengine.esper import Processor
@@ -148,7 +149,7 @@ class DungeonGenerator(Processor):
 
     def _generate_rooms(self, dungeon: DungeonConfig) -> Tuple[List[List[Tile]], List[Room]]:
 
-        grid = [[Tile.VOID for _ in range(dungeon.height)] for _ in range(dungeon.width)]
+        grid = [[VOID_TILE for _ in range(dungeon.height)] for _ in range(dungeon.width)]
         n_room = random.randint(dungeon.room_count_min, dungeon.room_count_max)
         return grid, [self._generate_room(dungeon, grid) for _ in range(n_room)]
 
@@ -156,8 +157,7 @@ class DungeonGenerator(Processor):
 
         while True:
 
-            w, h = random.randint(dungeon.room_size_min, dungeon.room_size_max), random.randint(dungeon.room_size_min,
-                                                                                                dungeon.room_size_max)
+            w, h = random.randint(dungeon.room_size_min, dungeon.room_size_max), random.randint(dungeon.room_size_min, dungeon.room_size_max)
             x_max, y_max = dungeon.width - w - 1, dungeon.height - h - 1
             x0, y0 = random.randint(1, x_max), random.randint(1, y_max)
 
@@ -168,7 +168,7 @@ class DungeonGenerator(Processor):
                     break
 
                 for x in range(x0, x0 + w):
-                    if grid[x][y] != Tile.VOID:
+                    if grid[x][y] != VOID_TILE:
                         is_empty = False
                         break
 
@@ -176,16 +176,29 @@ class DungeonGenerator(Processor):
                 continue
 
             for x in range(x0, x0 + w):
-                grid[x][y0] = Tile.WALL
-                grid[x][y0 + h - 1] = Tile.WALL
+                if x == x0:
+                    grid[x][y0] = TLWALL_TILE
+                    grid[x][y0 + h - 1] = BLWALL_TILE
+
+                elif x == x0 + w - 1:
+                    grid[x][y0] = TRWALL_TILE
+                    grid[x][y0 + h - 1] = BRWALL_TILE
+
+                else:
+                    grid[x][y0] = HWALL_TILE
+                    grid[x][y0 + h - 1] = HWALL_TILE
 
             for y in range(y0, y0 + h):
-                grid[x0][y] = Tile.WALL
-                grid[x0 + w - 1][y] = Tile.WALL
+                if y == y0 or y == y0 + h - 1:
+                    continue
+
+                else:
+                    grid[x0][y] = VWALL_TILE
+                    grid[x0 + w - 1][y] = VWALL_TILE
 
             for x in range(x0 + 1, x0 + w - 1):
                 for y in range(y0 + 1, y0 + h - 1):
-                    grid[x][y] = Tile.GROUND
+                    grid[x][y] = GROUND_TILE
 
             return Room(x0, y0, w, h)
 
@@ -217,31 +230,30 @@ class DungeonGenerator(Processor):
 
         wall_count = 0
         for i in range(x_min, x_max + 1):
-            if grid[i][y1] == Tile.WALL:
+            if isinstance(grid[i][y1], WallTile):
                 wall_count += 1
         for i in range(y_min, y_max + 1):
-            if grid[x2][i] == Tile.WALL:
+            if isinstance(grid[x2][i], WallTile):
                 wall_count += 1
         if wall_count != 2:
             return False
 
         for i in range(x_min, x_max + 1):
-            if grid[i][y1] == Tile.WALL:
-                if grid[i + 1][y1] == grid[i - 1][y1] == Tile.WALL:
-                    grid[i][y1] = Tile.VDOOR
-                elif grid[i][y1 + 1] == grid[i][y1 - 1] == Tile.WALL:
-                    grid[i][y1] = Tile.HDOOR
-            elif grid[i][y1] == Tile.VOID:
-                grid[i][y1] = Tile.CORRIDOR
+            if grid[i][y1] == HWALL_TILE:
+                grid[i][y1] = VDOOR_TILE
+            elif grid[i][y1] == VWALL_TILE:
+                grid[i][y1] = HDOOR_TILE
+            elif isinstance(grid[i][y1], VoidTile):
+                grid[i][y1] = CORRIDOR_TILE
 
         for i in range(y_min, y_max + 1):
-            if grid[x2][i] == Tile.WALL:
-                if grid[x2][i + 1] == grid[x2][i - 1] == Tile.WALL:
-                    grid[x2][i] = Tile.HDOOR
-                elif grid[x2 + 1][i] == grid[x2 - 1][i] == Tile.WALL:
-                    grid[x2][i] = Tile.VDOOR
-            elif grid[x2][i] == Tile.VOID:
-                grid[x2][i] = Tile.CORRIDOR
+
+            if grid[x2][i] == VWALL_TILE:
+                grid[x2][i] = HDOOR_TILE
+            elif grid[x2][i] == HWALL_TILE:
+                grid[x2][i] = VDOOR_TILE
+            elif isinstance(grid[x2][i], VoidTile):
+                grid[x2][i] = CORRIDOR_TILE
 
         return True
 

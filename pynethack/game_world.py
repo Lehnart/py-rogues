@@ -1,6 +1,7 @@
 from pynethack.sprites import SPRITE_DICT
 from roguengine import esper
-from roguengine.component.dungeon import Tile
+from roguengine.component.dungeon import VWALL_TILE, HWALL_TILE, TLWALL_TILE, BLWALL_TILE, TRWALL_TILE, BRWALL_TILE, GROUND_TILE, CORRIDOR_TILE, \
+    HDOOR_TILE, VDOOR_TILE
 from roguengine.component.dungeon_resident import DungeonResidentComponent
 from roguengine.component.movable import MovableComponent
 from roguengine.component.player import PlayerComponent
@@ -32,20 +33,31 @@ class GameWorld(esper.World):
             player_sprite
         )
         player_residents = DungeonResidents({1: 1}, [player_resident], 3)
+
         tile_sprites = {
-            Tile.WALL: SPRITE_DICT["wall"],
-            Tile.GROUND: SPRITE_DICT["ground"],
-            Tile.HDOOR: SPRITE_DICT["door"],
-            Tile.VDOOR: SPRITE_DICT["door"],
-            Tile.CORRIDOR: SPRITE_DICT["corridor"]
+            VWALL_TILE: SPRITE_DICT["vwall"],
+            HWALL_TILE: SPRITE_DICT["hwall"],
+            TLWALL_TILE: SPRITE_DICT["twall"],
+            BLWALL_TILE: SPRITE_DICT["bwall"],
+            TRWALL_TILE: SPRITE_DICT["twall"],
+            BRWALL_TILE: SPRITE_DICT["bwall"],
+            GROUND_TILE: SPRITE_DICT["ground"],
+            CORRIDOR_TILE: SPRITE_DICT["ground"],
+            HDOOR_TILE: SPRITE_DICT["door"],
+            VDOOR_TILE: SPRITE_DICT["door"],
         }
 
         tile_components = {
-            Tile.WALL: [],
-            Tile.GROUND: [MovableComponent()],
-            Tile.HDOOR: [MovableComponent()],
-            Tile.VDOOR: [MovableComponent()],
-            Tile.CORRIDOR: [MovableComponent()],
+            VWALL_TILE: [],
+            HWALL_TILE: [],
+            TLWALL_TILE: [],
+            BLWALL_TILE: [],
+            TRWALL_TILE: [],
+            BRWALL_TILE: [],
+            GROUND_TILE: [MovableComponent()],
+            CORRIDOR_TILE: [MovableComponent()],
+            HDOOR_TILE: [MovableComponent()],
+            VDOOR_TILE: [MovableComponent()],
         }
 
         self.add_processor(ViewProcessor(), 7)
