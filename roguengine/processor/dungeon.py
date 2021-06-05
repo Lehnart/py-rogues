@@ -9,7 +9,7 @@ import pygame
 from roguengine.component.dungeon import DungeonComponent, Room, Tile, VoidTile, VOID_TILE, TLWALL_TILE, BLWALL_TILE, TRWALL_TILE, BRWALL_TILE, \
     HWALL_TILE, VWALL_TILE, GROUND_TILE, WallTile, VDOOR_TILE, HDOOR_TILE, CORRIDOR_TILE
 from roguengine.component.position import PositionComponent
-from roguengine.component.sprite import SpriteComponent
+from roguengine.component.sprite import VisibleSpriteComponent, InvisibleSpriteComponent
 from roguengine.esper import Processor
 from roguengine.event.dungeon_creation import DungeonCreationEvent
 from roguengine.event.dungeon_filling import DungeonFillingEvent
@@ -86,10 +86,15 @@ class DungeonResidents:
 
 class DungeonCreator(Processor):
 
-    def __init__(self, tile_sprites: Dict[Tile, pygame.Surface], tile_components: Dict[Tile, list]):
+    def __init__(self,
+                 tile_sprites: Dict[Tile, pygame.Surface],
+                 tile_invisible_sprites: Dict[Tile, pygame.Surface],
+                 tile_components: Dict[Tile, list]
+                 ):
         super().__init__()
         self.queue = Queue()
         self._tile_sprites = tile_sprites
+        self._tile_invisible_sprites = tile_invisible_sprites
         self._tile_components = tile_components
 
     def process(self):
@@ -103,13 +108,23 @@ class DungeonCreator(Processor):
                         continue
                     tile = dungeon.grid()[x][y]
                     tile_sprite = self._tile_sprites[tile]
-                    sprite = SpriteComponent(
+                    sprite = VisibleSpriteComponent(
                         x * tile_sprite.get_width(),
                         y * tile_sprite.get_height(),
                         tile_sprite
                     )
                     pos = PositionComponent(x, y)
-                    components = [*self._tile_components[tile], sprite, pos]
+
+                    if self._tile_invisible_sprites and tile in self._tile_invisible_sprites:
+                        invisible_sprite = InvisibleSpriteComponent(
+                            x * tile_sprite.get_width(),
+                            y * tile_sprite.get_height(),
+                            self._tile_invisible_sprites[tile]
+                        )
+                        components = [*self._tile_components[tile], sprite, invisible_sprite, pos]
+                    else:
+                        components = [*self._tile_components[tile], sprite, pos]
+
                     self.world.create_entity(*components)
 
 
@@ -310,7 +325,7 @@ class DungeonFiller(Processor):
                         continue
 
                     resident_sprite = resident.sprite()
-                    sprite = SpriteComponent(
+                    sprite = VisibleSpriteComponent(
                         rx * resident_sprite.get_width(),
                         ry * resident_sprite.get_height(),
                         resident_sprite,

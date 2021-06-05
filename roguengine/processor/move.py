@@ -4,7 +4,7 @@ from roguengine.component.fighter import FighterComponent
 from roguengine.component.gold import GoldComponent
 from roguengine.component.movable import MovableComponent
 from roguengine.component.position import PositionComponent
-from roguengine.component.sprite import SpriteComponent
+from roguengine.component.sprite import VisibleSpriteComponent
 from roguengine.esper import Processor
 from roguengine.event.fight import FightEvent
 from roguengine.event.gold_pickup import GoldPickUpEvent
@@ -27,7 +27,7 @@ class MoveProcessor(Processor):
                 continue
 
             pos = self.world.component_for_entity(ent, PositionComponent)
-            sprite = self.world.component_for_entity(ent, SpriteComponent)
+            sprite = self.world.component_for_entity(ent, VisibleSpriteComponent)
 
             x, y = pos.xy()
             dx, dy = move.dx_dy()

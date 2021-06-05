@@ -3,14 +3,14 @@ from typing import Tuple
 import pygame
 
 
-class SpriteComponent:
+class _SpriteComponent:
 
     def __init__(self, px: int, py: int, sprite: pygame.Surface, layer: int = 0):
         self._px = px
         self._py = py
         self._sprite = sprite
         self._layer = layer
-        self._is_visible = True
+        self._is_shown = True
 
     def move(self, dx: int, dy: int):
         self._px += dx * self._sprite.get_width()
@@ -32,8 +32,19 @@ class SpriteComponent:
     def set_layer(self, layer: int):
         self._layer = layer
 
-    def is_visible(self) -> bool:
-        return self._is_visible
+    def is_shown(self) -> bool:
+        return self._is_shown
 
     def flip(self):
-        self._is_visible = not self._is_visible
+        self._is_shown = not self._is_shown
+
+
+class VisibleSpriteComponent(_SpriteComponent):
+
+    def __init__(self, px: int, py: int, sprite: pygame.Surface, layer: int = 0):
+        super().__init__(px, py, sprite, layer)
+
+
+class InvisibleSpriteComponent(_SpriteComponent):
+    def __init__(self, px: int, py: int, sprite: pygame.Surface, layer: int = 0):
+        super().__init__(px, py, sprite, layer)

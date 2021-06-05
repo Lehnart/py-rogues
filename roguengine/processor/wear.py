@@ -3,7 +3,7 @@ from typing import List
 from roguengine.component.armor import ArmorComponent
 from roguengine.component.armor_slot import ArmorSlotComponent
 from roguengine.component.position import PositionComponent
-from roguengine.component.sprite import SpriteComponent
+from roguengine.component.sprite import VisibleSpriteComponent
 from roguengine.component.weapon import WeaponComponent
 from roguengine.component.weapon_slot import WeaponSlotComponent
 from roguengine.esper import Processor
@@ -36,12 +36,12 @@ class WearWeaponProcessor(Processor):
             weapon_slot.set_weapon(new_weapon_ent)
 
             if old_weapon_ent:
-                old_weapon_sprite: SpriteComponent = self.world.component_for_entity(old_weapon_ent, SpriteComponent)
+                old_weapon_sprite: VisibleSpriteComponent = self.world.component_for_entity(old_weapon_ent, VisibleSpriteComponent)
                 old_weapon_sprite.flip()
                 old_weapon_sprite.set_position(x, y)
                 self.world.add_component(old_weapon_ent, PositionComponent(x, y))
 
-            new_weapon_sprite: SpriteComponent = self.world.component_for_entity(new_weapon_ent, SpriteComponent)
+            new_weapon_sprite: VisibleSpriteComponent = self.world.component_for_entity(new_weapon_ent, VisibleSpriteComponent)
             new_weapon_sprite.flip()
             self.world.remove_component(new_weapon_ent, PositionComponent)
 
@@ -80,12 +80,12 @@ class WearArmorProcessor(Processor):
             armor_slot.set_armor(new_armor_ent)
 
             if old_armor_ent:
-                old_armor_sprite: SpriteComponent = self.world.component_for_entity(old_armor_ent, SpriteComponent)
+                old_armor_sprite: VisibleSpriteComponent = self.world.component_for_entity(old_armor_ent, VisibleSpriteComponent)
                 old_armor_sprite.flip()
                 old_armor_sprite.set_position(x, y)
                 self.world.add_component(old_armor_ent, PositionComponent(x, y))
 
-            new_armor_sprite: SpriteComponent = self.world.component_for_entity(new_armor_ent, SpriteComponent)
+            new_armor_sprite: VisibleSpriteComponent = self.world.component_for_entity(new_armor_ent, VisibleSpriteComponent)
             new_armor_sprite.flip()
             self.world.remove_component(new_armor_ent, PositionComponent)
 

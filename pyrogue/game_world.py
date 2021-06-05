@@ -142,7 +142,20 @@ class GameWorld(esper.World):
             TRWALL_TILE: wall_sprite,
             BRWALL_TILE: wall_sprite,
             GROUND_TILE: ground_sprite,
-            CORRIDOR_TILE: ground_sprite,
+            CORRIDOR_TILE: corridor_sprite,
+            HDOOR_TILE: hdoor_sprite,
+            VDOOR_TILE: vdoor_sprite,
+        }
+
+        tile_invisible_sprites = {
+            VWALL_TILE: wall_sprite,
+            HWALL_TILE: wall_sprite,
+            TLWALL_TILE: wall_sprite,
+            BLWALL_TILE: wall_sprite,
+            TRWALL_TILE: wall_sprite,
+            BRWALL_TILE: wall_sprite,
+            GROUND_TILE: ground_sprite,
+            CORRIDOR_TILE: corridor_sprite,
             HDOOR_TILE: hdoor_sprite,
             VDOOR_TILE: vdoor_sprite,
         }
@@ -171,7 +184,7 @@ class GameWorld(esper.World):
         self.add_processor(WearWeaponProcessor(), 6)
         self.add_processor(MoveProcessor(), 6)
         self.add_processor(DungeonGenerator(), 5)
-        self.add_processor(DungeonCreator(tile_sprites, tile_components), 4)
+        self.add_processor(DungeonCreator(tile_sprites, tile_invisible_sprites, tile_components), 4)
         self.add_processor(DungeonFiller([player_residents, monster_residents, item_residents]), 3)
         self.add_processor(InputProcessor(), 2)
         self.add_processor(RenderProcessor(), 1)

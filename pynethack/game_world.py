@@ -5,6 +5,7 @@ from roguengine.component.dungeon import VWALL_TILE, HWALL_TILE, TLWALL_TILE, BL
 from roguengine.component.dungeon_resident import DungeonResidentComponent
 from roguengine.component.movable import MovableComponent
 from roguengine.component.player import PlayerComponent
+from roguengine.component.sprite import InvisibleSpriteComponent
 from roguengine.component.window import WindowComponent
 from roguengine.event.dungeon_generation import DungeonGenerationEvent
 from roguengine.processor.dungeon import DungeonResident, DungeonResidents, DungeonGenerator, DungeonCreator, DungeonFiller, DungeonConfig
@@ -47,6 +48,19 @@ class GameWorld(esper.World):
             VDOOR_TILE: SPRITE_DICT["door"],
         }
 
+        tile_invisible_sprites = {
+            GROUND_TILE: SPRITE_DICT["invisible_ground"],
+            VWALL_TILE: SPRITE_DICT["vwall"],
+            HWALL_TILE: SPRITE_DICT["hwall"],
+            TLWALL_TILE: SPRITE_DICT["twall"],
+            BLWALL_TILE: SPRITE_DICT["bwall"],
+            TRWALL_TILE: SPRITE_DICT["twall"],
+            BRWALL_TILE: SPRITE_DICT["bwall"],
+            CORRIDOR_TILE: SPRITE_DICT["ground"],
+            HDOOR_TILE: SPRITE_DICT["door"],
+            VDOOR_TILE: SPRITE_DICT["door"],
+        }
+
         tile_components = {
             VWALL_TILE: [],
             HWALL_TILE: [],
@@ -63,7 +77,7 @@ class GameWorld(esper.World):
         self.add_processor(ViewProcessor(), 7)
         self.add_processor(MoveProcessor(), 6)
         self.add_processor(DungeonGenerator(), 5)
-        self.add_processor(DungeonCreator(tile_sprites, tile_components), 4)
+        self.add_processor(DungeonCreator(tile_sprites, tile_invisible_sprites, tile_components), 4)
         self.add_processor(DungeonFiller([player_residents]), 3)
         self.add_processor(InputProcessor(), 2)
         self.add_processor(RenderProcessor(), 1)

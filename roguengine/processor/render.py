@@ -1,6 +1,7 @@
 import pygame
 
-from roguengine.component.sprite import SpriteComponent
+from roguengine.component.sprite import VisibleSpriteComponent, InvisibleSpriteComponent
+from roguengine.component.viewed import ViewedComponent
 from roguengine.component.visible import VisibleComponent
 from roguengine.component.window import WindowComponent
 from roguengine.esper import Processor
@@ -19,9 +20,18 @@ class RenderProcessor(Processor):
     def _draw_on_window(self, window_component: WindowComponent):
 
         window_surface = window_component.surface()
-        sprite_components = [sprite_component for _, [sprite_component, _] in self.world.get_components(SpriteComponent, VisibleComponent)]
+        sprite_components = [sprite_component for _, [sprite_component, _] in self.world.get_components(VisibleSpriteComponent, VisibleComponent)]
+
+        invisible_sprite_components = [
+            sprite_component
+            for ent, [sprite_component, _] in self.world.get_components(InvisibleSpriteComponent, ViewedComponent)
+            if not self.world.has_component(ent, VisibleComponent)
+        ]
+
+        sprite_components.extend(invisible_sprite_components)
+
         sprite_components.sort(key=lambda s: s.layer())
-        sprite_components = [s for s in sprite_components if s.is_visible()]
+        sprite_components = [s for s in sprite_components if s.is_shown()]
         for sprite_component in sprite_components:
             window_surface.blit(sprite_component.sprite(), sprite_component.top_left_pixel_position())
 
