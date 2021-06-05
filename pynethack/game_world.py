@@ -1,4 +1,6 @@
-from pynethack.sprites import SPRITE_DICT
+import pygame
+
+from pynethack.sprites import SPRITE_DICT, get_char_sprite_dict
 from roguengine import esper
 from roguengine.component.door import DoorComponent, DoorState
 from roguengine.component.dungeon import VWALL_TILE, HWALL_TILE, TLWALL_TILE, BLWALL_TILE, TRWALL_TILE, BRWALL_TILE, GROUND_TILE, CORRIDOR_TILE, \
@@ -13,6 +15,7 @@ from roguengine.processor.dungeon import DungeonResident, DungeonResidents, Dung
 from roguengine.processor.input import InputProcessor
 from roguengine.processor.move import MoveProcessor
 from roguengine.processor.render import RenderProcessor
+from roguengine.processor.ui import TestUIProcessor
 from roguengine.processor.view import ViewProcessor
 
 
@@ -57,7 +60,7 @@ class GameWorld(esper.World):
             BLWALL_TILE: SPRITE_DICT["bwall"],
             TRWALL_TILE: SPRITE_DICT["twall"],
             BRWALL_TILE: SPRITE_DICT["bwall"],
-            CORRIDOR_TILE: SPRITE_DICT["ground"],
+            CORRIDOR_TILE: SPRITE_DICT["invisible_ground"],
             HDOOR_TILE: SPRITE_DICT["door"],
             VDOOR_TILE: SPRITE_DICT["door"],
         }
