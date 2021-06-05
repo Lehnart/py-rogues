@@ -1,13 +1,14 @@
 from pynethack.sprites import SPRITE_DICT
 from roguengine import esper
+from roguengine.component.door import DoorComponent, DoorState
 from roguengine.component.dungeon import VWALL_TILE, HWALL_TILE, TLWALL_TILE, BLWALL_TILE, TRWALL_TILE, BRWALL_TILE, GROUND_TILE, CORRIDOR_TILE, \
     HDOOR_TILE, VDOOR_TILE
 from roguengine.component.dungeon_resident import DungeonResidentComponent
 from roguengine.component.movable import MovableComponent
 from roguengine.component.player import PlayerComponent
-from roguengine.component.sprite import InvisibleSpriteComponent
 from roguengine.component.window import WindowComponent
 from roguengine.event.dungeon_generation import DungeonGenerationEvent
+from roguengine.processor.door import DoorProcessor
 from roguengine.processor.dungeon import DungeonResident, DungeonResidents, DungeonGenerator, DungeonCreator, DungeonFiller, DungeonConfig
 from roguengine.processor.input import InputProcessor
 from roguengine.processor.move import MoveProcessor
@@ -68,12 +69,18 @@ class GameWorld(esper.World):
             BLWALL_TILE: [],
             TRWALL_TILE: [],
             BRWALL_TILE: [],
-            GROUND_TILE: [MovableComponent()],
-            CORRIDOR_TILE: [MovableComponent()],
-            HDOOR_TILE: [MovableComponent()],
-            VDOOR_TILE: [MovableComponent()],
+            GROUND_TILE: [MovableComponent],
+            CORRIDOR_TILE: [MovableComponent],
+            HDOOR_TILE: [MovableComponent, DoorComponent],
+            VDOOR_TILE: [MovableComponent, DoorComponent],
         }
 
+        door_sprites = {
+            (HDOOR_TILE, DoorState.OPEN): SPRITE_DICT["hdoor_open"],
+            (VDOOR_TILE, DoorState.OPEN): SPRITE_DICT["vdoor_open"]
+        }
+
+        self.add_processor(DoorProcessor(door_sprites), 8)
         self.add_processor(ViewProcessor(), 7)
         self.add_processor(MoveProcessor(), 6)
         self.add_processor(DungeonGenerator(), 5)

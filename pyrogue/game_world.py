@@ -167,10 +167,10 @@ class GameWorld(esper.World):
             BLWALL_TILE: [],
             TRWALL_TILE: [],
             BRWALL_TILE: [],
-            GROUND_TILE: [MovableComponent()],
-            CORRIDOR_TILE: [MovableComponent()],
-            HDOOR_TILE: [MovableComponent()],
-            VDOOR_TILE: [MovableComponent()],
+            GROUND_TILE: [MovableComponent],
+            CORRIDOR_TILE: [MovableComponent],
+            HDOOR_TILE: [MovableComponent],
+            VDOOR_TILE: [MovableComponent],
         }
 
         self.add_processor(AIProcessor(), 13)

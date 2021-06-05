@@ -121,9 +121,9 @@ class DungeonCreator(Processor):
                             y * tile_sprite.get_height(),
                             self._tile_invisible_sprites[tile]
                         )
-                        components = [*self._tile_components[tile], sprite, invisible_sprite, pos]
+                        components = [*[c() for c in self._tile_components[tile]], sprite, invisible_sprite, pos]
                     else:
-                        components = [*self._tile_components[tile], sprite, pos]
+                        components = [*[c() for c in self._tile_components[tile]], sprite, pos]
 
                     self.world.create_entity(*components)
 
