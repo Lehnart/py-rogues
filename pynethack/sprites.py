@@ -1,5 +1,3 @@
-from typing import Dict
-
 import pygame
 
 pygame.init()
@@ -12,6 +10,7 @@ SPRITE_SHEET: pygame.Surface = pygame.image.load("res/tileset.bmp")
 def get_sprite(px: int, py: int) -> pygame.Surface:
     sprite = SPRITE_SHEET.subsurface(pygame.Rect(px, py, SPRITE_WIDTH, SPRITE_HEIGHT))
     return sprite
+
 
 SPRITE_DICT = {
     "player": get_sprite(576, 128),

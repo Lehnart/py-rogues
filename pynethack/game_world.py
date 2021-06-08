@@ -7,6 +7,7 @@ from roguengine.component.door import DoorComponent, DoorState
 from roguengine.component.dungeon import VWALL_TILE, HWALL_TILE, TLWALL_TILE, BLWALL_TILE, TRWALL_TILE, BRWALL_TILE, GROUND_TILE, CORRIDOR_TILE, \
     HDOOR_TILE, VDOOR_TILE
 from roguengine.component.dungeon_resident import DungeonResidentComponent
+from roguengine.component.dynamic_label import DynamicLabelComponent
 from roguengine.component.label import LabelComponent
 from roguengine.component.movable import MovableComponent
 from roguengine.component.player import PlayerComponent
@@ -17,7 +18,7 @@ from roguengine.processor.dungeon import DungeonResident, DungeonResidents, Dung
 from roguengine.processor.input import InputProcessor
 from roguengine.processor.move import MoveProcessor
 from roguengine.processor.render import RenderProcessor
-from roguengine.processor.ui import GenericUIDrawerProcessor, Font
+from roguengine.processor.ui import GenericUIDrawerProcessor
 from roguengine.processor.view import ViewProcessor
 
 
@@ -85,7 +86,10 @@ class GameWorld(esper.World):
             (VDOOR_TILE, DoorState.OPEN): SPRITE_DICT["vdoor_open"]
         }
 
-        label = LabelComponent(0,788,"Dlvl", pygame.Color(254,254,254), pygame.Color(1,1,1))
+        label = LabelComponent(0, 788, "Dlvl:", pygame.Color(254, 254, 254), pygame.Color(1, 1, 1))
+        self.create_entity(label)
+
+        label = DynamicLabelComponent(40, 788, get_player_level, pygame.Color(254, 254, 254), pygame.Color(1, 1, 1) )
         self.create_entity(label)
 
         self.add_processor(GenericUIDrawerProcessor(FONT))
@@ -103,6 +107,16 @@ class GameWorld(esper.World):
 
     def is_running(self) -> bool:
         return self._is_running
+
+
+def get_player_level(world: esper.World) -> str:
+
+    players = world.get_components(PlayerComponent)
+    if not players:
+        return ""
+
+    player, [player_component] = players[0]
+    return str(player_component.level())
 
 
 def run():

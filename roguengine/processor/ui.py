@@ -3,6 +3,7 @@ from typing import Dict, Tuple
 import pygame
 
 from roguengine.component.dungeon import DungeonComponent
+from roguengine.component.dynamic_label import DynamicLabelComponent
 from roguengine.component.fighter import FighterComponent
 from roguengine.component.goldbag import GoldBagComponent
 from roguengine.component.label import LabelComponent
@@ -20,10 +21,10 @@ class Font:
         self._map_char_to_xy = map_char_to_xy
 
     def _get_colored_char_sprite(self, char_sprite: pygame.Surface, bkgd_color: pygame.Color, font_color: pygame.Color) -> pygame.Surface:
-        bkgd_oc = char_sprite.map_rgb(pygame.Color(255, 255, 255))
+        bkgd_oc = char_sprite.map_rgb(pygame.Color(253, 255, 251))
         bkgd_c = char_sprite.map_rgb(bkgd_color)
 
-        font_oc = char_sprite.map_rgb(pygame.Color(0, 0, 0))
+        font_oc = char_sprite.map_rgb(pygame.Color(0, 1, 0))
         font_c = char_sprite.map_rgb(font_color)
 
         pixel_array = pygame.PixelArray(char_sprite)
@@ -60,10 +61,19 @@ class GenericUIDrawerProcessor(Processor):
         for _, label in label_components:
             x, y = label.get_position()
             s = label.get_label()
-            for c in s:
-                sprite = self.font.get_char(c, label.get_font_color(), label.get_bkgd_color())
-                window_surface.blit(sprite, (x, y))
-                x += sprite.get_width()
+            self._draw_string(s, x, y, window_surface, label.get_font_color(), label.get_bkgd_color())
+
+        dynamic_label_components = self.world.get_component(DynamicLabelComponent)
+        for _, label in dynamic_label_components:
+            x, y = label.get_position()
+            s = label.get_callable()(self.world)
+            self._draw_string(s, x, y, window_surface, label.get_font_color(), label.get_bkgd_color())
+
+    def _draw_string(self, s: str, x: int, y: int, window_surface: pygame.Surface, font_color: pygame.Color, bkgd_color: pygame.Color):
+        for c in s:
+            sprite = self.font.get_char(c, font_color, bkgd_color)
+            window_surface.blit(sprite, (x, y))
+            x += sprite.get_width()
 
 
 class UIProcessor(Processor):
