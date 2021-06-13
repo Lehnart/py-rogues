@@ -17,6 +17,7 @@ from roguengine.component.gauge import GaugeComponent
 from roguengine.component.goldbag import GoldBagComponent
 from roguengine.component.movable import MovableComponent
 from roguengine.component.player import PlayerComponent
+from roguengine.component.turn_count import TurnCountComponent
 from roguengine.component.window import WindowComponent
 from roguengine.event.dungeon_generation import DungeonGenerationEvent
 from roguengine.processor.door import DoorProcessor
@@ -24,6 +25,7 @@ from roguengine.processor.dungeon import DungeonResident, DungeonResidents, Dung
 from roguengine.processor.input import InputProcessor
 from roguengine.processor.move import MoveProcessor
 from roguengine.processor.render import RenderProcessor
+from roguengine.processor.turn_counter import TurnCounterProcessor
 from roguengine.processor.ui import GenericUIDrawerProcessor
 from roguengine.processor.view import ViewProcessor
 
@@ -97,7 +99,8 @@ class GameWorld(esper.World):
 
         self.create_ui()
 
-        self.add_processor(GenericUIDrawerProcessor(FONT))
+        self.add_processor(TurnCounterProcessor(), 10)
+        self.add_processor(GenericUIDrawerProcessor(FONT), 9)
         self.add_processor(DoorProcessor(door_sprites), 8)
         self.add_processor(ViewProcessor(), 7)
         self.add_processor(MoveProcessor(), 6)
@@ -115,10 +118,11 @@ class GameWorld(esper.World):
 
     def create_ui(self):
         label = DynamicLabelComponent(0, 788, get_player_state, pygame.Color(254, 254, 254), pygame.Color(1, 1, 1))
-        self.create_entity(label)
+        ui_ent = self.create_entity(label)
+        self.add_component(ui_ent, TurnCountComponent())
 
         label = DynamicLabelComponent(248, 776, get_player_stats, pygame.Color(254, 254, 254), pygame.Color(1, 1, 1))
-        self.create_entity(label)
+        ui_ent = self.create_entity(label)
 
         gauge = GaugeComponent(
             0,
@@ -131,7 +135,9 @@ class GameWorld(esper.World):
             get_player_hp_max,
             "setoh"
         )
-        self.create_entity(gauge)
+        self.add_component(ui_ent, gauge)
+
+
 
 
 def get_player(world: esper.World) -> Optional[int]:
@@ -183,7 +189,10 @@ def get_player_state(world: esper.World) -> str:
         atk = fighter_component.attack()
         arm = fighter_component.defense()
         exp = player_component.exp()
-        ui_str += "HP:{}({}) Pw:{}({}) AC:{} Xp:{} T:{}".format(hp, hp_max, atk, atk, arm, exp, 1)
+
+        t: TurnCountComponent = world.get_component(TurnCountComponent)[0][1]
+
+        ui_str += "HP:{}({}) Pw:{}({}) AC:{} Xp:{} T:{}".format(hp, hp_max, atk, atk, arm, exp, t.get_turn())
 
     return ui_str
 

@@ -8,6 +8,7 @@ from roguengine.esper import Processor
 from roguengine.event.ai import AIEvent
 from roguengine.event.dungeon_generation import DungeonGenerationEvent
 from roguengine.event.move import MoveEvent, Movement
+from roguengine.event.turn_counter import NewTurnEvent
 from roguengine.event.wear import WearWeaponEvent, WearArmorEvent
 
 
@@ -36,15 +37,21 @@ class InputProcessor(Processor):
                 if event.key == pygame.K_DOWN:
                     self.world.publish(MoveEvent(player, Movement(0, 1)))
                     self.world.publish(AIEvent())
+                    self.world.publish(NewTurnEvent())
                 if event.key == pygame.K_UP:
                     self.world.publish(MoveEvent(player, Movement(0, -1)))
                     self.world.publish(AIEvent())
+                    self.world.publish(NewTurnEvent())
+
                 if event.key == pygame.K_LEFT:
                     self.world.publish(MoveEvent(player, Movement(-1, 0)))
                     self.world.publish(AIEvent())
+                    self.world.publish(NewTurnEvent())
+
                 if event.key == pygame.K_RIGHT:
                     self.world.publish(MoveEvent(player, Movement(1, 0)))
                     self.world.publish(AIEvent())
+                    self.world.publish(NewTurnEvent())
 
                 if event.key == pygame.K_c:
                     fighter = self.world.get_component(FighterComponent)

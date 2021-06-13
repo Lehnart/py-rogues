@@ -1,0 +1,7 @@
+from roguengine.esper import Event
+
+
+class NewTurnEvent(Event):
+
+    def __init__(self):
+        super().__init__()
