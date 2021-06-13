@@ -5,6 +5,7 @@ import pygame
 from roguengine.component.dungeon import DungeonComponent
 from roguengine.component.dynamic_label import DynamicLabelComponent
 from roguengine.component.fighter import FighterComponent
+from roguengine.component.gauge import GaugeComponent
 from roguengine.component.goldbag import GoldBagComponent
 from roguengine.component.label import LabelComponent
 from roguengine.component.player import PlayerComponent
@@ -19,6 +20,9 @@ class Font:
         self._char_width = char_width
         self._char_height = char_height
         self._map_char_to_xy = map_char_to_xy
+
+    def get_char_width(self) -> int:
+        return self._char_width
 
     def _get_colored_char_sprite(self, char_sprite: pygame.Surface, bkgd_color: pygame.Color, font_color: pygame.Color) -> pygame.Surface:
         bkgd_oc = char_sprite.map_rgb(pygame.Color(253, 255, 251))
@@ -68,6 +72,25 @@ class GenericUIDrawerProcessor(Processor):
             x, y = label.get_position()
             s = label.get_callable()(self.world)
             self._draw_string(s, x, y, window_surface, label.get_font_color(), label.get_bkgd_color())
+
+        gauge_components = self.world.get_component(GaugeComponent)
+        for _, gauge in gauge_components:
+            x, y = gauge.px, gauge.py
+            v = gauge.value_function(self.world)
+            v_max = gauge.value_max_function(self.world)
+            if v_max <= 0.:
+                continue
+
+            r = v / v_max
+            bkgd_color = gauge.color_threshold[-1][1]
+            for v, color in gauge.color_threshold:
+                if r <= v:
+                    bkgd_color = color
+                    break
+
+            w = int((r * gauge.width) / self.font.get_char_width())
+            s = gauge.label
+            self._draw_string(s[:w].ljust(w), x, y, window_surface, gauge.font_color, bkgd_color)
 
     def _draw_string(self, s: str, x: int, y: int, window_surface: pygame.Surface, font_color: pygame.Color, bkgd_color: pygame.Color):
         for c in s:

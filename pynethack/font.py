@@ -7,6 +7,22 @@ CHAR_SPRITE_HEIGHT = 12
 CHAR_SPRITE_SHEET: pygame.Surface = pygame.image.load("res/font_8x12.bmp")
 
 CHAR_POSITIONS = {
+    " ": (0, 0),
+    '!': (8, 0),
+    '\"': (16, 0),
+    '#': (24, 0),
+    '$': (32, 0),
+    '%': (40, 0),
+    '&': (48, 0),
+    '\'': (56, 0),
+    '(': (64, 0),
+    ')': (72, 0),
+    '*': (80, 0),
+    '+': (88, 0),
+    ',': (96, 0),
+    '-': (104, 0),
+    '.': (112, 0),
+    '/': (120, 0),
     'a': (8, 48),
     'b': (16, 48),
     'c': (24, 48),
@@ -73,4 +89,4 @@ CHAR_POSITIONS = {
 
 }
 
-FONT = Font(CHAR_SPRITE_SHEET,CHAR_SPRITE_WIDTH, CHAR_SPRITE_HEIGHT, CHAR_POSITIONS)
+FONT = Font(CHAR_SPRITE_SHEET, CHAR_SPRITE_WIDTH, CHAR_SPRITE_HEIGHT, CHAR_POSITIONS)

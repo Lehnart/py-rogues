@@ -2,6 +2,7 @@ import sys
 
 import pygame
 
+from roguengine.component.fighter import FighterComponent
 from roguengine.component.player import PlayerComponent
 from roguengine.esper import Processor
 from roguengine.event.ai import AIEvent
@@ -44,6 +45,10 @@ class InputProcessor(Processor):
                 if event.key == pygame.K_RIGHT:
                     self.world.publish(MoveEvent(player, Movement(1, 0)))
                     self.world.publish(AIEvent())
+
+                if event.key == pygame.K_c:
+                    fighter = self.world.get_component(FighterComponent)
+                    fighter[0][1]._hp -= 1
 
                 if event.key == pygame.K_w:
                     self.world.publish(WearWeaponEvent(player))

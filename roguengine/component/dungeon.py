@@ -147,7 +147,7 @@ class DungeonComponent:
     def grid(self) -> List[List[Tile]]:
         return self._grid
 
-    def tile(self, x:int, y:int) -> Tile:
+    def tile(self, x: int, y: int) -> Tile:
         return self._grid[x][y]
 
     def rooms(self) -> List[Room]:

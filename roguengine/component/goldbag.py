@@ -1,6 +1,6 @@
 class GoldBagComponent:
 
-    def __init__(self, amount: int):
+    def __init__(self, amount: int = 0):
         self._amount = amount
 
     def amount(self) -> int:

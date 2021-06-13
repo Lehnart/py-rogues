@@ -1,5 +1,4 @@
 from roguengine.component.dungeon import DungeonComponent
-from roguengine.component.dungeon_resident import DungeonResidentComponent
 from roguengine.component.player import PlayerComponent
 from roguengine.component.position import PositionComponent
 from roguengine.component.sprite import VisibleSpriteComponent

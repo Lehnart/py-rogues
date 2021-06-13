@@ -1,7 +1,5 @@
 from typing import List, Dict
 
-import pygame
-
 from roguengine.component.door import DoorComponent, DoorState
 from roguengine.component.dungeon import DungeonComponent, DoorTile
 from roguengine.component.position import PositionComponent

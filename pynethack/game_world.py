@@ -1,14 +1,20 @@
+from typing import Optional
+
 import pygame
+from pygame import Color
 
 from pynethack.font import FONT
 from pynethack.sprites import SPRITE_DICT
 from roguengine import esper
+from roguengine.component.character_stats import CharacterStatComponent
 from roguengine.component.door import DoorComponent, DoorState
 from roguengine.component.dungeon import VWALL_TILE, HWALL_TILE, TLWALL_TILE, BLWALL_TILE, TRWALL_TILE, BRWALL_TILE, GROUND_TILE, CORRIDOR_TILE, \
     HDOOR_TILE, VDOOR_TILE
 from roguengine.component.dungeon_resident import DungeonResidentComponent
 from roguengine.component.dynamic_label import DynamicLabelComponent
-from roguengine.component.label import LabelComponent
+from roguengine.component.fighter import FighterComponent
+from roguengine.component.gauge import GaugeComponent
+from roguengine.component.goldbag import GoldBagComponent
 from roguengine.component.movable import MovableComponent
 from roguengine.component.player import PlayerComponent
 from roguengine.component.window import WindowComponent
@@ -35,6 +41,9 @@ class GameWorld(esper.World):
             [
                 PlayerComponent(),
                 DungeonResidentComponent(),
+                GoldBagComponent(),
+                FighterComponent(5, 6, 60),
+                CharacterStatComponent(10, 10, 10, 10, 10, 10)
             ],
             1.,
             1,
@@ -86,11 +95,7 @@ class GameWorld(esper.World):
             (VDOOR_TILE, DoorState.OPEN): SPRITE_DICT["vdoor_open"]
         }
 
-        label = LabelComponent(0, 788, "Dlvl:", pygame.Color(254, 254, 254), pygame.Color(1, 1, 1))
-        self.create_entity(label)
-
-        label = DynamicLabelComponent(40, 788, get_player_level, pygame.Color(254, 254, 254), pygame.Color(1, 1, 1) )
-        self.create_entity(label)
+        self.create_ui()
 
         self.add_processor(GenericUIDrawerProcessor(FONT))
         self.add_processor(DoorProcessor(door_sprites), 8)
@@ -108,15 +113,107 @@ class GameWorld(esper.World):
     def is_running(self) -> bool:
         return self._is_running
 
+    def create_ui(self):
+        label = DynamicLabelComponent(0, 788, get_player_state, pygame.Color(254, 254, 254), pygame.Color(1, 1, 1))
+        self.create_entity(label)
 
-def get_player_level(world: esper.World) -> str:
+        label = DynamicLabelComponent(248, 776, get_player_stats, pygame.Color(254, 254, 254), pygame.Color(1, 1, 1))
+        self.create_entity(label)
 
+        gauge = GaugeComponent(
+            0,
+            776,
+            240,
+            12,
+            pygame.Color(1, 1, 1),
+            [(0.2, Color(254, 0, 0)), (0.4, Color(254, 170, 70)), (0.6, Color(247, 247, 69)), (0.8, Color(37, 186, 52)), (1., Color(254, 254, 254))],
+            get_player_hp,
+            get_player_hp_max,
+            "setoh"
+        )
+        self.create_entity(gauge)
+
+
+def get_player(world: esper.World) -> Optional[int]:
     players = world.get_components(PlayerComponent)
     if not players:
+        return None
+
+    player, [_] = players[0]
+    return player
+
+
+def get_player_stats(world: esper.World) -> str:
+    player_ent = get_player(world)
+
+    if not player_ent:
         return ""
 
-    player, [player_component] = players[0]
-    return str(player_component.level())
+    stat_component = world.component_for_entity(player_ent, CharacterStatComponent)
+    ui_str = "St:{} Dx:{} Co:{} In:{} Wi:{} Ch:{}".format(
+        stat_component.strength(),
+        stat_component.dexterity(),
+        stat_component.constitution(),
+        stat_component.intelligence(),
+        stat_component.wisdom(),
+        stat_component.charism()
+    )
+    return ui_str
+
+
+def get_player_state(world: esper.World) -> str:
+    player_ent = get_player(world)
+
+    if not player_ent:
+        return ""
+
+    ui_str = "Dlvl:"
+
+    player_component = world.component_for_entity(player_ent, PlayerComponent)
+    ui_str += str(player_component.level()) + "   "
+
+    if world.has_component(player_ent, GoldBagComponent):
+        goldbag_component = world.component_for_entity(player_ent, GoldBagComponent)
+        ui_str += "$:" + str(goldbag_component.amount()) + " "
+
+    if world.has_component(player_ent, FighterComponent):
+        fighter_component = world.component_for_entity(player_ent, FighterComponent)
+        hp = fighter_component.hp()
+        hp_max = fighter_component.hp_max()
+        atk = fighter_component.attack()
+        arm = fighter_component.defense()
+        exp = player_component.exp()
+        ui_str += "HP:{}({}) Pw:{}({}) AC:{} Xp:{} T:{}".format(hp, hp_max, atk, atk, arm, exp, 1)
+
+    return ui_str
+
+
+def get_player_hp(world: esper.World) -> float:
+    player_ent = get_player(world)
+
+    if not player_ent:
+        return 0.
+
+    if world.has_component(player_ent, FighterComponent):
+        fighter_component = world.component_for_entity(player_ent, FighterComponent)
+        hp = fighter_component.hp()
+
+        return hp
+    return 0.
+
+
+def get_player_hp_max(world: esper.World) -> float:
+    player_ent = get_player(world)
+
+    if not player_ent:
+        return 0.
+
+    if world.has_component(player_ent, FighterComponent):
+        fighter_component = world.component_for_entity(player_ent, FighterComponent)
+        hp_max = fighter_component.hp_max()
+
+        return hp_max
+    return 0.
 
 
 def run():
