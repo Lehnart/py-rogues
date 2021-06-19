@@ -1,5 +1,8 @@
+from typing import Optional
+
 import pygame
 
+from pyrogue.font import FONT
 from roguengine import esper
 from roguengine.component.ai import AIComponent, State
 from roguengine.component.armor import ArmorComponent
@@ -7,6 +10,7 @@ from roguengine.component.armor_slot import ArmorSlotComponent
 from roguengine.component.dungeon import VWALL_TILE, HWALL_TILE, TLWALL_TILE, BLWALL_TILE, TRWALL_TILE, BRWALL_TILE, GROUND_TILE, CORRIDOR_TILE, \
     HDOOR_TILE, VDOOR_TILE
 from roguengine.component.dungeon_resident import DungeonResidentComponent
+from roguengine.component.dynamic_label import DynamicLabelComponent
 from roguengine.component.fighter import FighterComponent, Type
 from roguengine.component.gold import GoldComponent
 from roguengine.component.goldbag import GoldBagComponent
@@ -27,7 +31,7 @@ from roguengine.processor.logger import LoggerProcessor
 from roguengine.processor.move import MoveProcessor
 from roguengine.processor.render import RenderProcessor
 from roguengine.processor.time import TimeProcessor
-from roguengine.processor.ui import UIProcessor
+from roguengine.processor.ui import UI
 from roguengine.processor.view import ViewProcessor
 from roguengine.processor.wear import WearWeaponProcessor, WearArmorProcessor
 
@@ -173,12 +177,14 @@ class GameWorld(esper.World):
             VDOOR_TILE: [MovableComponent],
         }
 
+        self.create_ui()
+
+        self.add_processor(UI(FONT), 14)
         self.add_processor(AIProcessor(), 13)
         self.add_processor(GoldProcessor(), 12)
         self.add_processor(FightProcessor(), 11)
         self.add_processor(LoggerProcessor(16, 0, grey_char_sprites, 3), 10)
         self.add_processor(TimeProcessor(720, 820, grey_char_sprites), 9)
-        self.add_processor(UIProcessor(16, 800, yellow_char_sprites), 8)
         self.add_processor(ViewProcessor(), 7)
         self.add_processor(WearArmorProcessor(), 6)
         self.add_processor(WearWeaponProcessor(), 6)
@@ -196,6 +202,43 @@ class GameWorld(esper.World):
 
     def is_running(self) -> bool:
         return self._is_running
+
+    def create_ui(self):
+        label = DynamicLabelComponent(16, 800, get_player_state, pygame.Color(128, 128, 0), pygame.Color(1, 1, 1))
+        self.create_entity(label)
+
+
+def get_player(world: esper.World) -> Optional[int]:
+    players = world.get_components(PlayerComponent)
+    if not players:
+        return None
+
+    player, [_] = players[0]
+    return player
+
+
+def get_player_state(world: esper.World) -> str:
+    player_ent = get_player(world)
+
+    if not player_ent:
+        return ""
+
+    ui_str = "Level:1 "
+
+    player_component = world.component_for_entity(player_ent, PlayerComponent)
+    goldbag_component = world.component_for_entity(player_ent, GoldBagComponent)
+
+    if world.has_component(player_ent, FighterComponent):
+        fighter_component = world.component_for_entity(player_ent, FighterComponent)
+        hp = fighter_component.hp()
+        hp_max = fighter_component.hp_max()
+        atk = fighter_component.attack()
+        arm = fighter_component.defense()
+        exp = player_component.exp()
+
+        ui_str += "HP:{}/{} Str:{} Gold:{} Armor:{} Exp:{}/{}".format(hp, hp_max, atk, goldbag_component.amount(), arm, player_component.level(), exp)
+
+    return ui_str
 
 
 def get_sprite(x: int, y: int, w: int, h: int, c: pygame.Color):

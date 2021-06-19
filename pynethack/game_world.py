@@ -26,7 +26,7 @@ from roguengine.processor.input import InputProcessor
 from roguengine.processor.move import MoveProcessor
 from roguengine.processor.render import RenderProcessor
 from roguengine.processor.turn_counter import TurnCounterProcessor
-from roguengine.processor.ui import GenericUIDrawerProcessor
+from roguengine.processor.ui import UI
 from roguengine.processor.view import ViewProcessor
 
 
@@ -100,7 +100,7 @@ class GameWorld(esper.World):
         self.create_ui()
 
         self.add_processor(TurnCounterProcessor(), 10)
-        self.add_processor(GenericUIDrawerProcessor(FONT), 9)
+        self.add_processor(UI(FONT), 9)
         self.add_processor(DoorProcessor(door_sprites), 8)
         self.add_processor(ViewProcessor(), 7)
         self.add_processor(MoveProcessor(), 6)
@@ -136,8 +136,6 @@ class GameWorld(esper.World):
             "setoh"
         )
         self.add_component(ui_ent, gauge)
-
-
 
 
 def get_player(world: esper.World) -> Optional[int]:
