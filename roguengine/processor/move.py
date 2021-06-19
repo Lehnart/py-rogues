@@ -8,7 +8,6 @@ from roguengine.component.sprite import VisibleSpriteComponent
 from roguengine.esper import Processor
 from roguengine.event.fight import FightEvent
 from roguengine.event.gold_pickup import GoldPickUpEvent
-from roguengine.event.log import LogEvent
 from roguengine.event.move import MoveEvent
 
 

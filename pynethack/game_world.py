@@ -101,7 +101,7 @@ class GameWorld(esper.World):
 
         self.create_ui()
 
-        self.add_processor(LoggerProcessor(0,0,FONT,3, pygame.Color(255,255,255), pygame.Color(128,128,128)), 11)
+        self.add_processor(LoggerProcessor(0, 0, FONT, 3, pygame.Color(255, 255, 255), pygame.Color(128, 128, 128)), 11)
         self.add_processor(TurnCounterProcessor(), 10)
         self.add_processor(UI(FONT), 9)
         self.add_processor(DoorProcessor(door_sprites), 8)

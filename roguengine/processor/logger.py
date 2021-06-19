@@ -22,7 +22,7 @@ class LoggerProcessor(Processor):
         self._py = py
         self._font = font
         self._message_count = message_count
-        self._msgs = [""]*message_count
+        self._msgs = [""] * message_count
         self._new_color = new_log_color
         self._old_color = old_log_color
 
@@ -43,7 +43,7 @@ class LoggerProcessor(Processor):
             y = self._py + (msg_index * self._font.get_char_height())
             for window_entity, [window_component] in self.world.get_components(WindowComponent):
                 window_surface = window_component.surface()
-                if msg_index == self._message_count-1 :
-                    self._font.draw_string(msg, x, y, window_surface,self._new_color, pygame.Color(0, 0, 0))
-                else :
+                if msg_index == self._message_count - 1:
+                    self._font.draw_string(msg, x, y, window_surface, self._new_color, pygame.Color(0, 0, 0))
+                else:
                     self._font.draw_string(msg, x, y, window_surface, self._old_color, pygame.Color(0, 0, 0))

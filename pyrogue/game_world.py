@@ -180,7 +180,7 @@ class GameWorld(esper.World):
         self.add_processor(AIProcessor(), 13)
         self.add_processor(GoldProcessor(), 12)
         self.add_processor(FightProcessor(), 11)
-        self.add_processor(LoggerProcessor(16, 0, FONT, 3, pygame.Color(128,128,128), pygame.Color(128,128,128)), 10)
+        self.add_processor(LoggerProcessor(16, 0, FONT, 3, pygame.Color(128, 128, 128), pygame.Color(128, 128, 128)), 10)
         self.add_processor(TimeProcessor(720, 824, FONT), 9)
         self.add_processor(ViewProcessor(), 7)
         self.add_processor(WearArmorProcessor(), 6)
