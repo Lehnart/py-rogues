@@ -20,9 +20,11 @@ from roguengine.component.player import PlayerComponent
 from roguengine.component.turn_count import TurnCountComponent
 from roguengine.component.window import WindowComponent
 from roguengine.event.dungeon_generation import DungeonGenerationEvent
+from roguengine.event.log import LogEvent
 from roguengine.processor.door import DoorProcessor
 from roguengine.processor.dungeon import DungeonResident, DungeonResidents, DungeonGenerator, DungeonCreator, DungeonFiller, DungeonConfig
 from roguengine.processor.input import InputProcessor
+from roguengine.processor.logger import LoggerProcessor
 from roguengine.processor.move import MoveProcessor
 from roguengine.processor.render import RenderProcessor
 from roguengine.processor.turn_counter import TurnCounterProcessor
@@ -99,6 +101,7 @@ class GameWorld(esper.World):
 
         self.create_ui()
 
+        self.add_processor(LoggerProcessor(0,0,FONT,3, pygame.Color(255,255,255), pygame.Color(128,128,128)), 11)
         self.add_processor(TurnCounterProcessor(), 10)
         self.add_processor(UI(FONT), 9)
         self.add_processor(DoorProcessor(door_sprites), 8)
@@ -112,6 +115,9 @@ class GameWorld(esper.World):
 
         dungeon = DungeonConfig(4, 10, 8, 16, 50, 50)
         self.publish(DungeonGenerationEvent(dungeon))
+
+        self.publish(LogEvent("[Odin has chosen you to recover the Amulet of Yendor for Him.]"))
+        self.publish(LogEvent("Welcome to pynethack! you are a neutral human."))
 
     def is_running(self) -> bool:
         return self._is_running

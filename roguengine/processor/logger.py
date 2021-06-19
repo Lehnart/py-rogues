@@ -1,21 +1,30 @@
-from typing import Dict
-
 import pygame
 
 from roguengine.component.window import WindowComponent
 from roguengine.esper import Processor
 from roguengine.event.log import LogEvent
+from roguengine.processor.ui import Font
 
 
 class LoggerProcessor(Processor):
 
-    def __init__(self, px: int, py: int, char_sprite_dict: Dict[str, pygame.Surface], message_count: int):
+    def __init__(
+            self,
+            px: int,
+            py: int,
+            font: Font,
+            message_count: int,
+            new_log_color: pygame.Color,
+            old_log_color: pygame.Color
+    ):
         super().__init__()
         self._px = px
         self._py = py
-        self._char_sprite_dict = char_sprite_dict
+        self._font = font
         self._message_count = message_count
-        self._msgs = []
+        self._msgs = [""]*message_count
+        self._new_color = new_log_color
+        self._old_color = old_log_color
 
     def put(self, msg: str):
         self._msgs.append(msg)
@@ -29,14 +38,12 @@ class LoggerProcessor(Processor):
             while len(self._msgs) > self._message_count:
                 self._msgs.pop(0)
 
-        for msg_index, msg in enumerate(self._msgs[::-1]):
+        for msg_index, msg in enumerate(self._msgs):
             x = self._px
-            y = self._py + (msg_index * self._char_sprite_dict["0"].get_height())
+            y = self._py + (msg_index * self._font.get_char_height())
             for window_entity, [window_component] in self.world.get_components(WindowComponent):
                 window_surface = window_component.surface()
-                for c in msg:
-                    if c not in self._char_sprite_dict:
-                        continue
-                    sprite = self._char_sprite_dict[c]
-                    window_surface.blit(sprite, (x, y))
-                    x += sprite.get_width()
+                if msg_index == self._message_count-1 :
+                    self._font.draw_string(msg, x, y, window_surface,self._new_color, pygame.Color(0, 0, 0))
+                else :
+                    self._font.draw_string(msg, x, y, window_surface, self._old_color, pygame.Color(0, 0, 0))

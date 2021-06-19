@@ -46,7 +46,6 @@ class MoveProcessor(Processor):
 
             pos.move(dx, dy)
             sprite.move(dx, dy)
-            self.world.publish(LogEvent("You move by ({},{})".format(dx, dy)))
 
     def get_entities_at(self, x: int, y: int, *component_types):
         entities = []

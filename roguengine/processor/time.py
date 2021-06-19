@@ -1,22 +1,21 @@
 import datetime
-from typing import Dict
 
 import pygame
 
 from roguengine.component.window import WindowComponent
 from roguengine.esper import Processor
+from roguengine.util.font import Font
 
 
 class TimeProcessor(Processor):
 
-    def __init__(self, px: int, py: int, char_sprite_dict: Dict[str, pygame.Surface]):
+    def __init__(self, px: int, py: int, font: Font):
         super().__init__()
-        self._char_sprite_dict = char_sprite_dict
+        self._font = font
         self._px = px
         self._py = py
 
     def process(self):
-
         for window_entity, [window_component] in self.world.get_components(WindowComponent):
             window_surface = window_component.surface()
             now = datetime.datetime.now()
@@ -26,9 +25,4 @@ class TimeProcessor(Processor):
             )
             x = self._px
             y = self._py
-            for c in string:
-                if c not in self._char_sprite_dict:
-                    continue
-                sprite = self._char_sprite_dict[c]
-                window_surface.blit(sprite, (x, y))
-                x += sprite.get_width()
+            self._font.draw_string(string, x, y, window_surface, pygame.Color(0, 0, 0), pygame.Color(128, 128, 128))
