@@ -43,24 +43,28 @@ class DoorProcessor(Processor):
                     continue
 
                 if self.world.has_component(door_ent, VisibleSpriteComponent):
-                    layer = self.world.component_for_entity(door_ent, VisibleSpriteComponent).layer()
+                    visible_sprite = self.world.component_for_entity(door_ent, VisibleSpriteComponent)
+                    px,py = visible_sprite.top_left_pixel_position()
+                    layer = visible_sprite.layer()
                     self.world.remove_component(door_ent, VisibleSpriteComponent)
                     sprite = self._sprites[(door_tile, DoorState.OPEN)]
                     sprite_comp = VisibleSpriteComponent(
-                        x * sprite.get_width(),
-                        y * sprite.get_height(),
+                        px,
+                        py,
                         sprite,
                         layer
                     )
                     self.world.add_component(door_ent, sprite_comp)
 
                 if self.world.has_component(door_ent, InvisibleSpriteComponent):
-                    layer = self.world.component_for_entity(door_ent, InvisibleSpriteComponent).layer()
+                    invisible_sprite = self.world.component_for_entity(door_ent, InvisibleSpriteComponent)
+                    layer = invisible_sprite.layer()
+                    px, py = invisible_sprite.top_left_pixel_position()
                     self.world.remove_component(door_ent, InvisibleSpriteComponent)
                     sprite = self._sprites[(door_tile, DoorState.OPEN)]
                     sprite_comp = InvisibleSpriteComponent(
-                        x * sprite.get_width(),
-                        y * sprite.get_height(),
+                        px,
+                        py,
                         sprite,
                         layer
                     )

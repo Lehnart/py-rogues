@@ -187,12 +187,12 @@ class GameWorld(esper.World):
         self.add_processor(WearWeaponProcessor(), 6)
         self.add_processor(MoveProcessor(), 6)
         self.add_processor(DungeonGenerator(), 5)
-        self.add_processor(DungeonCreator(tile_sprites, tile_invisible_sprites, tile_components), 4)
-        self.add_processor(DungeonFiller([player_residents, monster_residents, item_residents]), 3)
+        self.add_processor(DungeonCreator(tile_sprites, tile_invisible_sprites, tile_components, 0, 48), 4)
+        self.add_processor(DungeonFiller([player_residents, monster_residents, item_residents], 0, 48), 3)
         self.add_processor(InputProcessor(), 2)
         self.add_processor(RenderProcessor(), 1)
 
-        dungeon = DungeonConfig(5, 25, 5, 10, 50, 50)
+        dungeon = DungeonConfig(5, 25, 5, 10, 50, 47)
         self.publish(DungeonGenerationEvent(dungeon))
 
         self.get_processor(LoggerProcessor).put("Welcome to the dungeon!")

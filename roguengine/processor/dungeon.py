@@ -24,7 +24,7 @@ class DungeonConfig:
                  room_count_min: int,
                  room_count_max: int,
                  width: int,
-                 height: int
+                 height: int,
                  ):
         super().__init__()
 
@@ -34,6 +34,7 @@ class DungeonConfig:
         self.room_count_max = room_count_max
         self.width = width
         self.height = height
+
 
 
 class DungeonResident:
@@ -89,13 +90,18 @@ class DungeonCreator(Processor):
     def __init__(self,
                  tile_sprites: Dict[Tile, pygame.Surface],
                  tile_invisible_sprites: Dict[Tile, pygame.Surface],
-                 tile_components: Dict[Tile, list]
+                 tile_components: Dict[Tile, list],
+                 px0: int = 0,
+                 py0: int = 0
                  ):
+
         super().__init__()
-        self.queue = Queue()
+
         self._tile_sprites = tile_sprites
         self._tile_invisible_sprites = tile_invisible_sprites
         self._tile_components = tile_components
+        self.px0 = px0
+        self.py0 = py0
 
     def process(self):
         msgs = self.world.receive(DungeonCreationEvent)
@@ -109,16 +115,16 @@ class DungeonCreator(Processor):
                     tile = dungeon.grid()[x][y]
                     tile_sprite = self._tile_sprites[tile]
                     sprite = VisibleSpriteComponent(
-                        x * tile_sprite.get_width(),
-                        y * tile_sprite.get_height(),
+                        (x * tile_sprite.get_width()) + self.px0,
+                        (y * tile_sprite.get_height()) + self.py0,
                         tile_sprite
                     )
                     pos = PositionComponent(x, y)
 
                     if self._tile_invisible_sprites and tile in self._tile_invisible_sprites:
                         invisible_sprite = InvisibleSpriteComponent(
-                            x * tile_sprite.get_width(),
-                            y * tile_sprite.get_height(),
+                            (x * tile_sprite.get_width()) + self.px0,
+                            (y * tile_sprite.get_height()) + self.py0,
                             self._tile_invisible_sprites[tile]
                         )
                         components = [*[c() for c in self._tile_components[tile]], sprite, invisible_sprite, pos]
@@ -275,9 +281,12 @@ class DungeonGenerator(Processor):
 
 class DungeonFiller(Processor):
 
-    def __init__(self, dungeon_residents: List[DungeonResidents]):
+    def __init__(self, dungeon_residents: List[DungeonResidents], px0 : int = 0, py0 : int = 0):
+
         super().__init__()
         self._dungeon_residents = dungeon_residents
+        self.px0 = px0
+        self.py0 = py0
 
     def process(self):
         for msg in self.world.receive(DungeonFillingEvent):
@@ -326,8 +335,8 @@ class DungeonFiller(Processor):
 
                     resident_sprite = resident.sprite()
                     sprite = VisibleSpriteComponent(
-                        rx * resident_sprite.get_width(),
-                        ry * resident_sprite.get_height(),
+                        (rx * resident_sprite.get_width()) + self.px0,
+                        (ry * resident_sprite.get_height()) + self.py0,
                         resident_sprite,
                         dungeon_residents.sprite_layer()
                     )

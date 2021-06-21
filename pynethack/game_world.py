@@ -108,12 +108,12 @@ class GameWorld(esper.World):
         self.add_processor(ViewProcessor(), 7)
         self.add_processor(MoveProcessor(), 6)
         self.add_processor(DungeonGenerator(), 5)
-        self.add_processor(DungeonCreator(tile_sprites, tile_invisible_sprites, tile_components), 4)
-        self.add_processor(DungeonFiller([player_residents]), 3)
+        self.add_processor(DungeonCreator(tile_sprites, tile_invisible_sprites, tile_components, 0, 48), 4)
+        self.add_processor(DungeonFiller([player_residents], 0, 48), 3)
         self.add_processor(InputProcessor(), 2)
         self.add_processor(RenderProcessor(), 1)
 
-        dungeon = DungeonConfig(4, 10, 8, 16, 50, 50)
+        dungeon = DungeonConfig(4, 10, 8, 16, 50, 45)
         self.publish(DungeonGenerationEvent(dungeon))
 
         self.publish(LogEvent("[Odin has chosen you to recover the Amulet of Yendor for Him.]"))
