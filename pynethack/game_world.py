@@ -15,6 +15,7 @@ from roguengine.component.dynamic_label import DynamicLabelComponent
 from roguengine.component.fighter import FighterComponent
 from roguengine.component.gauge import GaugeComponent
 from roguengine.component.goldbag import GoldBagComponent
+from roguengine.component.input_listener import InputListenerComponent
 from roguengine.component.movable import MovableComponent
 from roguengine.component.player import PlayerComponent
 from roguengine.component.turn_count import TurnCountComponent
@@ -25,6 +26,7 @@ from roguengine.processor.door import DoorProcessor
 from roguengine.processor.dungeon import DungeonResident, DungeonResidents, DungeonGenerator, DungeonCreator, DungeonFiller, DungeonConfig
 from roguengine.processor.input import InputProcessor
 from roguengine.processor.logger import LoggerProcessor
+from roguengine.processor.look import LookProcessor
 from roguengine.processor.move import MoveProcessor
 from roguengine.processor.render import RenderProcessor
 from roguengine.processor.turn_counter import TurnCounterProcessor
@@ -46,6 +48,7 @@ class GameWorld(esper.World):
                 PlayerComponent(),
                 DungeonResidentComponent(),
                 GoldBagComponent(),
+                InputListenerComponent(),
                 FighterComponent(5, 6, 60),
                 CharacterStatComponent(10, 10, 10, 10, 10, 10)
             ],
@@ -101,6 +104,7 @@ class GameWorld(esper.World):
 
         self.create_ui()
 
+        self.add_processor(LookProcessor(), 12)
         self.add_processor(LoggerProcessor(0, 0, FONT, 3, pygame.Color(255, 255, 255), pygame.Color(128, 128, 128)), 11)
         self.add_processor(TurnCounterProcessor(), 10)
         self.add_processor(UI(FONT), 9)

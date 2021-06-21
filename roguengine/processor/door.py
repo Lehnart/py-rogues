@@ -2,6 +2,7 @@ from typing import List, Dict
 
 from roguengine.component.door import DoorComponent, DoorState
 from roguengine.component.dungeon import DungeonComponent, DoorTile
+from roguengine.component.player import PlayerComponent
 from roguengine.component.position import PositionComponent
 from roguengine.component.sprite import VisibleSpriteComponent, InvisibleSpriteComponent
 from roguengine.esper import Processor
@@ -19,6 +20,9 @@ class DoorProcessor(Processor):
         for msg in messages:
 
             ent, move = msg.entity, msg.movement
+            if not self.world.has_component(ent, PlayerComponent):
+                continue
+
             pos = self.world.component_for_entity(ent, PositionComponent)
             x, y = pos.xy()
             dx, dy = move.dx_dy()

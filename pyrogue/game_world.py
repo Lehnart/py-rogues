@@ -14,6 +14,7 @@ from roguengine.component.dynamic_label import DynamicLabelComponent
 from roguengine.component.fighter import FighterComponent, Type
 from roguengine.component.gold import GoldComponent
 from roguengine.component.goldbag import GoldBagComponent
+from roguengine.component.input_listener import InputListenerComponent
 from roguengine.component.movable import MovableComponent
 from roguengine.component.player import PlayerComponent
 from roguengine.component.weapon import WeaponComponent
@@ -56,6 +57,7 @@ class GameWorld(esper.World):
                 FighterComponent(10, 5, 15, Type.HUMAN),
                 WeaponSlotComponent(),
                 ArmorSlotComponent(),
+                InputListenerComponent(),
             ],
             1.,
             1,
