@@ -6,6 +6,7 @@ from pygame import Color
 from pynethack.font import FONT
 from pynethack.sprites import SPRITE_DICT
 from roguengine import esper
+from roguengine.component.ai import AIComponent, State
 from roguengine.component.character_stats import CharacterStatComponent
 from roguengine.component.door import DoorComponent, DoorState
 from roguengine.component.dungeon import VWALL_TILE, HWALL_TILE, TLWALL_TILE, BLWALL_TILE, TRWALL_TILE, BRWALL_TILE, GROUND_TILE, CORRIDOR_TILE, \
@@ -58,6 +59,19 @@ class GameWorld(esper.World):
         )
         player_residents = DungeonResidents({1: 1}, [player_resident], 3)
 
+        spider_sprite = SPRITE_DICT["spider"]
+        spider_resident = DungeonResident(
+            [DungeonResidentComponent(), FighterComponent(10, 5, 15), AIComponent(State.PASSIVE)],
+            0.5,
+            100,
+            spider_sprite
+        )
+        monster_residents = DungeonResidents(
+            {0: 0.2, 1: 0.5, 2: 0.2},
+            [spider_resident],
+            3
+        )
+
         tile_sprites = {
             VWALL_TILE: SPRITE_DICT["vwall"],
             HWALL_TILE: SPRITE_DICT["hwall"],
@@ -104,7 +118,7 @@ class GameWorld(esper.World):
 
         self.create_ui()
 
-        self.add_processor(LookProcessor(), 12)
+        self.add_processor(LookProcessor(640,0,160,800,FONT), 12)
         self.add_processor(LoggerProcessor(0, 0, FONT, 3, pygame.Color(255, 255, 255), pygame.Color(128, 128, 128)), 11)
         self.add_processor(TurnCounterProcessor(), 10)
         self.add_processor(UI(FONT), 9)
@@ -113,11 +127,11 @@ class GameWorld(esper.World):
         self.add_processor(MoveProcessor(), 6)
         self.add_processor(DungeonGenerator(), 5)
         self.add_processor(DungeonCreator(tile_sprites, tile_invisible_sprites, tile_components, 0, 48), 4)
-        self.add_processor(DungeonFiller([player_residents], 0, 48), 3)
+        self.add_processor(DungeonFiller([player_residents,monster_residents], 0, 48), 3)
         self.add_processor(InputProcessor(), 2)
         self.add_processor(RenderProcessor(), 1)
 
-        dungeon = DungeonConfig(4, 10, 8, 16, 50, 45)
+        dungeon = DungeonConfig(4, 10, 8, 16, 40, 45)
         self.publish(DungeonGenerationEvent(dungeon))
 
         self.publish(LogEvent("[Odin has chosen you to recover the Amulet of Yendor for Him.]"))
