@@ -1,4 +1,4 @@
-class LookCursorComponent:
+class OpaqueComponent:
 
     def __init__(self):
         pass

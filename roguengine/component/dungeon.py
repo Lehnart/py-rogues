@@ -144,6 +144,12 @@ class DungeonComponent:
         self._rooms = rooms
         self._level = 1
 
+    def width(self) -> int:
+        return len(self._grid)
+
+    def height(self) -> int:
+        return len(self._grid[0])
+
     def grid(self) -> List[List[Tile]]:
         return self._grid
 

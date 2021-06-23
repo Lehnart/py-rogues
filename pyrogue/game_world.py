@@ -33,7 +33,7 @@ from roguengine.processor.move import MoveProcessor
 from roguengine.processor.render import RenderProcessor
 from roguengine.processor.time import TimeProcessor
 from roguengine.processor.ui import UI
-from roguengine.processor.view import ViewProcessor
+from roguengine.processor.view import RoomViewProcessor
 from roguengine.processor.wear import WearWeaponProcessor, WearArmorProcessor
 
 SPRITE_SHEET: pygame.Surface = pygame.image.load("res/sprites.bmp")
@@ -184,7 +184,7 @@ class GameWorld(esper.World):
         self.add_processor(FightProcessor(), 11)
         self.add_processor(LoggerProcessor(16, 0, FONT, 3, pygame.Color(128, 128, 128), pygame.Color(128, 128, 128)), 10)
         self.add_processor(TimeProcessor(720, 824, FONT), 9)
-        self.add_processor(ViewProcessor(), 7)
+        self.add_processor(RoomViewProcessor(), 7)
         self.add_processor(WearArmorProcessor(), 6)
         self.add_processor(WearWeaponProcessor(), 6)
         self.add_processor(MoveProcessor(), 6)

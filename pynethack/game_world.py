@@ -10,7 +10,7 @@ from roguengine.component.ai import AIComponent, State
 from roguengine.component.character_stats import CharacterStatComponent
 from roguengine.component.door import DoorComponent, DoorState
 from roguengine.component.dungeon import VWALL_TILE, HWALL_TILE, TLWALL_TILE, BLWALL_TILE, TRWALL_TILE, BRWALL_TILE, GROUND_TILE, CORRIDOR_TILE, \
-    HDOOR_TILE, VDOOR_TILE
+    HDOOR_TILE, VDOOR_TILE, VOID_TILE
 from roguengine.component.dungeon_resident import DungeonResidentComponent
 from roguengine.component.dynamic_label import DynamicLabelComponent
 from roguengine.component.fighter import FighterComponent
@@ -18,6 +18,7 @@ from roguengine.component.gauge import GaugeComponent
 from roguengine.component.goldbag import GoldBagComponent
 from roguengine.component.input_listener import InputListenerComponent
 from roguengine.component.movable import MovableComponent
+from roguengine.component.opaque import OpaqueComponent
 from roguengine.component.player import PlayerComponent
 from roguengine.component.turn_count import TurnCountComponent
 from roguengine.component.window import WindowComponent
@@ -32,7 +33,7 @@ from roguengine.processor.move import MoveProcessor
 from roguengine.processor.render import RenderProcessor
 from roguengine.processor.turn_counter import TurnCounterProcessor
 from roguengine.processor.ui import UI
-from roguengine.processor.view import ViewProcessor
+from roguengine.processor.view import FOVViewProcessor
 
 
 class GameWorld(esper.World):
@@ -83,6 +84,7 @@ class GameWorld(esper.World):
             CORRIDOR_TILE: SPRITE_DICT["ground"],
             HDOOR_TILE: SPRITE_DICT["door"],
             VDOOR_TILE: SPRITE_DICT["door"],
+            VOID_TILE: SPRITE_DICT["void"]
         }
 
         tile_invisible_sprites = {
@@ -96,19 +98,21 @@ class GameWorld(esper.World):
             CORRIDOR_TILE: SPRITE_DICT["invisible_ground"],
             HDOOR_TILE: SPRITE_DICT["door"],
             VDOOR_TILE: SPRITE_DICT["door"],
+            VOID_TILE: SPRITE_DICT["void"]
         }
 
         tile_components = {
-            VWALL_TILE: [],
-            HWALL_TILE: [],
-            TLWALL_TILE: [],
-            BLWALL_TILE: [],
-            TRWALL_TILE: [],
-            BRWALL_TILE: [],
+            VWALL_TILE: [OpaqueComponent],
+            HWALL_TILE: [OpaqueComponent],
+            TLWALL_TILE: [OpaqueComponent],
+            BLWALL_TILE: [OpaqueComponent],
+            TRWALL_TILE: [OpaqueComponent],
+            BRWALL_TILE: [OpaqueComponent],
             GROUND_TILE: [MovableComponent],
             CORRIDOR_TILE: [MovableComponent],
-            HDOOR_TILE: [MovableComponent, DoorComponent],
-            VDOOR_TILE: [MovableComponent, DoorComponent],
+            HDOOR_TILE: [MovableComponent, DoorComponent, OpaqueComponent],
+            VDOOR_TILE: [MovableComponent, DoorComponent, OpaqueComponent],
+            VOID_TILE: [OpaqueComponent]
         }
 
         door_sprites = {
@@ -118,16 +122,16 @@ class GameWorld(esper.World):
 
         self.create_ui()
 
-        self.add_processor(LookProcessor(640,0,160,800,FONT), 12)
+        self.add_processor(LookProcessor(640, 0, 160, 800, FONT), 12)
         self.add_processor(LoggerProcessor(0, 0, FONT, 3, pygame.Color(255, 255, 255), pygame.Color(128, 128, 128)), 11)
         self.add_processor(TurnCounterProcessor(), 10)
         self.add_processor(UI(FONT), 9)
         self.add_processor(DoorProcessor(door_sprites), 8)
-        self.add_processor(ViewProcessor(), 7)
+        self.add_processor(FOVViewProcessor(), 7)
         self.add_processor(MoveProcessor(), 6)
         self.add_processor(DungeonGenerator(), 5)
         self.add_processor(DungeonCreator(tile_sprites, tile_invisible_sprites, tile_components, 0, 48), 4)
-        self.add_processor(DungeonFiller([player_residents,monster_residents], 0, 48), 3)
+        self.add_processor(DungeonFiller([player_residents, monster_residents], 0, 48), 3)
         self.add_processor(InputProcessor(), 2)
         self.add_processor(RenderProcessor(), 1)
 

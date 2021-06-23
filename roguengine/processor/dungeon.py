@@ -1,7 +1,6 @@
 import bisect
 import random
 from copy import deepcopy
-from queue import Queue
 from typing import List, Dict, Tuple
 
 import pygame
@@ -34,7 +33,6 @@ class DungeonConfig:
         self.room_count_max = room_count_max
         self.width = width
         self.height = height
-
 
 
 class DungeonResident:
@@ -281,7 +279,7 @@ class DungeonGenerator(Processor):
 
 class DungeonFiller(Processor):
 
-    def __init__(self, dungeon_residents: List[DungeonResidents], px0 : int = 0, py0 : int = 0):
+    def __init__(self, dungeon_residents: List[DungeonResidents], px0: int = 0, py0: int = 0):
 
         super().__init__()
         self._dungeon_residents = dungeon_residents

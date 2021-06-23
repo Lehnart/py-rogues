@@ -14,7 +14,7 @@ def get_sprite(px: int, py: int) -> pygame.Surface:
 
 SPRITE_DICT = {
     "player": get_sprite(576, 128),
-    "spider": get_sprite(0,0),
+    "spider": get_sprite(0, 0),
     "vwall": get_sprite(176, 336),
     "hwall": get_sprite(192, 336),
     "twall": get_sprite(208, 336),
@@ -25,4 +25,5 @@ SPRITE_DICT = {
     "door": get_sprite(400, 336),
     "vdoor_open": get_sprite(384, 336),
     "hdoor_open": get_sprite(368, 336),
+    "void": pygame.Surface((16, 16))
 }

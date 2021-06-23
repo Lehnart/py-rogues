@@ -2,6 +2,7 @@ from typing import List, Dict
 
 from roguengine.component.door import DoorComponent, DoorState
 from roguengine.component.dungeon import DungeonComponent, DoorTile
+from roguengine.component.opaque import OpaqueComponent
 from roguengine.component.player import PlayerComponent
 from roguengine.component.position import PositionComponent
 from roguengine.component.sprite import VisibleSpriteComponent, InvisibleSpriteComponent
@@ -38,6 +39,9 @@ class DoorProcessor(Processor):
 
                 door_comp.open()
 
+                if self.world.has_component(door_ent, OpaqueComponent):
+                    self.world.remove_component(door_ent, OpaqueComponent)
+
                 dungeon = self.world.get_component(DungeonComponent)
                 if not dungeon:
                     continue
@@ -48,7 +52,7 @@ class DoorProcessor(Processor):
 
                 if self.world.has_component(door_ent, VisibleSpriteComponent):
                     visible_sprite = self.world.component_for_entity(door_ent, VisibleSpriteComponent)
-                    px,py = visible_sprite.top_left_pixel_position()
+                    px, py = visible_sprite.top_left_pixel_position()
                     layer = visible_sprite.layer()
                     self.world.remove_component(door_ent, VisibleSpriteComponent)
                     sprite = self._sprites[(door_tile, DoorState.OPEN)]

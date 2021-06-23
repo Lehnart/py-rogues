@@ -53,7 +53,7 @@ class LookProcessor(Processor):
         y = self._y0
         for ent in entities:
             components = self.world.components_for_entity(ent)
-            if not any(isinstance(c,VisibleComponent) for c in components):
+            if not any(isinstance(c, VisibleComponent) for c in components):
                 continue
 
             component_strs = [type(c).__name__ for c in components]
