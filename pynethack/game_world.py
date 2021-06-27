@@ -22,6 +22,7 @@ from roguengine.component.label import LabelComponent
 from roguengine.component.movable import MovableComponent
 from roguengine.component.opaque import OpaqueComponent
 from roguengine.component.player import PlayerComponent
+from roguengine.component.text_form import TextFormComponent
 from roguengine.component.turn_count import TurnCountComponent
 from roguengine.component.window import WindowComponent
 from roguengine.event.dungeon_generation import DungeonGenerationEvent
@@ -36,6 +37,7 @@ from roguengine.processor.logger import LoggerProcessor
 from roguengine.processor.look import LookProcessor
 from roguengine.processor.move import MoveProcessor
 from roguengine.processor.render import RenderProcessor
+from roguengine.processor.text_form import TextFormProcessor
 from roguengine.processor.turn_counter import TurnCounterProcessor
 from roguengine.processor.ui import UI
 from roguengine.processor.view import FOVViewProcessor
@@ -56,7 +58,8 @@ class GameWorld(esper.World):
         bc = BlinkingComponent(0.250)
         self.create_entity(lc, bc)
 
-        self.add_processor(CallableProcessor({StartGameEvent: self._create_game}), 14)
+        self.add_processor(TextFormProcessor(), 15)
+        self.add_processor(CallableProcessor({StartGameEvent: self._enter_name}), 14)
         self.add_processor(BlinkProcessor(), 13)
         self.add_processor(LookProcessor(640, 0, 160, 800, FONT), 12)
         self.add_processor(LoggerProcessor(0, 0, FONT, 3, pygame.Color(255, 255, 255), pygame.Color(128, 128, 128)), 11)
@@ -68,10 +71,33 @@ class GameWorld(esper.World):
         self.add_processor(InputProcessor(), 2)
         self.add_processor(RenderProcessor(), 1)
 
+    def _enter_name(self):
+
+        for e, _ in self.get_component(LabelComponent):
+            self.delete_entity(e, True)
+
+        lc = LabelComponent(358, 384, "Enter your name : ", pygame.Color(128, 128, 128), pygame.Color(0, 0, 0))
+        self.create_entity(lc)
+
+        tfc = TextFormComponent()
+        dlc = DynamicLabelComponent(358, 400, get_text_form, pygame.Color(128, 128, 128), pygame.Color(0, 0, 0))
+        self.create_entity(tfc, dlc)
+
+        self.remove_processor(CallableProcessor)
+        self.add_processor(CallableProcessor({StartGameEvent: self._create_game}), 16)
+
     def _create_game(self):
+
+        e, t = self.get_component(TextFormComponent)[0]
+        player_name = t.get()
 
         for e, _ in self.get_component(LabelComponent):
             self.delete_entity(e)
+        for e, _ in self.get_component(DynamicLabelComponent):
+            self.delete_entity(e)
+
+        self.remove_processor(CallableProcessor)
+        self.remove_processor(TextFormProcessor)
 
         player_sprite = SPRITE_DICT["player"]
         player_resident = DungeonResident(
@@ -149,7 +175,7 @@ class GameWorld(esper.World):
             (VDOOR_TILE, DoorState.OPEN): SPRITE_DICT["vdoor_open"]
         }
 
-        self.create_ui()
+        self.create_ui(player_name)
 
         self.add_processor(DoorProcessor(door_sprites), 8)
         self.add_processor(DungeonCreator(tile_sprites, tile_invisible_sprites, tile_components, 0, 48), 4)
@@ -164,7 +190,7 @@ class GameWorld(esper.World):
     def is_running(self) -> bool:
         return self._is_running
 
-    def create_ui(self):
+    def create_ui(self, player_name: str):
         label = DynamicLabelComponent(0, 788, get_player_state, pygame.Color(254, 254, 254), pygame.Color(1, 1, 1))
         ui_ent = self.create_entity(label)
         self.add_component(ui_ent, TurnCountComponent())
@@ -181,9 +207,14 @@ class GameWorld(esper.World):
             [(0.2, Color(254, 0, 0)), (0.4, Color(254, 170, 70)), (0.6, Color(247, 247, 69)), (0.8, Color(37, 186, 52)), (1., Color(254, 254, 254))],
             get_player_hp,
             get_player_hp_max,
-            "setoh"
+            player_name
         )
         self.add_component(ui_ent, gauge)
+
+
+def get_text_form(world: esper.World) -> str:
+    for e, tfc in world.get_component(TextFormComponent):
+        return tfc.get()
 
 
 def get_player(world: esper.World) -> Optional[int]:

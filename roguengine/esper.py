@@ -120,7 +120,7 @@ class World:
         self._processors.append(processor_instance)
         self._processors.sort(key=lambda proc: proc.priority, reverse=True)
 
-    def remove_processor(self, processor_type: Processor) -> None:
+    def remove_processor(self, processor_type: Type[Processor]) -> None:
         """Remove a Processor from the World, by type.
 
         :param processor_type: The class type of the Processor to remove.
