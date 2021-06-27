@@ -1,11 +1,19 @@
-from typing import Tuple
+import time
+from typing import Tuple, Optional
 
 import pygame
 
 
 class LabelComponent:
 
-    def __init__(self, px: int, py: int, label: str, font_color: pygame.Color, bkgd_color: pygame.Color):
+    def __init__(
+            self,
+            px: int,
+            py: int,
+            label: str,
+            font_color: pygame.Color,
+            bkgd_color: pygame.Color
+    ):
         self._px = px
         self._py = py
         self._label = label

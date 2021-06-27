@@ -7,6 +7,7 @@ from pynethack.font import FONT
 from pynethack.sprites import SPRITE_DICT
 from roguengine import esper
 from roguengine.component.ai import AIComponent, State
+from roguengine.component.blinking import BlinkingComponent
 from roguengine.component.character_stats import CharacterStatComponent
 from roguengine.component.door import DoorComponent, DoorState
 from roguengine.component.dungeon import VWALL_TILE, HWALL_TILE, TLWALL_TILE, BLWALL_TILE, TRWALL_TILE, BRWALL_TILE, GROUND_TILE, CORRIDOR_TILE, \
@@ -17,6 +18,7 @@ from roguengine.component.fighter import FighterComponent
 from roguengine.component.gauge import GaugeComponent
 from roguengine.component.goldbag import GoldBagComponent
 from roguengine.component.input_listener import InputListenerComponent
+from roguengine.component.label import LabelComponent
 from roguengine.component.movable import MovableComponent
 from roguengine.component.opaque import OpaqueComponent
 from roguengine.component.player import PlayerComponent
@@ -24,6 +26,9 @@ from roguengine.component.turn_count import TurnCountComponent
 from roguengine.component.window import WindowComponent
 from roguengine.event.dungeon_generation import DungeonGenerationEvent
 from roguengine.event.log import LogEvent
+from roguengine.event.start_game_event import StartGameEvent
+from roguengine.processor.blink import BlinkProcessor
+from roguengine.processor.callable import CallableProcessor
 from roguengine.processor.door import DoorProcessor
 from roguengine.processor.dungeon import DungeonResident, DungeonResidents, DungeonGenerator, DungeonCreator, DungeonFiller, DungeonConfig
 from roguengine.processor.input import InputProcessor
@@ -43,6 +48,30 @@ class GameWorld(esper.World):
 
         window = WindowComponent((800, 800))
         self.create_entity(window)
+
+        lc2 = LabelComponent(358, 384, "PYNETHACK", pygame.Color(255, 0, 0), pygame.Color(0, 0, 0))
+        self.create_entity(lc2)
+
+        lc = LabelComponent(350, 400, "PRESS ENTER", pygame.Color(255, 0, 0), pygame.Color(0, 0, 0))
+        bc = BlinkingComponent(0.250)
+        self.create_entity(lc, bc)
+
+        self.add_processor(CallableProcessor({StartGameEvent: self._create_game}), 14)
+        self.add_processor(BlinkProcessor(), 13)
+        self.add_processor(LookProcessor(640, 0, 160, 800, FONT), 12)
+        self.add_processor(LoggerProcessor(0, 0, FONT, 3, pygame.Color(255, 255, 255), pygame.Color(128, 128, 128)), 11)
+        self.add_processor(TurnCounterProcessor(), 10)
+        self.add_processor(UI(FONT), 9)
+        self.add_processor(FOVViewProcessor(), 7)
+        self.add_processor(MoveProcessor(), 6)
+        self.add_processor(DungeonGenerator(), 5)
+        self.add_processor(InputProcessor(), 2)
+        self.add_processor(RenderProcessor(), 1)
+
+    def _create_game(self):
+
+        for e, _ in self.get_component(LabelComponent):
+            self.delete_entity(e)
 
         player_sprite = SPRITE_DICT["player"]
         player_resident = DungeonResident(
@@ -122,18 +151,9 @@ class GameWorld(esper.World):
 
         self.create_ui()
 
-        self.add_processor(LookProcessor(640, 0, 160, 800, FONT), 12)
-        self.add_processor(LoggerProcessor(0, 0, FONT, 3, pygame.Color(255, 255, 255), pygame.Color(128, 128, 128)), 11)
-        self.add_processor(TurnCounterProcessor(), 10)
-        self.add_processor(UI(FONT), 9)
         self.add_processor(DoorProcessor(door_sprites), 8)
-        self.add_processor(FOVViewProcessor(), 7)
-        self.add_processor(MoveProcessor(), 6)
-        self.add_processor(DungeonGenerator(), 5)
         self.add_processor(DungeonCreator(tile_sprites, tile_invisible_sprites, tile_components, 0, 48), 4)
         self.add_processor(DungeonFiller([player_residents, monster_residents], 0, 48), 3)
-        self.add_processor(InputProcessor(), 2)
-        self.add_processor(RenderProcessor(), 1)
 
         dungeon = DungeonConfig(4, 10, 8, 16, 40, 45)
         self.publish(DungeonGenerationEvent(dungeon))

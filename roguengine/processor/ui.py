@@ -1,3 +1,4 @@
+from roguengine.component.blinking import BlinkingComponent
 from roguengine.component.dynamic_label import DynamicLabelComponent
 from roguengine.component.gauge import GaugeComponent
 from roguengine.component.label import LabelComponent
@@ -19,10 +20,15 @@ class UI(Processor):
         window_surface = window[0][1].surface()
 
         label_components = self.world.get_component(LabelComponent)
-        for _, label in label_components:
+        for ent, label in label_components:
             x, y = label.get_position()
             s = label.get_label()
-            self.font.draw_string(s, x, y, window_surface, label.get_font_color(), label.get_bkgd_color())
+
+            if self.world.has_component(ent, BlinkingComponent) and self.world.component_for_entity(ent,
+                                                                                                    BlinkingComponent).get_blinking_count() % 2 == 1:
+                self.font.draw_string(s, x, y, window_surface, label.get_bkgd_color(), label.get_bkgd_color())
+            else:
+                self.font.draw_string(s, x, y, window_surface, label.get_font_color(), label.get_bkgd_color())
 
         dynamic_label_components = self.world.get_component(DynamicLabelComponent)
         for _, label in dynamic_label_components:
