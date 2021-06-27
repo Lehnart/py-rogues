@@ -2,7 +2,7 @@ from typing import Tuple, List, Callable
 
 import pygame
 
-from roguengine import esper
+from roguengine import rogue_esper
 
 
 class GaugeComponent:
@@ -15,8 +15,8 @@ class GaugeComponent:
             height: int,
             font_color: pygame.Color,
             bkgd_color_thresholds: List[Tuple[float, pygame.Color]],
-            value_function: Callable[[esper.World], float],
-            value_max_function: Callable[[esper.World], float],
+            value_function: Callable[[rogue_esper.RogueWorld], float],
+            value_max_function: Callable[[rogue_esper.RogueWorld], float],
             label: str
     ):
         self.px = px

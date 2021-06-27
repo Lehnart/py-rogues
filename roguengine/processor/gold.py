@@ -1,9 +1,10 @@
 from roguengine.component.gold import GoldComponent
 from roguengine.component.goldbag import GoldBagComponent
 from roguengine.component.player import PlayerComponent
-from roguengine.esper import Processor
+
 from roguengine.event.gold_pickup import GoldPickUpEvent
 from roguengine.event.log import LogEvent
+from roguengine.rogue_esper import Processor
 
 
 class GoldProcessor(Processor):

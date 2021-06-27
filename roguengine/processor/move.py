@@ -8,12 +8,12 @@ from roguengine.component.movable import MovableComponent
 from roguengine.component.player import PlayerComponent
 from roguengine.component.position import PositionComponent
 from roguengine.component.sprite import VisibleSpriteComponent
-from roguengine.esper import Processor
 from roguengine.event.ai import AIEvent
 from roguengine.event.fight import FightEvent
 from roguengine.event.gold_pickup import GoldPickUpEvent
 from roguengine.event.move import MoveEvent
 from roguengine.event.turn_counter import NewTurnEvent
+from roguengine.rogue_esper import Processor
 
 
 class MoveProcessor(Processor):
@@ -27,7 +27,7 @@ class MoveProcessor(Processor):
         for msg in messages:
             ent, move = msg.entity, msg.movement
 
-            if ent not in self.world.entities():
+            if not self.world.entity_exists(ent):
                 continue
 
             pos = self.world.component_for_entity(ent, PositionComponent)

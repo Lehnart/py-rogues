@@ -9,8 +9,8 @@ from roguengine.component.position import PositionComponent
 from roguengine.component.sprite import VisibleSpriteComponent
 from roguengine.component.visible import VisibleComponent
 from roguengine.component.window import WindowComponent
-from roguengine.esper import Processor
 from roguengine.event.look import LookInputEvent
+from roguengine.rogue_esper import Processor
 from roguengine.util.font import Font
 
 

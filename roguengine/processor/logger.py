@@ -1,9 +1,9 @@
 import pygame
 
 from roguengine.component.window import WindowComponent
-from roguengine.esper import Processor
 from roguengine.event.log import LogEvent
 from roguengine.processor.ui import Font
+from roguengine.rogue_esper import Processor
 
 
 class LoggerProcessor(Processor):

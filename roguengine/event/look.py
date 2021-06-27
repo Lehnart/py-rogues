@@ -1,4 +1,4 @@
-from roguengine.esper import Event
+from roguengine.rogue_esper import Event
 
 
 class LookInputEvent(Event):

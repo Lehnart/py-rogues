@@ -6,9 +6,9 @@ from roguengine.component.ai import AIComponent, State
 from roguengine.component.fighter import FighterComponent
 from roguengine.component.player import PlayerComponent
 from roguengine.component.position import PositionComponent
-from roguengine.esper import Processor
 from roguengine.event.ai import AIEvent
 from roguengine.event.move import Movement, MoveEvent
+from roguengine.rogue_esper import Processor
 
 
 class AIProcessor(Processor):

@@ -6,9 +6,9 @@ from roguengine.component.position import PositionComponent
 from roguengine.component.sprite import VisibleSpriteComponent
 from roguengine.component.weapon import WeaponComponent
 from roguengine.component.weapon_slot import WeaponSlotComponent
-from roguengine.esper import Processor
 from roguengine.event.log import LogEvent
 from roguengine.event.wear import WearWeaponEvent, WearArmorEvent
+from roguengine.rogue_esper import Processor
 
 
 class WearWeaponProcessor(Processor):

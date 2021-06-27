@@ -1,6 +1,7 @@
-from typing import List, Type, Callable, Dict
+from typing import Type, Callable, Dict
 
-from roguengine.esper import Processor, Event
+from roguengine.rogue_esper import Event
+from roguengine.rogue_esper import Processor
 
 
 class CallableProcessor(Processor):

@@ -3,7 +3,6 @@ import sys
 import pygame
 
 from roguengine.component.input_listener import InputListenerComponent
-from roguengine.esper import Processor
 from roguengine.event.ai import AIEvent
 from roguengine.event.dungeon_generation import DungeonGenerationEvent
 from roguengine.event.key_pressed import KeyPressedEvent
@@ -11,6 +10,7 @@ from roguengine.event.look import LookInputEvent
 from roguengine.event.move import MoveEvent, Movement
 from roguengine.event.start_game_event import StartGameEvent
 from roguengine.event.wear import WearWeaponEvent, WearArmorEvent
+from roguengine.rogue_esper import Processor
 
 
 class InputProcessor(Processor):

@@ -8,7 +8,7 @@ from roguengine.component.position import PositionComponent
 from roguengine.component.sprite import VisibleSpriteComponent
 from roguengine.component.viewed import ViewedComponent
 from roguengine.component.visible import VisibleComponent
-from roguengine.esper import Processor
+from roguengine.rogue_esper import Processor
 
 
 class RoomViewProcessor(Processor):

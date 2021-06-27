@@ -2,12 +2,12 @@ from typing import Tuple, Callable
 
 import pygame
 
-from roguengine import esper
+from roguengine import rogue_esper
 
 
 class DynamicLabelComponent:
 
-    def __init__(self, px: int, py: int, acallable: Callable[[esper.World], str], font_color: pygame.Color, bkgd_color: pygame.Color):
+    def __init__(self, px: int, py: int, acallable: Callable[[rogue_esper.RogueWorld], str], font_color: pygame.Color, bkgd_color: pygame.Color):
         self._px = px
         self._py = py
         self._font_color = font_color
@@ -17,7 +17,7 @@ class DynamicLabelComponent:
     def get_position(self) -> Tuple[int, int]:
         return self._px, self._py
 
-    def get_callable(self) -> Callable[[esper.World], str]:
+    def get_callable(self) -> Callable[[rogue_esper.RogueWorld], str]:
         return self._callable
 
     def get_font_color(self) -> pygame.Color:

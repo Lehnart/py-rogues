@@ -6,8 +6,8 @@ from roguengine.component.opaque import OpaqueComponent
 from roguengine.component.player import PlayerComponent
 from roguengine.component.position import PositionComponent
 from roguengine.component.sprite import VisibleSpriteComponent, InvisibleSpriteComponent
-from roguengine.esper import Processor
 from roguengine.event.move import MoveEvent
+from roguengine.rogue_esper import Processor
 
 
 class DoorProcessor(Processor):

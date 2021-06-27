@@ -1,8 +1,8 @@
 from typing import List
 
 from roguengine.component.text_form import TextFormComponent
-from roguengine.esper import Processor
 from roguengine.event.key_pressed import KeyPressedEvent
+from roguengine.rogue_esper import Processor
 
 
 class TextFormProcessor(Processor):

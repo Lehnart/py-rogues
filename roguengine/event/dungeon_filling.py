@@ -1,5 +1,5 @@
 from roguengine.component.dungeon import DungeonComponent
-from roguengine.esper import Event
+from roguengine.rogue_esper import Event
 
 
 class DungeonFillingEvent(Event):

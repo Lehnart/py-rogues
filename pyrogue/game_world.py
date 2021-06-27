@@ -3,7 +3,7 @@ from typing import Optional
 import pygame
 
 from pyrogue.font import FONT
-from roguengine import esper
+from roguengine import rogue_esper
 from roguengine.component.ai import AIComponent, State
 from roguengine.component.armor import ArmorComponent
 from roguengine.component.armor_slot import ArmorSlotComponent
@@ -39,7 +39,7 @@ from roguengine.processor.wear import WearWeaponProcessor, WearArmorProcessor
 SPRITE_SHEET: pygame.Surface = pygame.image.load("res/sprites.bmp")
 
 
-class GameWorld(esper.World):
+class GameWorld(rogue_esper.RogueWorld):
     def __init__(self):
         super().__init__()
         self._is_running: bool = True
@@ -207,7 +207,7 @@ class GameWorld(esper.World):
         self.create_entity(label)
 
 
-def get_player(world: esper.World) -> Optional[int]:
+def get_player(world: rogue_esper.RogueWorld) -> Optional[int]:
     players = world.get_components(PlayerComponent)
     if not players:
         return None
@@ -216,7 +216,7 @@ def get_player(world: esper.World) -> Optional[int]:
     return player
 
 
-def get_player_state(world: esper.World) -> str:
+def get_player_state(world: rogue_esper.RogueWorld) -> str:
     player_ent = get_player(world)
 
     if not player_ent:

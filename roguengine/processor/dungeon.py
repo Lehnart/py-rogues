@@ -9,10 +9,10 @@ from roguengine.component.dungeon import DungeonComponent, Room, Tile, VoidTile,
     HWALL_TILE, VWALL_TILE, GROUND_TILE, WallTile, VDOOR_TILE, HDOOR_TILE, CORRIDOR_TILE
 from roguengine.component.position import PositionComponent
 from roguengine.component.sprite import VisibleSpriteComponent, InvisibleSpriteComponent
-from roguengine.esper import Processor
 from roguengine.event.dungeon_creation import DungeonCreationEvent
 from roguengine.event.dungeon_filling import DungeonFillingEvent
 from roguengine.event.dungeon_generation import DungeonGenerationEvent
+from roguengine.rogue_esper import Processor
 
 
 class DungeonConfig:

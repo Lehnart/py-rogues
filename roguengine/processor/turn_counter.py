@@ -1,8 +1,8 @@
 from typing import List
 
 from roguengine.component.turn_count import TurnCountComponent
-from roguengine.esper import Processor
 from roguengine.event.turn_counter import NewTurnEvent
+from roguengine.rogue_esper import Processor
 
 
 class TurnCounterProcessor(Processor):

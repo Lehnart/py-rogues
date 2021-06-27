@@ -5,7 +5,7 @@ from pygame import Color
 
 from pynethack.font import FONT
 from pynethack.sprites import SPRITE_DICT
-from roguengine import esper
+from roguengine import rogue_esper
 from roguengine.component.ai import AIComponent, State
 from roguengine.component.blinking import BlinkingComponent
 from roguengine.component.character_stats import CharacterStatComponent
@@ -43,7 +43,7 @@ from roguengine.processor.ui import UI
 from roguengine.processor.view import FOVViewProcessor
 
 
-class GameWorld(esper.World):
+class GameWorld(rogue_esper.RogueWorld):
     def __init__(self):
         super().__init__()
         self._is_running: bool = True
@@ -212,12 +212,12 @@ class GameWorld(esper.World):
         self.add_component(ui_ent, gauge)
 
 
-def get_text_form(world: esper.World) -> str:
+def get_text_form(world: rogue_esper.RogueWorld) -> str:
     for e, tfc in world.get_component(TextFormComponent):
         return tfc.get()
 
 
-def get_player(world: esper.World) -> Optional[int]:
+def get_player(world: rogue_esper.RogueWorld) -> Optional[int]:
     players = world.get_components(PlayerComponent)
     if not players:
         return None
@@ -226,7 +226,7 @@ def get_player(world: esper.World) -> Optional[int]:
     return player
 
 
-def get_player_stats(world: esper.World) -> str:
+def get_player_stats(world: rogue_esper.RogueWorld) -> str:
     player_ent = get_player(world)
 
     if not player_ent:
@@ -244,7 +244,7 @@ def get_player_stats(world: esper.World) -> str:
     return ui_str
 
 
-def get_player_state(world: esper.World) -> str:
+def get_player_state(world: rogue_esper.RogueWorld) -> str:
     player_ent = get_player(world)
 
     if not player_ent:
@@ -274,7 +274,7 @@ def get_player_state(world: esper.World) -> str:
     return ui_str
 
 
-def get_player_hp(world: esper.World) -> float:
+def get_player_hp(world: rogue_esper.RogueWorld) -> float:
     player_ent = get_player(world)
 
     if not player_ent:
@@ -288,7 +288,7 @@ def get_player_hp(world: esper.World) -> float:
     return 0.
 
 
-def get_player_hp_max(world: esper.World) -> float:
+def get_player_hp_max(world: rogue_esper.RogueWorld) -> float:
     player_ent = get_player(world)
 
     if not player_ent:

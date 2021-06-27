@@ -4,7 +4,7 @@ from roguengine.component.sprite import VisibleSpriteComponent, InvisibleSpriteC
 from roguengine.component.viewed import ViewedComponent
 from roguengine.component.visible import VisibleComponent
 from roguengine.component.window import WindowComponent
-from roguengine.esper import Processor
+from roguengine.rogue_esper import Processor
 
 
 class RenderProcessor(Processor):

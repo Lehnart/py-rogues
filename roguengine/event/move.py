@@ -1,6 +1,6 @@
 from typing import Tuple
 
-from roguengine.esper import Event
+from roguengine.rogue_esper import Event
 
 
 class Movement:

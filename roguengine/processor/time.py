@@ -3,7 +3,7 @@ import datetime
 import pygame
 
 from roguengine.component.window import WindowComponent
-from roguengine.esper import Processor
+from roguengine.rogue_esper import Processor
 from roguengine.util.font import Font
 
 
