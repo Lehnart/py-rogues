@@ -39,6 +39,9 @@ class MoveProcessor(Processor):
             fighting_entities = self.get_entities_at(x + dx, y + dy, FighterComponent)
             if self.world.has_component(ent, FighterComponent) and fighting_entities:
                 self.world.publish(FightEvent(ent, fighting_entities[0]))
+                if self.world.has_component(ent, PlayerComponent):
+                    self.world.publish(AIEvent())
+                    self.world.publish(NewTurnEvent())
                 continue
 
             if self.world.has_component(ent, DungeonResidentComponent) and not self.get_entities_at(x + dx, y + dy, MovableComponent):
