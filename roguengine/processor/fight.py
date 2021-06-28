@@ -32,7 +32,7 @@ class FightProcessor(Processor):
 
             attack_bonus = 0
             weapon_slot = self.world.try_component(attacker_ent, WeaponSlotComponent)
-            if weapon_slot:
+            if weapon_slot :
                 weapon_ent = weapon_slot.get_weapon()
                 if weapon_ent:
                     weapon = self.world.try_component(weapon_ent, WeaponComponent)
@@ -40,7 +40,7 @@ class FightProcessor(Processor):
 
             defense_bonus = 0
             armor_slot = self.world.try_component(defender_ent, ArmorSlotComponent)
-            if armor_slot:
+            if armor_slot :
                 armor_ent = armor_slot.get_armor()
                 if armor_ent:
                     armor = self.world.try_component(armor_ent, ArmorComponent)

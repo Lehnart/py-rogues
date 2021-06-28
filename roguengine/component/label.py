@@ -1,5 +1,4 @@
-import time
-from typing import Tuple, Optional
+from typing import Tuple
 
 import pygame
 
