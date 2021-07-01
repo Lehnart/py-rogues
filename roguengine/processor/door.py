@@ -21,7 +21,8 @@ class DoorProcessor(Processor):
         for msg in messages:
 
             ent, move = msg.entity, msg.movement
-            if not self.world.has_component(ent, PlayerComponent):
+
+            if not self.world.entity_exists(ent) or not self.world.has_component(ent, PlayerComponent):
                 continue
 
             pos = self.world.component_for_entity(ent, PositionComponent)

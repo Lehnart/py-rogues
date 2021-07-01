@@ -14,7 +14,7 @@ from roguengine.component.dungeon import VWALL_TILE, HWALL_TILE, TLWALL_TILE, BL
     HDOOR_TILE, VDOOR_TILE, VOID_TILE
 from roguengine.component.dungeon_resident import DungeonResidentComponent
 from roguengine.component.dynamic_label import DynamicLabelComponent
-from roguengine.component.fighter import FighterComponent
+from roguengine.component.fighter import FighterComponent, Type
 from roguengine.component.gauge import GaugeComponent
 from roguengine.component.goldbag import GoldBagComponent
 from roguengine.component.input_listener import InputListenerComponent
@@ -28,10 +28,12 @@ from roguengine.component.window import WindowComponent
 from roguengine.event.dungeon_generation import DungeonGenerationEvent
 from roguengine.event.log import LogEvent
 from roguengine.event.start_game_event import StartGameEvent
+from roguengine.processor.ai import AIProcessor
 from roguengine.processor.blink import BlinkProcessor
 from roguengine.processor.callable import CallableProcessor
 from roguengine.processor.door import DoorProcessor
 from roguengine.processor.dungeon import DungeonResident, DungeonResidents, DungeonGenerator, DungeonCreator, DungeonFiller, DungeonConfig
+from roguengine.processor.fight import FightProcessor
 from roguengine.processor.input import InputProcessor
 from roguengine.processor.logger import LoggerProcessor
 from roguengine.processor.look import LookProcessor
@@ -58,6 +60,8 @@ class GameWorld(rogue_esper.RogueWorld):
         bc = BlinkingComponent(0.250)
         self.create_entity(lc, bc)
 
+        self.add_processor(AIProcessor(), 17)
+        self.add_processor(FightProcessor(), 16)
         self.add_processor(TextFormProcessor(), 15)
         self.add_processor(CallableProcessor({StartGameEvent: self._enter_name}), 14)
         self.add_processor(BlinkProcessor(), 13)
@@ -106,7 +110,7 @@ class GameWorld(rogue_esper.RogueWorld):
                 DungeonResidentComponent(),
                 GoldBagComponent(),
                 InputListenerComponent(),
-                FighterComponent(5, 6, 60),
+                FighterComponent(20, 15, 60, Type.HUMAN),
                 CharacterStatComponent(10, 10, 10, 10, 10, 10)
             ],
             1.,
@@ -117,7 +121,7 @@ class GameWorld(rogue_esper.RogueWorld):
 
         spider_sprite = SPRITE_DICT["spider"]
         spider_resident = DungeonResident(
-            [DungeonResidentComponent(), FighterComponent(10, 5, 15), AIComponent(State.PASSIVE)],
+            [DungeonResidentComponent(), FighterComponent(20, 10, 15), AIComponent(State.PASSIVE)],
             0.5,
             100,
             spider_sprite
