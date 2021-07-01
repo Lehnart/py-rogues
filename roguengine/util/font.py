@@ -56,7 +56,14 @@ class Font:
         return self._get_colored_char_sprite(char_sprite, bkgd_color, font_color)
 
     def draw_string(self, s: str, x: int, y: int, window_surface: pygame.Surface, font_color: pygame.Color, bkgd_color: pygame.Color):
+        x0 = x
         for c in s:
+            if c == '\n':
+                sprite = self.get_char(" ", font_color, bkgd_color)
+                y += sprite.get_height()
+                x = x0
+                continue
+
             sprite = self.get_char(c, font_color, bkgd_color)
             window_surface.blit(sprite, (x, y))
             x += sprite.get_width()

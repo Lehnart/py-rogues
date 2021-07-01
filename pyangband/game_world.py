@@ -26,16 +26,35 @@ class GameWorld(rogue_esper.RogueWorld):
         self.create_entity(label)
 
         label3_str = "random menu item, \'ESC\' to step back through the birth process, \'=\' for the birth options, \'?\'"
-        label = LabelComponent(48, 112, label3_str, pygame.Color(255, 255, 255), pygame.Color(0, 0, 0))
+        label = LabelComponent(48, 120, label3_str, pygame.Color(255, 255, 255), pygame.Color(0, 0, 0))
         self.create_entity(label)
 
         label4_str = "for help, or \'Ctrl-X\' to quit."
-        label = LabelComponent(48, 128, label4_str, pygame.Color(255, 255, 255), pygame.Color(0, 0, 0))
+        label = LabelComponent(48, 144, label4_str, pygame.Color(255, 255, 255), pygame.Color(0, 0, 0))
         self.create_entity(label)
 
         label5_str = "Race affects stats and skills, and may confer resistances and abilities."
-        label = LabelComponent(48, 160, label5_str, pygame.Color(206, 206, 0), pygame.Color(0, 0, 0))
+        label = LabelComponent(48, 184, label5_str, pygame.Color(206, 206, 0), pygame.Color(0, 0, 0))
         self.create_entity(label)
+
+        label_strs = [
+            "a) Human",
+            "b) Half-Elf",
+            "c) Elf",
+            "d) Hobbit",
+            "e) Gnome",
+            "f) Dwarf",
+            "g) Half-Orc",
+            "h) Half-Troll",
+            "i) Dunadan",
+            "j) High-Elf",
+            "k) Kobold"
+        ]
+        y = 216
+        for l in label_strs:
+            label = LabelComponent(48, y, l, pygame.Color(255, 255, 255), pygame.Color(0, 0, 0))
+            self.create_entity(label)
+            y += 24
 
         self.add_processor(UI(FONT))
         self.add_processor(InputProcessor())
