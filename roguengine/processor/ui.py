@@ -2,6 +2,7 @@ from roguengine.component.blinking import BlinkingComponent
 from roguengine.component.dynamic_label import DynamicLabelComponent
 from roguengine.component.gauge import GaugeComponent
 from roguengine.component.label import LabelComponent
+from roguengine.component.menu import MenuComponent
 from roguengine.component.window import WindowComponent
 from roguengine.rogue_esper import Processor
 
@@ -36,6 +37,17 @@ class UI(Processor):
             x, y = label.get_position()
             s = label.get_callable()(self.world)
             self.font.draw_string(s, x, y, window_surface, label.get_font_color(), label.get_bkgd_color())
+
+        menu_components = self.world.get_component(MenuComponent)
+        for _, menu in menu_components:
+            labels = menu.get_labels()
+            selected_index = menu.get_selected()
+
+            for i, label in enumerate(labels):
+                if selected_index is not None and i == selected_index:
+                    self.font.draw_string(label.s, label.px, label.py, window_surface, menu.get_selected_color(), label.bkgd_color)
+                else:
+                    self.font.draw_string(label.s, label.px, label.py, window_surface, label.font_color, label.bkgd_color)
 
         gauge_components = self.world.get_component(GaugeComponent)
         for _, gauge in gauge_components:

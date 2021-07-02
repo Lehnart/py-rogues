@@ -2,9 +2,12 @@ import pygame
 
 from pyangband.font import FONT
 from roguengine import rogue_esper
+from roguengine.component.input_listener import InputListenerComponent
 from roguengine.component.label import LabelComponent
+from roguengine.component.menu import MenuComponent
 from roguengine.component.window import WindowComponent
 from roguengine.processor.input import InputProcessor
+from roguengine.processor.menu import MenuProcessor
 from roguengine.processor.render import RenderProcessor
 from roguengine.processor.ui import UI
 
@@ -50,12 +53,14 @@ class GameWorld(rogue_esper.RogueWorld):
             "j) High-Elf",
             "k) Kobold"
         ]
-        y = 216
-        for l in label_strs:
-            label = LabelComponent(48, y, l, pygame.Color(255, 255, 255), pygame.Color(0, 0, 0))
-            self.create_entity(label)
-            y += 24
+        white = pygame.Color(255, 255, 255)
+        black = pygame.Color(0, 0, 0)
+        cyan = pygame.Color(0, 255, 255)
+        n_labels = len(label_strs)
+        menu = MenuComponent(48, 216, 24, label_strs, [white for _ in range(n_labels)], [black for _ in range(n_labels)], cyan)
+        self.create_entity(menu, InputListenerComponent())
 
+        self.add_processor(MenuProcessor())
         self.add_processor(UI(FONT))
         self.add_processor(InputProcessor())
         self.add_processor(RenderProcessor())
