@@ -101,9 +101,6 @@ class GameWorld(rogue_esper.RogueWorld):
         for e, _ in self.get_component(DynamicLabelComponent):
             self.delete_entity(e)
 
-        self.remove_processor(CallableProcessor)
-        self.remove_processor(TextFormProcessor)
-
         player_sprite = SPRITE_DICT["player"]
         player_resident = DungeonResident(
             [

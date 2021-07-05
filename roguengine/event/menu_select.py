@@ -1,4 +1,7 @@
-class MenuSelectEvent:
+from roguengine.rogue_esper import Event
+
+
+class MenuSelectEvent(Event):
 
     def __init__(self):
-        pass
+        super().__init__()
