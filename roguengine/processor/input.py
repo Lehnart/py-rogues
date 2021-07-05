@@ -8,7 +8,6 @@ from roguengine.event.dungeon_generation import DungeonGenerationEvent
 from roguengine.event.key_pressed import KeyPressedEvent
 from roguengine.event.look import LookInputEvent
 from roguengine.event.move import MoveEvent, Movement
-from roguengine.event.start_game_event import StartGameEvent
 from roguengine.event.wear import WearWeaponEvent, WearArmorEvent
 from roguengine.rogue_esper import Processor
 
@@ -31,9 +30,6 @@ class InputProcessor(Processor):
                 if event.key == pygame.K_r:
                     self.world.publish(DungeonGenerationEvent(None))
                     continue
-
-                if event.key == pygame.K_RETURN:
-                    self.world.publish(StartGameEvent())
 
                 listeners = self.world.get_components(InputListenerComponent)
                 if not listeners:

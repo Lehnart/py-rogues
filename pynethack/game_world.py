@@ -18,6 +18,7 @@ from roguengine.component.fighter import FighterComponent, Type
 from roguengine.component.gauge import GaugeComponent
 from roguengine.component.goldbag import GoldBagComponent
 from roguengine.component.input_listener import InputListenerComponent
+from roguengine.component.key_callable import KeyCallableComponent
 from roguengine.component.label import LabelComponent
 from roguengine.component.movable import MovableComponent
 from roguengine.component.opaque import OpaqueComponent
@@ -26,8 +27,8 @@ from roguengine.component.text_form import TextFormComponent
 from roguengine.component.turn_count import TurnCountComponent
 from roguengine.component.window import WindowComponent
 from roguengine.event.dungeon_generation import DungeonGenerationEvent
+from roguengine.event.key_pressed import KeyPressedEvent
 from roguengine.event.log import LogEvent
-from roguengine.event.start_game_event import StartGameEvent
 from roguengine.processor.ai import AIProcessor
 from roguengine.processor.blink import BlinkProcessor
 from roguengine.processor.callable import CallableProcessor
@@ -35,6 +36,7 @@ from roguengine.processor.door import DoorProcessor
 from roguengine.processor.dungeon import DungeonResident, DungeonResidents, DungeonGenerator, DungeonCreator, DungeonFiller, DungeonConfig
 from roguengine.processor.fight import FightProcessor
 from roguengine.processor.input import InputProcessor
+from roguengine.processor.key_callable import KeyCallableProcessor
 from roguengine.processor.logger import LoggerProcessor
 from roguengine.processor.look import LookProcessor
 from roguengine.processor.move import MoveProcessor
@@ -58,12 +60,13 @@ class GameWorld(rogue_esper.RogueWorld):
 
         lc = LabelComponent(350, 400, "PRESS ENTER", pygame.Color(255, 0, 0), pygame.Color(0, 0, 0))
         bc = BlinkingComponent(0.250)
-        self.create_entity(lc, bc)
+        kc = KeyCallableComponent(KeyPressedEvent("\u000D"), self._enter_name)
+        self.create_entity(lc, bc, kc)
 
         self.add_processor(AIProcessor(), 17)
         self.add_processor(FightProcessor(), 16)
         self.add_processor(TextFormProcessor(), 15)
-        self.add_processor(CallableProcessor({StartGameEvent: self._enter_name}), 14)
+        self.add_processor(KeyCallableProcessor(), 14)
         self.add_processor(BlinkProcessor(), 13)
         self.add_processor(LookProcessor(640, 0, 160, 800, FONT), 12)
         self.add_processor(LoggerProcessor(0, 0, FONT, 3, pygame.Color(255, 255, 255), pygame.Color(128, 128, 128)), 11)
@@ -81,14 +84,12 @@ class GameWorld(rogue_esper.RogueWorld):
             self.delete_entity(e, True)
 
         lc = LabelComponent(358, 384, "Enter your name : ", pygame.Color(128, 128, 128), pygame.Color(0, 0, 0))
-        self.create_entity(lc)
+        kc = KeyCallableComponent(KeyPressedEvent("\u000D"), self._create_game)
+        self.create_entity(lc, kc)
 
         tfc = TextFormComponent()
         dlc = DynamicLabelComponent(358, 400, get_text_form, pygame.Color(128, 128, 128), pygame.Color(0, 0, 0))
         self.create_entity(tfc, dlc)
-
-        self.remove_processor(CallableProcessor)
-        self.add_processor(CallableProcessor({StartGameEvent: self._create_game}), 16)
 
     def _create_game(self):
 

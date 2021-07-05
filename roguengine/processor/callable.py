@@ -1,17 +1,14 @@
-from typing import Type, Callable, Dict
-
-from roguengine.rogue_esper import Event
+from roguengine.component.callable import CallableComponent
 from roguengine.rogue_esper import Processor
 
 
 class CallableProcessor(Processor):
 
-    def __init__(self, event_dict: Dict[Type[Event], Callable]):
+    def __init__(self):
         super().__init__()
-        self.event_classes = event_dict
 
     def process(self):
-        for event_key in self.event_classes:
-            messages = self.world.receive(event_key)
-            for _ in messages:
-                self.event_classes[event_key]()
+        for _, call_comp in self.world.get_component(CallableComponent):
+            event_type = call_comp.event_type
+            if any(self.world.receive(event_type)):
+                call_comp.call()

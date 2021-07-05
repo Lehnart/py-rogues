@@ -40,7 +40,7 @@ class MenuComponent:
 
     def get_selected(self) -> Optional[int]:
         return self._selected_index
-    
+
     def get_selected_color(self) -> pygame.Color:
         return self._selected_color
 
