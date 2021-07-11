@@ -10,5 +10,5 @@ class CallableProcessor(Processor):
     def process(self):
         for _, call_comp in self.world.get_component(CallableComponent):
             event_type = call_comp.event_type
-            if any(self.world.receive(event_type)):
-                call_comp.call()
+            for event in self.world.receive(event_type):
+                call_comp.call(event, self.world)

@@ -19,6 +19,6 @@ class MenuProcessor(Processor):
             if dy == 0:
                 continue
 
-            for _, [menu, _] in self.world.get_components(MenuComponent, InputListenerComponent):
+            for menu_entity, [menu, _] in self.world.get_components(MenuComponent, InputListenerComponent):
                 menu.move_selection(dy)
-                self.world.publish(MenuSelectEvent())
+                self.world.publish(MenuSelectEvent(menu_entity))
