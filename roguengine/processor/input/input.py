@@ -3,7 +3,6 @@ import sys
 import pygame
 
 from roguengine.component.input.input_listener import InputListenerComponent
-
 from roguengine.event.ai import AIEvent
 from roguengine.event.dungeon_generation import DungeonGenerationEvent
 from roguengine.event.key_pressed import KeyPressedEvent

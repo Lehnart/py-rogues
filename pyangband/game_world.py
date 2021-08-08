@@ -6,15 +6,13 @@ import pygame
 from pyangband.font import FONT
 from roguengine import rogue_esper
 from roguengine.component.callable.callable import CallableComponent
-
-from roguengine.component.ui.dynamic_label import DynamicLabelComponent
 from roguengine.component.input.input_listener import InputListenerComponent
+from roguengine.component.ui.dynamic_label import DynamicLabelComponent
 from roguengine.component.ui.label import LabelComponent
 from roguengine.component.ui.menu import MenuComponent
 from roguengine.component.window.window import WindowComponent
 from roguengine.event.menu_select import MenuSelectEvent
 from roguengine.processor.callable.callable import CallableProcessor
-
 from roguengine.processor.input.input import InputProcessor
 from roguengine.processor.menu import MenuProcessor
 from roguengine.processor.render import RenderProcessor
