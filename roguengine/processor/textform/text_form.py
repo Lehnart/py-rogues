@@ -1,6 +1,6 @@
 from typing import List
 
-from roguengine.component.text_form import TextFormComponent
+from roguengine.component.textform.text_form import TextFormComponent
 from roguengine.event.key_pressed import KeyPressedEvent
 from roguengine.rogue_esper import Processor
 

@@ -1,8 +1,9 @@
 import pygame
 
-from roguengine.component.window import WindowComponent
+from roguengine.component.window.window import WindowComponent
+
 from roguengine.event.log import LogEvent
-from roguengine.processor.ui import Font
+from roguengine.util.font import Font
 from roguengine.rogue_esper import Processor
 
 

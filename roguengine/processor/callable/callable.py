@@ -1,4 +1,4 @@
-from roguengine.component.callable import CallableComponent
+from roguengine.component.callable.callable import CallableComponent
 from roguengine.rogue_esper import Processor
 
 

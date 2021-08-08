@@ -5,18 +5,20 @@ import pygame
 
 from pyangband.font import FONT
 from roguengine import rogue_esper
-from roguengine.component.callable import CallableComponent
-from roguengine.component.dynamic_label import DynamicLabelComponent
-from roguengine.component.input_listener import InputListenerComponent
-from roguengine.component.label import LabelComponent
-from roguengine.component.menu import MenuComponent
-from roguengine.component.window import WindowComponent
+from roguengine.component.callable.callable import CallableComponent
+
+from roguengine.component.ui.dynamic_label import DynamicLabelComponent
+from roguengine.component.input.input_listener import InputListenerComponent
+from roguengine.component.ui.label import LabelComponent
+from roguengine.component.ui.menu import MenuComponent
+from roguengine.component.window.window import WindowComponent
 from roguengine.event.menu_select import MenuSelectEvent
-from roguengine.processor.callable import CallableProcessor
-from roguengine.processor.input import InputProcessor
+from roguengine.processor.callable.callable import CallableProcessor
+
+from roguengine.processor.input.input import InputProcessor
 from roguengine.processor.menu import MenuProcessor
 from roguengine.processor.render import RenderProcessor
-from roguengine.processor.ui import UI
+from roguengine.processor.uiprocessor import UIProcessor
 
 
 class Race(Enum):
@@ -92,19 +94,19 @@ class RaceSelection:
             return "+" + str(stat)
         return str(stat)
 
-    def str(self, world: rogue_esper.RogueWorld) -> str:
+    def str(self, _world: rogue_esper.RogueWorld) -> str:
         return self._get_stat("str")
 
-    def dex(self, world: rogue_esper.RogueWorld) -> str:
+    def dex(self, _world: rogue_esper.RogueWorld) -> str:
         return self._get_stat("dex")
 
-    def int(self, world: rogue_esper.RogueWorld) -> str:
+    def int(self, _world: rogue_esper.RogueWorld) -> str:
         return self._get_stat("int")
 
-    def con(self, world: rogue_esper.RogueWorld) -> str:
+    def con(self, _world: rogue_esper.RogueWorld) -> str:
         return self._get_stat("con")
 
-    def wis(self, world: rogue_esper.RogueWorld) -> str:
+    def wis(self, _world: rogue_esper.RogueWorld) -> str:
         return self._get_stat("wis")
 
     def update_selection(self, event: MenuSelectEvent, world: rogue_esper.RogueWorld):
@@ -213,7 +215,7 @@ class GameWorld(rogue_esper.RogueWorld):
 
         self.add_processor(CallableProcessor())
         self.add_processor(MenuProcessor())
-        self.add_processor(UI(FONT))
+        self.add_processor(UIProcessor(FONT))
         self.add_processor(InputProcessor())
         self.add_processor(RenderProcessor())
 

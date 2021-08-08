@@ -1,4 +1,4 @@
-from roguengine.component.key_callable import KeyCallableComponent
+from roguengine.component.callable.key_callable import KeyCallableComponent
 from roguengine.event.key_pressed import KeyPressedEvent
 from roguengine.rogue_esper import Processor
 

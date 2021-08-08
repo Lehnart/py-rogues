@@ -1,7 +1,7 @@
 import numpy
 import tcod
 
-from roguengine.component.dungeon import DungeonComponent
+from roguengine.component.dungeon.dungeon import DungeonComponent
 from roguengine.component.opaque import OpaqueComponent
 from roguengine.component.player import PlayerComponent
 from roguengine.component.position import PositionComponent

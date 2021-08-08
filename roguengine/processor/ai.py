@@ -3,7 +3,7 @@ import random
 from typing import List
 
 from roguengine.component.ai import AIComponent, State
-from roguengine.component.fighter import FighterComponent
+from roguengine.component.fight.fighter import FighterComponent
 from roguengine.component.player import PlayerComponent
 from roguengine.component.position import PositionComponent
 from roguengine.event.ai import AIEvent

@@ -1,6 +1,6 @@
 import pygame
 
-from roguengine.processor.ui import Font
+from roguengine.util.font import Font
 
 CHAR_SPRITE_WIDTH = 8
 CHAR_SPRITE_HEIGHT = 12

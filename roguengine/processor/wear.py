@@ -1,11 +1,11 @@
 from typing import List
 
-from roguengine.component.armor import ArmorComponent
-from roguengine.component.armor_slot import ArmorSlotComponent
+from roguengine.component.fight.armor import ArmorComponent
+from roguengine.component.fight.armor_slot import ArmorSlotComponent
+from roguengine.component.fight.weapon import WeaponComponent
+from roguengine.component.fight.weapon_slot import WeaponSlotComponent
 from roguengine.component.position import PositionComponent
 from roguengine.component.sprite import VisibleSpriteComponent
-from roguengine.component.weapon import WeaponComponent
-from roguengine.component.weapon_slot import WeaponSlotComponent
 from roguengine.event.log import LogEvent
 from roguengine.event.wear import WearWeaponEvent, WearArmorEvent
 from roguengine.rogue_esper import Processor

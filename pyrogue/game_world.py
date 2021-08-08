@@ -5,34 +5,33 @@ import pygame
 from pyrogue.font import FONT
 from roguengine import rogue_esper
 from roguengine.component.ai import AIComponent, State
-from roguengine.component.armor import ArmorComponent
-from roguengine.component.armor_slot import ArmorSlotComponent
-from roguengine.component.dungeon import VWALL_TILE, HWALL_TILE, TLWALL_TILE, BLWALL_TILE, TRWALL_TILE, BRWALL_TILE, GROUND_TILE, CORRIDOR_TILE, \
+from roguengine.component.fight.armor import ArmorComponent
+from roguengine.component.fight.armor_slot import ArmorSlotComponent
+from roguengine.component.dungeon.dungeon import VWALL_TILE, HWALL_TILE, TLWALL_TILE, BLWALL_TILE, TRWALL_TILE, BRWALL_TILE, GROUND_TILE, CORRIDOR_TILE, \
     HDOOR_TILE, VDOOR_TILE
-from roguengine.component.dungeon_resident import DungeonResidentComponent
-from roguengine.component.dynamic_label import DynamicLabelComponent
-from roguengine.component.fighter import FighterComponent, Type
-from roguengine.component.gold import GoldComponent
-from roguengine.component.goldbag import GoldBagComponent
-from roguengine.component.input_listener import InputListenerComponent
+from roguengine.component.dungeon.dungeon_resident import DungeonResidentComponent
+from roguengine.component.ui.dynamic_label import DynamicLabelComponent
+from roguengine.component.fight.fighter import FighterComponent, Type
+from roguengine.component.gold.gold import GoldComponent
+from roguengine.component.gold.goldbag import GoldBagComponent
+from roguengine.component.input.input_listener import InputListenerComponent
 from roguengine.component.movable import MovableComponent
 from roguengine.component.player import PlayerComponent
-from roguengine.component.weapon import WeaponComponent
-from roguengine.component.weapon_slot import WeaponSlotComponent
-from roguengine.component.window import WindowComponent
+from roguengine.component.fight.weapon import WeaponComponent
+from roguengine.component.fight.weapon_slot import WeaponSlotComponent
+from roguengine.component.window.window import WindowComponent
 from roguengine.event.dungeon_generation import DungeonGenerationEvent
 from roguengine.processor.ai import AIProcessor
-from roguengine.processor.dungeon import DungeonGenerator, DungeonConfig, DungeonCreator, \
-    DungeonFiller, DungeonResidents, \
-    DungeonResident
-from roguengine.processor.fight import FightProcessor
-from roguengine.processor.gold import GoldProcessor
-from roguengine.processor.input import InputProcessor
-from roguengine.processor.logger import LoggerProcessor
+from roguengine.processor.dungeon.dungeon import DungeonResident, DungeonResidents, DungeonGenerator, DungeonCreator, DungeonFiller, DungeonConfig
+
+from roguengine.processor.fight.fight import FightProcessor
+from roguengine.processor.gold.gold import GoldProcessor
+from roguengine.processor.input.input import InputProcessor
+from roguengine.processor.uiprocessor import UIProcessor
+from roguengine.processor.window.logger import LoggerProcessor
 from roguengine.processor.move import MoveProcessor
 from roguengine.processor.render import RenderProcessor
-from roguengine.processor.time import TimeProcessor
-from roguengine.processor.ui import UI
+from roguengine.processor.window.time import TimeProcessor
 from roguengine.processor.view import RoomViewProcessor
 from roguengine.processor.wear import WearWeaponProcessor, WearArmorProcessor
 
@@ -178,7 +177,7 @@ class GameWorld(rogue_esper.RogueWorld):
 
         self.create_ui()
 
-        self.add_processor(UI(FONT), 14)
+        self.add_processor(UIProcessor(FONT), 14)
         self.add_processor(AIProcessor(), 13)
         self.add_processor(GoldProcessor(), 12)
         self.add_processor(FightProcessor(), 11)

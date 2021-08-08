@@ -3,7 +3,7 @@ import pygame
 from roguengine.component.sprite import VisibleSpriteComponent, InvisibleSpriteComponent
 from roguengine.component.viewed import ViewedComponent
 from roguengine.component.visible import VisibleComponent
-from roguengine.component.window import WindowComponent
+from roguengine.component.window.window import WindowComponent
 from roguengine.rogue_esper import Processor
 
 

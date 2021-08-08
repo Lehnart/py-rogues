@@ -1,15 +1,15 @@
-from roguengine.component.blinking import BlinkingComponent
-from roguengine.component.dynamic_label import DynamicLabelComponent
-from roguengine.component.gauge import GaugeComponent
-from roguengine.component.label import LabelComponent
-from roguengine.component.menu import MenuComponent
-from roguengine.component.window import WindowComponent
+from roguengine.component.ui.blinking import BlinkingComponent
+from roguengine.component.ui.dynamic_label import DynamicLabelComponent
+from roguengine.component.ui.gauge import GaugeComponent
+from roguengine.component.ui.label import LabelComponent
+from roguengine.component.ui.menu import MenuComponent
+from roguengine.component.window.window import WindowComponent
 from roguengine.rogue_esper import Processor
 
 from roguengine.util.font import Font
 
 
-class UI(Processor):
+class UIProcessor(Processor):
 
     def __init__(self, font: Font):
         super().__init__()

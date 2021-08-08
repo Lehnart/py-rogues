@@ -1,4 +1,4 @@
-from roguengine.component.dungeon import DungeonComponent
+from roguengine.component.dungeon.dungeon import DungeonComponent
 from roguengine.rogue_esper import Event
 
 

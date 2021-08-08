@@ -1,6 +1,6 @@
 import time
 
-from roguengine.component.blinking import BlinkingComponent
+from roguengine.component.ui.blinking import BlinkingComponent
 from roguengine.rogue_esper import Processor
 
 

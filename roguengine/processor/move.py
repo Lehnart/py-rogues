@@ -1,9 +1,9 @@
 from typing import List
 
-from roguengine.component.dungeon_resident import DungeonResidentComponent
-from roguengine.component.fighter import FighterComponent
-from roguengine.component.gold import GoldComponent
-from roguengine.component.goldbag import GoldBagComponent
+from roguengine.component.dungeon.dungeon_resident import DungeonResidentComponent
+from roguengine.component.fight.fighter import FighterComponent
+from roguengine.component.gold.gold import GoldComponent
+from roguengine.component.gold.goldbag import GoldBagComponent
 from roguengine.component.movable import MovableComponent
 from roguengine.component.player import PlayerComponent
 from roguengine.component.position import PositionComponent

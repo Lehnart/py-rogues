@@ -5,7 +5,7 @@ from typing import List, Dict, Tuple
 
 import pygame
 
-from roguengine.component.dungeon import DungeonComponent, Room, Tile, VoidTile, VOID_TILE, TLWALL_TILE, BLWALL_TILE, TRWALL_TILE, BRWALL_TILE, \
+from roguengine.component.dungeon.dungeon import DungeonComponent, Room, Tile, VoidTile, VOID_TILE, TLWALL_TILE, BLWALL_TILE, TRWALL_TILE, BRWALL_TILE, \
     HWALL_TILE, VWALL_TILE, GROUND_TILE, WallTile, VDOOR_TILE, HDOOR_TILE, CORRIDOR_TILE
 from roguengine.component.position import PositionComponent
 from roguengine.component.sprite import VisibleSpriteComponent, InvisibleSpriteComponent

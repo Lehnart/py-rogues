@@ -1,7 +1,8 @@
 from typing import List, Dict
 
-from roguengine.component.door import DoorComponent, DoorState
-from roguengine.component.dungeon import DungeonComponent, DoorTile
+from roguengine.component.dungeon.door import DoorComponent, DoorState
+from roguengine.component.dungeon.dungeon import DungeonComponent, DoorTile
+
 from roguengine.component.opaque import OpaqueComponent
 from roguengine.component.player import PlayerComponent
 from roguengine.component.position import PositionComponent

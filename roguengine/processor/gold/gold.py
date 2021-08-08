@@ -1,5 +1,5 @@
-from roguengine.component.gold import GoldComponent
-from roguengine.component.goldbag import GoldBagComponent
+from roguengine.component.gold.gold import GoldComponent
+from roguengine.component.gold.goldbag import GoldBagComponent
 from roguengine.component.player import PlayerComponent
 
 from roguengine.event.gold_pickup import GoldPickUpEvent
