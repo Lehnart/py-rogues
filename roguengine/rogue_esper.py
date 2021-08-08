@@ -1,4 +1,4 @@
-from typing import List
+from typing import List, Type
 
 from .esper import esper
 
@@ -16,7 +16,7 @@ class MessageQueue:
     def __init__(self):
         self._queue = {}
 
-    def add(self, key: str, message: object):
+    def add(self, key: Type, message: object):
         if key not in self._queue:
             self._queue[key] = []
         self._queue[key].append([message, 0])
@@ -29,7 +29,7 @@ class MessageQueue:
         for key in self._queue.keys():
             self._queue[key] = [msg for msg in self._queue[key] if msg[1] < 2]
 
-    def get(self, key: str) -> List:
+    def get(self, key: Type) -> List:
         if key not in self._queue:
             return []
         return [msg[0] for msg in self._queue[key] if msg[1] == 1]
@@ -40,8 +40,8 @@ class Event:
     def __init__(self):
         pass
 
-    def key(self) -> str:
-        return self.__class__.__name__
+    def key(self) -> Type:
+        return self.__class__
 
 
 class RogueWorld(esper.World):
@@ -57,4 +57,4 @@ class RogueWorld(esper.World):
         self._message_queue.add(event.key(), event)
 
     def receive(self, event_class) -> List:
-        return self._message_queue.get(event_class.__name__)
+        return self._message_queue.get(event_class)

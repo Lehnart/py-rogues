@@ -1,18 +1,17 @@
 from typing import List
 
-from roguengine.component.dungeon.dungeon_resident import DungeonResidentComponent
-from roguengine.component.fight.fighter import FighterComponent
-from roguengine.component.gold.gold import GoldComponent
-from roguengine.component.gold.goldbag import GoldBagComponent
+from roguengine.dungeon.components import DungeonResidentComponent
 from roguengine.component.movable import MovableComponent
 from roguengine.component.player import PlayerComponent
-from roguengine.component.position import PositionComponent
+from roguengine.dungeon.components import PositionComponent
 from roguengine.component.sprite import VisibleSpriteComponent
 from roguengine.event.ai import AIEvent
-from roguengine.event.fight import FightEvent
-from roguengine.event.gold_pickup import GoldPickUpEvent
 from roguengine.event.move import MoveEvent
-from roguengine.event.turn_counter import NewTurnEvent
+from roguengine.turn_count.events import NewTurnEvent
+from roguengine.fight.components import FighterComponent
+from roguengine.fight.events import FightEvent
+from roguengine.gold.components import GoldComponent, GoldBagComponent
+from roguengine.gold.events import GoldPickUpEvent
 from roguengine.rogue_esper import Processor
 
 
@@ -49,7 +48,7 @@ class MoveProcessor(Processor):
 
             gold_entities = self.get_entities_at(x + dx, y + dy, GoldComponent)
             if self.world.has_component(ent, GoldBagComponent) and gold_entities:
-                self.world.publish(GoldPickUpEvent(gold_entities[0]))
+                self.world.publish(GoldPickUpEvent(gold_entities[0], ent))
 
             pos.move(dx, dy)
             sprite.move(dx, dy)

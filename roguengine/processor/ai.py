@@ -3,11 +3,11 @@ import random
 from typing import List
 
 from roguengine.component.ai import AIComponent, State
-from roguengine.component.fight.fighter import FighterComponent
 from roguengine.component.player import PlayerComponent
-from roguengine.component.position import PositionComponent
+from roguengine.dungeon.components import PositionComponent
 from roguengine.event.ai import AIEvent
 from roguengine.event.move import Movement, MoveEvent
+from roguengine.fight.components import FighterComponent
 from roguengine.rogue_esper import Processor
 
 

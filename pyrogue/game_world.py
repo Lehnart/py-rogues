@@ -5,35 +5,29 @@ import pygame
 from pyrogue.font import FONT
 from roguengine import rogue_esper
 from roguengine.component.ai import AIComponent, State
-from roguengine.component.dungeon.dungeon import VWALL_TILE, HWALL_TILE, TLWALL_TILE, BLWALL_TILE, TRWALL_TILE, BRWALL_TILE, GROUND_TILE, \
-    CORRIDOR_TILE, \
-    HDOOR_TILE, VDOOR_TILE
-from roguengine.component.dungeon.dungeon_resident import DungeonResidentComponent
-from roguengine.component.fight.armor import ArmorComponent
-from roguengine.component.fight.armor_slot import ArmorSlotComponent
-from roguengine.component.fight.fighter import FighterComponent, Type
-from roguengine.component.fight.weapon import WeaponComponent
-from roguengine.component.fight.weapon_slot import WeaponSlotComponent
-from roguengine.component.gold.gold import GoldComponent
-from roguengine.component.gold.goldbag import GoldBagComponent
-from roguengine.component.input.input_listener import InputListenerComponent
+from roguengine.dungeon.components import *
+
 from roguengine.component.movable import MovableComponent
 from roguengine.component.player import PlayerComponent
-from roguengine.component.ui.dynamic_label import DynamicLabelComponent
 from roguengine.component.window.window import WindowComponent
-from roguengine.event.dungeon_generation import DungeonGenerationEvent
+from roguengine.dungeon.events import DungeonGenerationEvent
+from roguengine.dungeon.processors import DungeonResident, DungeonResidents, DungeonGenerator, DungeonCreator, DungeonFiller, DungeonConfig
+from roguengine.fight.components import FighterComponent, WeaponSlotComponent, ArmorSlotComponent, Type, WeaponComponent, ArmorComponent
+from roguengine.fight.processors import FightProcessor
+from roguengine.gold.components import GoldBagComponent, GoldComponent
+from roguengine.gold.processors import GoldProcessor
+from roguengine.input.components import InputListenerComponent
+from roguengine.input.processors import InputProcessor
 from roguengine.processor.ai import AIProcessor
-from roguengine.processor.dungeon.dungeon import DungeonResident, DungeonResidents, DungeonGenerator, DungeonCreator, DungeonFiller, DungeonConfig
-from roguengine.processor.fight.fight import FightProcessor
-from roguengine.processor.gold.gold import GoldProcessor
-from roguengine.processor.input.input import InputProcessor
+
 from roguengine.processor.move import MoveProcessor
 from roguengine.processor.render import RenderProcessor
-from roguengine.processor.uiprocessor import UIProcessor
 from roguengine.processor.view import RoomViewProcessor
 from roguengine.processor.wear import WearWeaponProcessor, WearArmorProcessor
 from roguengine.processor.window.logger import LoggerProcessor
 from roguengine.processor.window.time import TimeProcessor
+from roguengine.ui.components import DynamicLabelComponent
+from roguengine.ui.processors import UIProcessor
 
 SPRITE_SHEET: pygame.Surface = pygame.image.load("res/sprites.bmp")
 

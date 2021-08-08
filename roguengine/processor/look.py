@@ -2,14 +2,14 @@ from typing import List
 
 import pygame
 
-from roguengine.component.input.input_listener import InputListenerComponent
 from roguengine.component.look_cursor import LookCursorComponent
 from roguengine.component.player import PlayerComponent
-from roguengine.component.position import PositionComponent
+from roguengine.dungeon.components import PositionComponent
 from roguengine.component.sprite import VisibleSpriteComponent
 from roguengine.component.visible import VisibleComponent
 from roguengine.component.window.window import WindowComponent
 from roguengine.event.look import LookInputEvent
+from roguengine.input.components import InputListenerComponent
 from roguengine.rogue_esper import Processor
 from roguengine.util.font import Font
 

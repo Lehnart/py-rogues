@@ -14,7 +14,8 @@ class Movement:
 
 class MoveEvent(Event):
 
-    def __init__(self, entity: int, movement: Movement):
+    def __init__(self, entity: int, movement: Movement, is_player: bool = False):
         super().__init__()
         self.entity = entity
         self.movement = movement
+        self.is_player = is_player

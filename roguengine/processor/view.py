@@ -1,13 +1,15 @@
 import numpy
 import tcod
 
-from roguengine.component.dungeon.dungeon import DungeonComponent
 from roguengine.component.opaque import OpaqueComponent
 from roguengine.component.player import PlayerComponent
-from roguengine.component.position import PositionComponent
-from roguengine.component.sprite import VisibleSpriteComponent
+from roguengine.component.sprite import VisibleSpriteComponent, InvisibleSpriteComponent
 from roguengine.component.viewed import ViewedComponent
 from roguengine.component.visible import VisibleComponent
+from roguengine.dungeon.components import DungeonComponent
+from roguengine.dungeon.components import PositionComponent
+from roguengine.event.sprite import SetSpriteEvent, CreateSpriteEvent
+from roguengine.event.transparent import TransparentEvent
 from roguengine.rogue_esper import Processor
 
 
@@ -50,6 +52,14 @@ class RoomViewProcessor(Processor):
                     if not self.world.has_component(ent, ViewedComponent):
                         self.world.add_component(ent, ViewedComponent())
 
+        for msg in self.world.receive(CreateSpriteEvent):
+            ent = msg.ent
+            if not msg.is_invisible:
+                sprite_comp = VisibleSpriteComponent(msg.px, msg.py, msg.sprite, msg.layer)
+            else:
+                sprite_comp = InvisibleSpriteComponent(msg.px, msg.py, msg.sprite, msg.layer)
+            self.world.add_component(ent, sprite_comp)
+
     def get_entities_at(self, x: int, y: int, *component_types):
         entities = []
         for ent, (pos, *_) in self.world.get_components(PositionComponent, *component_types):
@@ -89,6 +99,46 @@ class FOVViewProcessor(Processor):
                 self.world.add_component(ent, VisibleComponent())
                 if not self.world.has_component(ent, ViewedComponent):
                     self.world.add_component(ent, ViewedComponent())
+
+        for msg in self.world.receive(TransparentEvent):
+            ent = msg.ent
+            if self.world.has_component(ent, OpaqueComponent):
+                self.world.remove_component(ent, OpaqueComponent)
+
+        for msg in self.world.receive(SetSpriteEvent):
+            ent = msg.ent
+            if not msg.is_invisible and self.world.has_component(ent, VisibleSpriteComponent):
+                visible_sprite = self.world.component_for_entity(ent, VisibleSpriteComponent)
+                px, py = visible_sprite.top_left_pixel_position()
+                layer = visible_sprite.layer()
+                self.world.remove_component(ent, VisibleSpriteComponent)
+                sprite_comp = VisibleSpriteComponent(
+                    px,
+                    py,
+                    msg.sprite,
+                    layer
+                )
+                self.world.add_component(ent, sprite_comp)
+            elif self.world.has_component(ent, InvisibleSpriteComponent):
+                invisible_sprite = self.world.component_for_entity(ent, InvisibleSpriteComponent)
+                px, py = invisible_sprite.top_left_pixel_position()
+                layer = invisible_sprite.layer()
+                self.world.remove_component(ent, InvisibleSpriteComponent)
+                sprite_comp = InvisibleSpriteComponent(
+                    px,
+                    py,
+                    msg.sprite,
+                    layer
+                )
+                self.world.add_component(ent, sprite_comp)
+
+        for msg in self.world.receive(CreateSpriteEvent):
+            ent = msg.ent
+            if not msg.is_invisible:
+                sprite_comp = VisibleSpriteComponent(msg.px, msg.py, msg.sprite, msg.layer)
+            else:
+                sprite_comp = InvisibleSpriteComponent(msg.px, msg.py, msg.sprite, msg.layer)
+            self.world.add_component(ent, sprite_comp)
 
     def get_entities_at(self, x: int, y: int, *component_types):
         entities = []

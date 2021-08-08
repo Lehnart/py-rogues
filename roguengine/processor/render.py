@@ -4,6 +4,7 @@ from roguengine.component.sprite import VisibleSpriteComponent, InvisibleSpriteC
 from roguengine.component.viewed import ViewedComponent
 from roguengine.component.visible import VisibleComponent
 from roguengine.component.window.window import WindowComponent
+from roguengine.event.draw_string import DrawStringEvent
 from roguengine.rogue_esper import Processor
 
 
@@ -34,6 +35,10 @@ class RenderProcessor(Processor):
         sprite_components = [s for s in sprite_components if s.is_shown()]
         for sprite_component in sprite_components:
             window_surface.blit(sprite_component.sprite(), sprite_component.top_left_pixel_position())
+
+        for msg in self.world.receive(DrawStringEvent):
+            font = msg.font
+            font.draw_string(msg.s, msg.x, msg.y, window_surface, msg.font_color, msg.bkgd_color)
 
         pygame.display.flip()
         window_surface.fill((0, 0, 0))

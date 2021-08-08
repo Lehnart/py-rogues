@@ -1,8 +1,10 @@
-from roguengine.component.input.input_listener import InputListenerComponent
-from roguengine.component.ui.menu import MenuComponent
+
+
 from roguengine.event.menu_select import MenuSelectEvent
 from roguengine.event.move import MoveEvent
+from roguengine.input.components import InputListenerComponent
 from roguengine.rogue_esper import Processor
+from roguengine.ui.components import MenuComponent
 
 
 class MenuProcessor(Processor):

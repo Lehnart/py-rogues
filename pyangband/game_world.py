@@ -5,18 +5,19 @@ import pygame
 
 from pyangband.font import FONT
 from roguengine import rogue_esper
-from roguengine.component.callable.callable import CallableComponent
-from roguengine.component.input.input_listener import InputListenerComponent
-from roguengine.component.ui.dynamic_label import DynamicLabelComponent
-from roguengine.component.ui.label import LabelComponent
-from roguengine.component.ui.menu import MenuComponent
+from roguengine.callable.components import CallableComponent
+from roguengine.callable.processors import CallableProcessor
+
+
 from roguengine.component.window.window import WindowComponent
 from roguengine.event.menu_select import MenuSelectEvent
-from roguengine.processor.callable.callable import CallableProcessor
-from roguengine.processor.input.input import InputProcessor
+from roguengine.input.components import InputListenerComponent
+from roguengine.input.processors import InputProcessor
+
 from roguengine.processor.menu import MenuProcessor
 from roguengine.processor.render import RenderProcessor
-from roguengine.processor.uiprocessor import UIProcessor
+from roguengine.ui.components import MenuComponent, LabelComponent, DynamicLabelComponent
+from roguengine.ui.processors import UIProcessor
 
 
 class Race(Enum):

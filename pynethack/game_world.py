@@ -6,45 +6,39 @@ from pygame import Color
 from pynethack.font import FONT
 from pynethack.sprites import SPRITE_DICT
 from roguengine import rogue_esper
+from roguengine.callable.components import KeyCallableComponent
+from roguengine.callable.events import KeyPressedEvent
+from roguengine.callable.processors import KeyCallableProcessor
 from roguengine.component.ai import AIComponent, State
-from roguengine.component.callable.key_callable import KeyCallableComponent
 from roguengine.component.character_stats import CharacterStatComponent
-from roguengine.component.dungeon.door import DoorComponent, DoorState
-from roguengine.component.dungeon.dungeon import VWALL_TILE, HWALL_TILE, TLWALL_TILE, BLWALL_TILE, TRWALL_TILE, BRWALL_TILE, GROUND_TILE, \
-    CORRIDOR_TILE, \
-    HDOOR_TILE, VDOOR_TILE, VOID_TILE
-from roguengine.component.dungeon.dungeon_resident import DungeonResidentComponent
-from roguengine.component.fight.fighter import FighterComponent, Type
-from roguengine.component.gold.goldbag import GoldBagComponent
-from roguengine.component.input.input_listener import InputListenerComponent
 from roguengine.component.movable import MovableComponent
 from roguengine.component.opaque import OpaqueComponent
 from roguengine.component.player import PlayerComponent
-from roguengine.component.textform.text_form import TextFormComponent
-from roguengine.component.turn_count.turn_count import TurnCountComponent
-from roguengine.component.ui.blinking import BlinkingComponent
-from roguengine.component.ui.dynamic_label import DynamicLabelComponent
-from roguengine.component.ui.gauge import GaugeComponent
-from roguengine.component.ui.label import LabelComponent
 from roguengine.component.window.window import WindowComponent
-from roguengine.event.dungeon_generation import DungeonGenerationEvent
-from roguengine.event.key_pressed import KeyPressedEvent
+from roguengine.dungeon.components import VWALL_TILE, HWALL_TILE, TLWALL_TILE, BLWALL_TILE, TRWALL_TILE, BRWALL_TILE, GROUND_TILE, \
+    CORRIDOR_TILE, \
+    HDOOR_TILE, VDOOR_TILE, VOID_TILE, DungeonResidentComponent, DoorComponent, DoorState
+from roguengine.dungeon.events import DungeonGenerationEvent
+from roguengine.dungeon.processors import DungeonGenerator, DungeonResident, DungeonResidents, DoorProcessor, DungeonCreator, DungeonFiller, \
+    DungeonConfig
 from roguengine.event.log import LogEvent
+from roguengine.fight.components import FighterComponent, Type
+from roguengine.fight.processors import FightProcessor
+from roguengine.gold.components import GoldBagComponent
+from roguengine.input.components import InputListenerComponent
+from roguengine.input.processors import InputProcessor
 from roguengine.processor.ai import AIProcessor
-from roguengine.processor.callable.key_callable import KeyCallableProcessor
-from roguengine.processor.dungeon.door import DoorProcessor
-from roguengine.processor.dungeon.dungeon import DungeonGenerator, DungeonResident, DungeonResidents, DungeonCreator, DungeonFiller, DungeonConfig
-from roguengine.processor.fight.fight import FightProcessor
-from roguengine.processor.input.input import InputProcessor
 from roguengine.processor.look import LookProcessor
 from roguengine.processor.move import MoveProcessor
 from roguengine.processor.render import RenderProcessor
-from roguengine.processor.textform.text_form import TextFormProcessor
-from roguengine.processor.turn_count.turn_counter import TurnCounterProcessor
-from roguengine.processor.ui.blink import BlinkProcessor
-from roguengine.processor.uiprocessor import UIProcessor
 from roguengine.processor.view import FOVViewProcessor
 from roguengine.processor.window.logger import LoggerProcessor
+from roguengine.text_form.components import TextFormComponent
+from roguengine.text_form.processors import TextFormProcessor
+from roguengine.turn_count.components import TurnCountComponent
+from roguengine.turn_count.processors import TurnCounterProcessor
+from roguengine.ui.components import LabelComponent, BlinkingComponent, DynamicLabelComponent, GaugeComponent
+from roguengine.ui.processors import BlinkProcessor, UIProcessor
 
 
 class GameWorld(rogue_esper.RogueWorld):
