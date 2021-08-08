@@ -1,11 +1,9 @@
 import pygame
 
-from roguengine.component.sprite import VisibleSpriteComponent, InvisibleSpriteComponent
-from roguengine.component.viewed import ViewedComponent
-from roguengine.component.visible import VisibleComponent
-from roguengine.component.window.window import WindowComponent
-from roguengine.event.draw_string import DrawStringEvent
+from roguengine.render.components import WindowComponent, InvisibleSpriteComponent, VisibleSpriteComponent
+from roguengine.render.events import DrawStringEvent
 from roguengine.rogue_esper import Processor
+from roguengine.view.components import VisibleComponent, ViewedComponent
 
 
 class RenderProcessor(Processor):

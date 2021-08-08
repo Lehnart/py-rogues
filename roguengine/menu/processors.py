@@ -1,8 +1,8 @@
 
 
-from roguengine.event.menu_select import MenuSelectEvent
-from roguengine.event.move import MoveEvent
 from roguengine.input.components import InputListenerComponent
+from roguengine.menu.events import MenuSelectEvent
+from roguengine.move.events import MoveEvent
 from roguengine.rogue_esper import Processor
 from roguengine.ui.components import MenuComponent
 

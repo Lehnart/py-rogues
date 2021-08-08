@@ -1,16 +1,15 @@
 import numpy
 import tcod
 
-from roguengine.component.opaque import OpaqueComponent
-from roguengine.component.player import PlayerComponent
-from roguengine.component.sprite import VisibleSpriteComponent, InvisibleSpriteComponent
-from roguengine.component.viewed import ViewedComponent
-from roguengine.component.visible import VisibleComponent
+
 from roguengine.dungeon.components import DungeonComponent
 from roguengine.dungeon.components import PositionComponent
-from roguengine.event.sprite import SetSpriteEvent, CreateSpriteEvent
-from roguengine.event.transparent import TransparentEvent
+from roguengine.player.components import PlayerComponent
+from roguengine.render.components import VisibleSpriteComponent, InvisibleSpriteComponent
+from roguengine.render.events import CreateSpriteEvent, SetSpriteEvent
+from roguengine.view.events import TransparentEvent
 from roguengine.rogue_esper import Processor
+from roguengine.view.components import VisibleComponent, ViewedComponent, OpaqueComponent
 
 
 class RoomViewProcessor(Processor):

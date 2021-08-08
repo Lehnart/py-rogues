@@ -1,7 +1,7 @@
 import pygame
 
-from roguengine.component.window.window import WindowComponent
-from roguengine.event.log import LogEvent
+from roguengine.log.events import LogEvent
+from roguengine.render.events import DrawStringEvent
 from roguengine.rogue_esper import Processor
 from roguengine.util.font import Font
 
@@ -41,9 +41,7 @@ class LoggerProcessor(Processor):
         for msg_index, msg in enumerate(self._msgs):
             x = self._px
             y = self._py + (msg_index * self._font.get_char_height())
-            for window_entity, [window_component] in self.world.get_components(WindowComponent):
-                window_surface = window_component.surface()
-                if msg_index == self._message_count - 1:
-                    self._font.draw_string(msg, x, y, window_surface, self._new_color, pygame.Color(0, 0, 0))
-                else:
-                    self._font.draw_string(msg, x, y, window_surface, self._old_color, pygame.Color(0, 0, 0))
+            if msg_index == self._message_count - 1:
+                self.world.publish(DrawStringEvent(msg, x, y, self._new_color, pygame.Color(0, 0, 0), self._font))
+            else:
+                self.world.publish(DrawStringEvent(msg, x, y, self._old_color, pygame.Color(0, 0, 0), self._font))

@@ -1,4 +1,4 @@
-from roguengine.event.draw_string import DrawStringEvent
+from roguengine.render.events import DrawStringEvent
 from roguengine.rogue_esper import Processor
 from roguengine.ui.components import *
 from roguengine.util.font import Font
@@ -51,9 +51,9 @@ class UIProcessor(Processor):
 
             for i, label in enumerate(labels):
                 if selected_index is not None and i == selected_index:
-                    self.world.publish(DrawStringEvent(label.s, label.px, label.py, menu.get_selected_color(), label.get_bkgd_color(), self.font))
+                    self.world.publish(DrawStringEvent(label.s, label.px, label.py, menu.get_selected_color(), label.bkgd_color, self.font))
                 else:
-                    self.world.publish(DrawStringEvent(label.s, label.px, label.py, label.font_color, label.get_bkgd_color(), self.font))
+                    self.world.publish(DrawStringEvent(label.s, label.px, label.py, label.font_color, label.bkgd_color, self.font))
 
         gauge_components = self.world.get_component(GaugeComponent)
         for _, gauge in gauge_components:

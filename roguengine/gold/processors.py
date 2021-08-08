@@ -1,6 +1,6 @@
-from roguengine.event.log import LogEvent
 from roguengine.gold.components import GoldComponent, GoldBagComponent
 from roguengine.gold.events import GoldPickUpEvent
+from roguengine.log.events import LogEvent
 from roguengine.rogue_esper import Processor
 
 

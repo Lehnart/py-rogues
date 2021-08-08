@@ -3,6 +3,20 @@ from typing import Tuple
 import pygame
 
 
+class WindowComponent:
+
+    def __init__(self, size: Tuple[int, int]):
+        pygame.init()
+        self._window_surface: pygame.Surface = pygame.display.set_mode(size)
+
+    def surface(self) -> pygame.Surface:
+        return self._window_surface
+
+from typing import Tuple
+
+import pygame
+
+
 class _SpriteComponent:
 
     def __init__(self, px: int, py: int, sprite: pygame.Surface, layer: int = 0):
@@ -48,3 +62,4 @@ class VisibleSpriteComponent(_SpriteComponent):
 class InvisibleSpriteComponent(_SpriteComponent):
     def __init__(self, px: int, py: int, sprite: pygame.Surface, layer: int = 0):
         super().__init__(px, py, sprite, layer)
+

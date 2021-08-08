@@ -9,13 +9,14 @@ from roguengine.callable.components import CallableComponent
 from roguengine.callable.processors import CallableProcessor
 
 
-from roguengine.component.window.window import WindowComponent
-from roguengine.event.menu_select import MenuSelectEvent
+
 from roguengine.input.components import InputListenerComponent
 from roguengine.input.processors import InputProcessor
+from roguengine.menu.events import MenuSelectEvent
+from roguengine.menu.processors import MenuProcessor
 
-from roguengine.processor.menu import MenuProcessor
-from roguengine.processor.render import RenderProcessor
+from roguengine.render.components import WindowComponent
+from roguengine.render.processors import RenderProcessor
 from roguengine.ui.components import MenuComponent, LabelComponent, DynamicLabelComponent
 from roguengine.ui.processors import UIProcessor
 

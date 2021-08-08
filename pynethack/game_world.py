@@ -6,39 +6,38 @@ from pygame import Color
 from pynethack.font import FONT
 from pynethack.sprites import SPRITE_DICT
 from roguengine import rogue_esper
+from roguengine.ai.components import AIComponent, State
+from roguengine.ai.processors import AIProcessor
 from roguengine.callable.components import KeyCallableComponent
 from roguengine.callable.events import KeyPressedEvent
 from roguengine.callable.processors import KeyCallableProcessor
-from roguengine.component.ai import AIComponent, State
-from roguengine.component.character_stats import CharacterStatComponent
-from roguengine.component.movable import MovableComponent
-from roguengine.component.opaque import OpaqueComponent
-from roguengine.component.player import PlayerComponent
-from roguengine.component.window.window import WindowComponent
+
 from roguengine.dungeon.components import VWALL_TILE, HWALL_TILE, TLWALL_TILE, BLWALL_TILE, TRWALL_TILE, BRWALL_TILE, GROUND_TILE, \
     CORRIDOR_TILE, \
-    HDOOR_TILE, VDOOR_TILE, VOID_TILE, DungeonResidentComponent, DoorComponent, DoorState
+    HDOOR_TILE, VDOOR_TILE, VOID_TILE, DungeonResidentComponent, DoorComponent, DoorState, MovableComponent
 from roguengine.dungeon.events import DungeonGenerationEvent
 from roguengine.dungeon.processors import DungeonGenerator, DungeonResident, DungeonResidents, DoorProcessor, DungeonCreator, DungeonFiller, \
-    DungeonConfig
-from roguengine.event.log import LogEvent
-from roguengine.fight.components import FighterComponent, Type
+    DungeonConfig, MoveProcessor
+from roguengine.fight.components import FighterComponent, Type, CharacterStatComponent
 from roguengine.fight.processors import FightProcessor
 from roguengine.gold.components import GoldBagComponent
 from roguengine.input.components import InputListenerComponent
 from roguengine.input.processors import InputProcessor
-from roguengine.processor.ai import AIProcessor
-from roguengine.processor.look import LookProcessor
-from roguengine.processor.move import MoveProcessor
-from roguengine.processor.render import RenderProcessor
-from roguengine.processor.view import FOVViewProcessor
-from roguengine.processor.window.logger import LoggerProcessor
+from roguengine.log.events import LogEvent
+from roguengine.log.processors import LoggerProcessor
+from roguengine.look.processors import LookProcessor
+from roguengine.player.components import PlayerComponent
+
+from roguengine.render.components import WindowComponent
+from roguengine.render.processors import RenderProcessor
 from roguengine.text_form.components import TextFormComponent
 from roguengine.text_form.processors import TextFormProcessor
 from roguengine.turn_count.components import TurnCountComponent
 from roguengine.turn_count.processors import TurnCounterProcessor
 from roguengine.ui.components import LabelComponent, BlinkingComponent, DynamicLabelComponent, GaugeComponent
 from roguengine.ui.processors import BlinkProcessor, UIProcessor
+from roguengine.view.components import OpaqueComponent
+from roguengine.view.processors import FOVViewProcessor
 
 
 class GameWorld(rogue_esper.RogueWorld):

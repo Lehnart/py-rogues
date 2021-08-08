@@ -2,16 +2,15 @@ from typing import List
 
 import pygame
 
-from roguengine.component.look_cursor import LookCursorComponent
-from roguengine.component.player import PlayerComponent
 from roguengine.dungeon.components import PositionComponent
-from roguengine.component.sprite import VisibleSpriteComponent
-from roguengine.component.visible import VisibleComponent
-from roguengine.component.window.window import WindowComponent
-from roguengine.event.look import LookInputEvent
 from roguengine.input.components import InputListenerComponent
+from roguengine.look.components import LookCursorComponent
+from roguengine.look.events import LookInputEvent
+from roguengine.player.components import PlayerComponent
+from roguengine.render.components import WindowComponent, VisibleSpriteComponent
 from roguengine.rogue_esper import Processor
 from roguengine.util.font import Font
+from roguengine.view.components import VisibleComponent
 
 
 class LookProcessor(Processor):

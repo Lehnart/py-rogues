@@ -2,13 +2,12 @@ import sys
 
 import pygame
 
+from roguengine.ai.events import AIEvent
+from roguengine.dungeon.events import DungeonGenerationEvent, Movement, MoveEvent
+from roguengine.fight.events import WearWeaponEvent, WearArmorEvent
 
-from roguengine.dungeon.events import DungeonGenerationEvent
-from roguengine.event.ai import AIEvent
-from roguengine.event.look import LookInputEvent
-from roguengine.event.move import MoveEvent, Movement
-from roguengine.event.wear import WearWeaponEvent, WearArmorEvent
 from roguengine.input.components import InputListenerComponent
+from roguengine.look.events import LookInputEvent
 from roguengine.rogue_esper import Processor
 import roguengine.text_form.events as text_form_events
 import roguengine.callable.events as callable_events

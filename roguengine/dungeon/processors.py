@@ -2,13 +2,22 @@ import bisect
 from copy import deepcopy
 from typing import Dict
 
-from roguengine.component.sprite import VisibleSpriteComponent
+from roguengine.ai.events import AIEvent
 from roguengine.dungeon.components import *
-from roguengine.dungeon.events import DungeonCreationEvent, DungeonFillingEvent, DungeonGenerationEvent
-from roguengine.event.move import MoveEvent
-from roguengine.event.sprite import SetSpriteEvent, CreateSpriteEvent
-from roguengine.event.transparent import TransparentEvent
+from roguengine.dungeon.events import DungeonCreationEvent, DungeonFillingEvent, DungeonGenerationEvent, MoveEvent
+from roguengine.dungeon.tools import get_entities_at, is_movable
+from roguengine.fight.events import FightEvent
+from roguengine.fight.tools import is_fighter
+from roguengine.gold.components import GoldComponent, GoldBagComponent
+from roguengine.gold.events import GoldPickUpEvent
+from roguengine.gold.tools import is_gold
+from roguengine.player.components import PlayerComponent
+from roguengine.player.tools import is_player
+from roguengine.render.components import VisibleSpriteComponent
+from roguengine.render.events import SetSpriteEvent, CreateSpriteEvent
 from roguengine.rogue_esper import Processor
+from roguengine.turn_count.events import NewTurnEvent
+from roguengine.view.events import TransparentEvent
 
 
 class DungeonConfig:
@@ -368,16 +377,67 @@ class DungeonFiller(Processor):
                     if room.is_occupied(rx, ry):
                         continue
 
-                    resident_sprite = resident.sprite()
-                    sprite = VisibleSpriteComponent(
-                        (rx * resident_sprite.get_width()) + self.px0,
-                        (ry * resident_sprite.get_height()) + self.py0,
-                        resident_sprite,
-                        dungeon_residents.sprite_layer()
-                    )
                     pos = PositionComponent(rx, ry)
-                    components = [*deepcopy(resident.components()), sprite, pos]
-                    self.world.create_entity(*components)
+                    components = [*deepcopy(resident.components()), pos]
+
+                    new_ent = self.world.create_entity(*components)
+                    resident_sprite = resident.sprite()
+                    px = (rx * resident_sprite.get_width()) + self.px0
+                    py = (ry * resident_sprite.get_height()) + self.py0
+                    self.world.publish(CreateSpriteEvent(new_ent, px, py, resident_sprite, dungeon_residents.sprite_layer()))
+
                     resident.created()
                     room.set_occupied(rx, ry)
                     break
+
+
+class MoveProcessor(Processor):
+
+    def __init__(self):
+        super().__init__()
+
+    def process(self):
+
+        messages: List[MoveEvent] = self.world.receive(MoveEvent)
+        for msg in messages:
+            ent, move = msg.entity, msg.movement
+
+            if not self.world.entity_exists(ent):
+                continue
+
+            pos = self.world.component_for_entity(ent, PositionComponent)
+            sprite = self.world.component_for_entity(ent, VisibleSpriteComponent)
+
+            x, y = pos.xy()
+            dx, dy = move.dx_dy()
+
+            close_entities = get_entities_at(self.world, x + dx, y + dy)
+
+            has_fight = False
+            if is_fighter(self.world, ent):
+                for next_ent in close_entities:
+                    if not is_fighter(self.world, next_ent):
+                        continue
+                    self.world.publish(FightEvent(ent, next_ent))
+                    has_fight = True
+                    if is_player(self.world, ent):
+                        self.world.publish(AIEvent())
+                        self.world.publish(NewTurnEvent())
+
+            if has_fight :
+                continue
+
+            if not is_movable(self.world, x + dx, y + dy):
+                continue
+
+            for next_ent in close_entities:
+                if not is_gold(self.world, next_ent):
+                    continue
+                self.world.publish(GoldPickUpEvent(next_ent, ent))
+
+            pos.move(dx, dy)
+            sprite.move(dx, dy)
+
+            if self.world.has_component(ent, PlayerComponent):
+                self.world.publish(AIEvent())
+                self.world.publish(NewTurnEvent())

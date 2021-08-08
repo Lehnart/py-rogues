@@ -199,3 +199,8 @@ class PositionComponent:
     def move(self, dx: int, dy: int):
         self._x += dx
         self._y += dy
+
+class MovableComponent:
+
+    def __init__(self):
+        pass
