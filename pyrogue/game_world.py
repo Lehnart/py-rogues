@@ -2,26 +2,26 @@ from typing import Optional
 
 from pyrogue.font import FONT
 from roguengine import rogue_esper
-from roguengine.ai.components import AIComponent, State
-from roguengine.ai.processors import AIProcessor
-from roguengine.dungeon.components import *
-from roguengine.dungeon.events import DungeonGenerationEvent
-from roguengine.dungeon.processors import DungeonResident, DungeonResidents, DungeonGenerator, DungeonCreator, DungeonFiller, DungeonConfig, \
+from roguengine.systems.ai.components import AIComponent, State
+from roguengine.systems.ai.processors import AIProcessor
+from roguengine.systems.dungeon.components import *
+from roguengine.systems.dungeon.events import DungeonGenerationEvent
+from roguengine.systems.dungeon.processors import DungeonResident, DungeonResidents, DungeonGenerator, DungeonCreator, DungeonFiller, DungeonConfig, \
     MoveProcessor
-from roguengine.fight.components import FighterComponent, WeaponSlotComponent, ArmorSlotComponent, Type, WeaponComponent, ArmorComponent
-from roguengine.fight.processors import FightProcessor, WearWeaponProcessor, WearArmorProcessor
-from roguengine.gold.components import GoldBagComponent, GoldComponent
-from roguengine.gold.processors import GoldProcessor
-from roguengine.input.components import InputListenerComponent
-from roguengine.input.processors import InputProcessor
-from roguengine.log.processors import LoggerProcessor
-from roguengine.player.components import PlayerComponent
-from roguengine.render.components import WindowComponent
-from roguengine.render.processors import RenderProcessor
-from roguengine.time.processors import TimeProcessor
-from roguengine.ui.components import DynamicLabelComponent
-from roguengine.ui.processors import UIProcessor
-from roguengine.view.processors import RoomViewProcessor
+from roguengine.systems.fight.components import FighterComponent, WeaponSlotComponent, ArmorSlotComponent, Type, WeaponComponent, ArmorComponent
+from roguengine.systems.fight.processors import FightProcessor, WearWeaponProcessor, WearArmorProcessor
+from roguengine.systems.gold.components import GoldBagComponent, GoldComponent
+from roguengine.systems.gold.processors import GoldProcessor
+from roguengine.systems.input.components import InputListenerComponent
+from roguengine.systems.input.processors import InputProcessor
+from roguengine.systems.log.processors import LoggerProcessor
+from roguengine.systems.player.components import PlayerComponent
+from roguengine.systems.render.components import WindowComponent
+from roguengine.systems.render.processors import RenderProcessor
+from roguengine.systems.time.processors import TimeProcessor
+from roguengine.systems.ui.components import DynamicLabelComponent
+from roguengine.systems.ui.processors import UIProcessor
+from roguengine.systems.view.processors import RoomViewProcessor
 
 SPRITE_SHEET: pygame.Surface = pygame.image.load("res/sprites.bmp")
 
