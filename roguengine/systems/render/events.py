@@ -36,11 +36,11 @@ class MoveSpriteEvent(Event):
 
 class UpdateSpritePositionEvent(Event):
 
-    def __init__(self, ent: int, x: int, y: int):
+    def __init__(self, ent: int, px: int, py: int):
         super().__init__()
         self.ent = ent
-        self.x = x
-        self.y = y
+        self.px = px
+        self.py = py
 
 
 class FlipEvent(Event):

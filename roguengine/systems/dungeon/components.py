@@ -205,3 +205,9 @@ class MovableComponent:
 
     def __init__(self):
         pass
+
+
+class BlockComponent:
+
+    def __init__(self):
+        pass

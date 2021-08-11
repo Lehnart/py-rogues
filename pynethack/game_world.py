@@ -11,10 +11,9 @@ from roguengine.systems.ai.processors import AIProcessor
 from roguengine.systems.callable.components import KeyCallableComponent
 from roguengine.systems.callable.events import KeyPressedEvent
 from roguengine.systems.callable.processors import KeyCallableProcessor
-
 from roguengine.systems.dungeon.components import VWALL_TILE, HWALL_TILE, TLWALL_TILE, BLWALL_TILE, TRWALL_TILE, BRWALL_TILE, GROUND_TILE, \
     CORRIDOR_TILE, \
-    HDOOR_TILE, VDOOR_TILE, VOID_TILE, DungeonResidentComponent, DoorComponent, DoorState, MovableComponent
+    HDOOR_TILE, VDOOR_TILE, VOID_TILE, DungeonResidentComponent, DoorComponent, DoorState, MovableComponent, BlockComponent
 from roguengine.systems.dungeon.events import DungeonGenerationEvent
 from roguengine.systems.dungeon.processors import DungeonGenerator, DungeonResident, DungeonResidents, DoorProcessor, DungeonCreator, DungeonFiller, \
     DungeonConfig, MoveProcessor
@@ -27,7 +26,6 @@ from roguengine.systems.log.events import LogEvent
 from roguengine.systems.log.processors import LoggerProcessor
 from roguengine.systems.look.processors import LookProcessor
 from roguengine.systems.player.components import PlayerComponent
-
 from roguengine.systems.render.components import WindowComponent
 from roguengine.systems.render.processors import RenderProcessor
 from roguengine.systems.text_form.components import TextFormComponent
@@ -152,16 +150,16 @@ class GameWorld(rogue_esper.RogueWorld):
         }
 
         tile_components = {
-            VWALL_TILE: [OpaqueComponent],
-            HWALL_TILE: [OpaqueComponent],
-            TLWALL_TILE: [OpaqueComponent],
-            BLWALL_TILE: [OpaqueComponent],
-            TRWALL_TILE: [OpaqueComponent],
-            BRWALL_TILE: [OpaqueComponent],
+            VWALL_TILE: [OpaqueComponent, BlockComponent],
+            HWALL_TILE: [OpaqueComponent, BlockComponent],
+            TLWALL_TILE: [OpaqueComponent, BlockComponent],
+            BLWALL_TILE: [OpaqueComponent, BlockComponent],
+            TRWALL_TILE: [OpaqueComponent, BlockComponent],
+            BRWALL_TILE: [OpaqueComponent, BlockComponent],
             GROUND_TILE: [MovableComponent],
             CORRIDOR_TILE: [MovableComponent],
-            HDOOR_TILE: [MovableComponent, DoorComponent, OpaqueComponent],
-            VDOOR_TILE: [MovableComponent, DoorComponent, OpaqueComponent],
+            HDOOR_TILE: [MovableComponent, DoorComponent, OpaqueComponent, BlockComponent],
+            VDOOR_TILE: [MovableComponent, DoorComponent, OpaqueComponent, BlockComponent],
             VOID_TILE: [OpaqueComponent]
         }
 

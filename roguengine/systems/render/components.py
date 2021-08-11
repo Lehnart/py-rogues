@@ -31,9 +31,9 @@ class _SpriteComponent:
         self._px += dx * self._sprite.get_width()
         self._py += dy * self._sprite.get_height()
 
-    def set_position(self, x: int, y: int):
-        self._px = x * self._sprite.get_width()
-        self._py = y * self._sprite.get_height()
+    def set_position(self, px: int, py: int):
+        self._px = px
+        self._py = py
 
     def sprite(self) -> pygame.Surface:
         return self._sprite

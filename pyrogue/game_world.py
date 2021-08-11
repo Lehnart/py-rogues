@@ -151,12 +151,12 @@ class GameWorld(rogue_esper.RogueWorld):
         }
 
         tile_components = {
-            VWALL_TILE: [],
-            HWALL_TILE: [],
-            TLWALL_TILE: [],
-            BLWALL_TILE: [],
-            TRWALL_TILE: [],
-            BRWALL_TILE: [],
+            VWALL_TILE: [BlockComponent],
+            HWALL_TILE: [BlockComponent],
+            TLWALL_TILE: [BlockComponent],
+            BLWALL_TILE: [BlockComponent],
+            TRWALL_TILE: [BlockComponent],
+            BRWALL_TILE: [BlockComponent],
             GROUND_TILE: [MovableComponent],
             CORRIDOR_TILE: [MovableComponent],
             HDOOR_TILE: [MovableComponent],

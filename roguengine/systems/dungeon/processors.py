@@ -117,6 +117,9 @@ class DoorProcessor(Processor):
                 door_comp.open()
                 self.world.publish(TransparentEvent(door_ent))
 
+                if self.world.has_component(door_ent, BlockComponent):
+                    self.world.remove_component(door_ent, BlockComponent)
+
                 dungeon = self.world.get_component(DungeonComponent)
                 if not dungeon:
                     continue

@@ -24,7 +24,7 @@ class RenderProcessor(Processor):
 
         for msg in self.world.receive(UpdateSpritePositionEvent):
             sprite: VisibleSpriteComponent = self.world.component_for_entity(msg.ent, VisibleSpriteComponent)
-            sprite.set_position(msg.x, msg.y)
+            sprite.set_position(msg.px, msg.py)
 
         for msg in self.world.receive(FlipEvent):
             sprite: VisibleSpriteComponent = self.world.component_for_entity(msg.ent, VisibleSpriteComponent)

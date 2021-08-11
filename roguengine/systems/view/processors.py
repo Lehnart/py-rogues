@@ -24,7 +24,11 @@ class RoomViewProcessor(Processor):
         entities = get_entities_with_sprite(self.world)
         if not room:
             for ent in entities:
-                x, y = get_position(self.world, ent)
+                pos = get_position(self.world, ent)
+                if pos is None:
+                    continue
+
+                x, y = pos
                 if not (px - 1 <= x <= px + 1 and py - 1 <= y <= py + 1):
                     if self.world.has_component(ent, VisibleComponent):
                         self.world.remove_component(ent, VisibleComponent)
@@ -36,7 +40,11 @@ class RoomViewProcessor(Processor):
 
         else:
             for ent in entities:
-                x, y = get_position(self.world, ent)
+                pos = get_position(self.world, ent)
+                if pos is None:
+                    continue
+
+                x, y = pos
                 if not room.is_in(x, y):
                     if self.world.has_component(ent, VisibleComponent):
                         self.world.remove_component(ent, VisibleComponent)

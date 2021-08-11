@@ -9,6 +9,7 @@ from roguengine.systems.fight.events import *
 from roguengine.systems.fight.tools import get_weapon_at, get_armor_at
 from roguengine.systems.log.events import LogEvent
 from roguengine.systems.render.events import UpdateSpritePositionEvent, FlipEvent
+from roguengine.systems.render.tools import get_sprite_position
 
 
 class FightProcessor(Processor):
@@ -79,17 +80,17 @@ class WearWeaponProcessor(Processor):
                 continue
 
             x, y = get_position(self.world, slot_ent)
-            weapon = get_weapon_at(self.world, x, y)
-            if not weapon:
+            new_weapon_ent = get_weapon_at(self.world, x, y)
+            if not new_weapon_ent:
                 continue
 
-            new_weapon_ent, _ = weapon
             weapon_slot: WeaponSlotComponent = self.world.component_for_entity(slot_ent, WeaponSlotComponent)
             old_weapon_ent = weapon_slot.get_weapon()
             weapon_slot.set_weapon(new_weapon_ent)
 
             if old_weapon_ent:
-                self.world.publish(UpdateSpritePositionEvent(old_weapon_ent, x, y))
+                px, py = get_sprite_position(self.world, slot_ent)
+                self.world.publish(UpdateSpritePositionEvent(old_weapon_ent, px, py))
                 self.world.publish(FlipEvent(old_weapon_ent))
                 self.world.publish(SetPositionEvent(old_weapon_ent, x, y))
 
@@ -113,17 +114,17 @@ class WearArmorProcessor(Processor):
 
             x, y = get_position(self.world, slot_ent)
 
-            armor = get_armor_at(self.world, x, y)
-            if not armor:
+            new_armor_ent = get_armor_at(self.world, x, y)
+            if not new_armor_ent:
                 continue
 
-            new_armor_ent, _ = armor
             armor_slot: ArmorSlotComponent = self.world.component_for_entity(slot_ent, ArmorSlotComponent)
             old_armor_ent = armor_slot.get_armor()
             armor_slot.set_armor(new_armor_ent)
 
             if old_armor_ent:
-                self.world.publish(UpdateSpritePositionEvent(old_armor_ent, x, y))
+                px, py = get_sprite_position(self.world, slot_ent)
+                self.world.publish(UpdateSpritePositionEvent(old_armor_ent, px, py))
                 self.world.publish(FlipEvent(old_armor_ent))
                 self.world.publish(SetPositionEvent(old_armor_ent, x, y))
 

@@ -1,4 +1,4 @@
-from typing import Tuple, Optional
+from typing import Optional
 
 from roguengine.esper import esper
 from roguengine.systems.dungeon.tools import get_entities_at
@@ -14,7 +14,7 @@ def get_last_attacker(world: esper.World, entity: int) -> Optional[int]:
     return fighter_component.last_attacker()
 
 
-def get_weapon_at(world: esper.World, x: int, y: int) -> Optional[Tuple[int, WeaponComponent]]:
+def get_weapon_at(world: esper.World, x: int, y: int) -> Optional[int]:
     weapons = []
     entities = get_entities_at(world, x, y)
     for ent in entities:
@@ -23,10 +23,10 @@ def get_weapon_at(world: esper.World, x: int, y: int) -> Optional[Tuple[int, Wea
 
     assert len(weapons) <= 1
 
-    return weapons[0] if weapons else None
+    return weapons[0][0] if weapons else None
 
 
-def get_armor_at(world: esper.World, x: int, y: int) -> Optional[Tuple[int, ArmorComponent]]:
+def get_armor_at(world: esper.World, x: int, y: int) -> Optional[int]:
     armors = []
     entities = get_entities_at(world, x, y)
     for ent in entities:
@@ -35,4 +35,4 @@ def get_armor_at(world: esper.World, x: int, y: int) -> Optional[Tuple[int, Armo
 
     assert len(armors) <= 1
 
-    return armors[0] if armors else None
+    return armors[0][0] if armors else None

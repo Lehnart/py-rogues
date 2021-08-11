@@ -1,7 +1,7 @@
 from typing import Tuple, Optional, List
 
 from roguengine.esper import esper
-from roguengine.systems.dungeon.components import PositionComponent, MovableComponent, DungeonComponent
+from roguengine.systems.dungeon.components import PositionComponent, MovableComponent, DungeonComponent, BlockComponent
 
 
 class Rect:
@@ -56,6 +56,11 @@ def get_room(world: esper.World, x: int, y: int) -> Optional[Rect]:
 
 def is_movable(world: esper.World, x: int, y: int) -> bool:
     entities = get_entities_at(world, x, y)
+
+    for e in entities:
+        if world.has_component(e, BlockComponent):
+            return False
+
     for e in entities:
         if world.has_component(e, MovableComponent):
             return True
