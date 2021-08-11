@@ -2,13 +2,12 @@ import math
 import random
 from typing import List
 
+from roguengine.rogue_esper import Processor
 from roguengine.systems.ai.components import AIComponent, State
 from roguengine.systems.ai.events import AIEvent
 from roguengine.systems.dungeon.events import Movement, MoveEvent
-from roguengine.rogue_esper import Processor
-
-from roguengine.systems.fight.components import FighterComponent
 from roguengine.systems.dungeon.tools import get_position
+from roguengine.systems.fight.tools import get_last_attacker
 from roguengine.systems.player.tools import get_player_entity
 
 
@@ -29,10 +28,10 @@ class AIProcessor(Processor):
                 ai_x, ai_y = get_position(self.world, ai_ent)
 
                 if ai_component.state() == State.PASSIVE:
-                    ai_fighter_component = self.world.component_for_entity(ai_ent, FighterComponent)
-                    if ai_fighter_component.last_attacker() is not None:
+                    last_attacker_ent = get_last_attacker(self.world, ai_ent)
+                    if last_attacker_ent is not None:
                         ai_component.set_state(State.HOSTILE)
-                        ai_component.set_enemy(ai_fighter_component.last_attacker())
+                        ai_component.set_enemy(last_attacker_ent)
 
                 if ai_component.state() == State.GUARDING:
                     if math.sqrt((ai_x - p_x) ** 2 + (ai_y - p_y) ** 2) <= 2.:

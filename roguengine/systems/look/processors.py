@@ -3,14 +3,14 @@ from typing import List
 import pygame
 
 from roguengine.rogue_esper import Processor
-from roguengine.systems.dungeon.components import PositionComponent
+from roguengine.systems.dungeon.events import SetPositionEvent
 from roguengine.systems.dungeon.tools import get_entities_at, get_position
-from roguengine.systems.input.components import InputListenerComponent
+from roguengine.systems.input.events import StopInputListeningEvent, StartInputListeningEvent
 from roguengine.systems.look.components import LookCursorComponent
 from roguengine.systems.look.events import LookInputEvent
-from roguengine.systems.player.components import PlayerComponent
-from roguengine.systems.render.components import VisibleSpriteComponent
-from roguengine.systems.render.events import DrawStringEvent
+from roguengine.systems.player.tools import get_player_entity
+from roguengine.systems.render.events import DrawStringEvent, CreateSpriteEvent
+from roguengine.systems.render.tools import get_sprite_position
 from roguengine.systems.view.tools import is_visible
 from roguengine.util.font import Font
 
@@ -42,7 +42,11 @@ class LookProcessor(Processor):
         assert (len(cursors) == 1)
 
         cursor_ent, _ = cursors[0]
-        x, y = get_position(self.world, cursor_ent)
+        pos = get_position(self.world, cursor_ent)
+        if pos is None:
+            return
+
+        x, y = pos
         entities = get_entities_at(self.world, x, y)
 
         y = self._y0
@@ -62,36 +66,26 @@ class LookProcessor(Processor):
         if not self._cursor_sprite:
             self._create_cursor_sprite()
 
-        players = self.world.get_component(PlayerComponent)
-        assert (len(players) == 1)
-        player_ent, _ = players[0]
+        player_ent = get_player_entity(self.world)
+        x, y = get_position(self.world, player_ent)
+        px, py = get_sprite_position(self.world, player_ent)
 
-        self.world.remove_component(player_ent, InputListenerComponent)
-
-        sprite = self.world.component_for_entity(player_ent, VisibleSpriteComponent)
-        pos = self.world.component_for_entity(player_ent, PositionComponent)
-        x, y = pos.xy()
-        px, py = sprite.top_left_pixel_position()
-        self.world.create_entity(
-            PositionComponent(x, y),
-            InputListenerComponent(),
-            VisibleSpriteComponent(px, py, self._cursor_sprite, 3),
-            LookCursorComponent()
-        )
+        new_ent = self.world.create_entity(LookCursorComponent())
+        self.world.publish(SetPositionEvent(new_ent, x, y))
+        self.world.publish(StopInputListeningEvent(player_ent))
+        self.world.publish(StartInputListeningEvent(new_ent))
+        self.world.publish(CreateSpriteEvent(new_ent, px, py, self._cursor_sprite, 3))
 
         self._is_in_look_mode = True
 
     def _unactive_look_mode(self):
-        listeners = self.world.get_component(InputListenerComponent)
+        listeners = self.world.get_component(LookCursorComponent)
         assert (len(listeners) == 1)
         listener_ent, _ = listeners[0]
-
         self.world.delete_entity(listener_ent, True)
 
-        players = self.world.get_component(PlayerComponent)
-        assert (len(players) == 1)
-        player_ent, _ = players[0]
-        self.world.add_component(player_ent, InputListenerComponent())
+        ent = get_player_entity(self.world)
+        self.world.publish(StartInputListeningEvent(ent))
 
         self._is_in_look_mode = False
 
@@ -102,10 +96,3 @@ class LookProcessor(Processor):
         empty_surface = empty_surface.convert_alpha()
         pygame.draw.rect(empty_surface, pygame.Color(255, 0, 0), pygame.Rect(0, 0, 16, 16), 2)
         self._cursor_sprite = empty_surface
-
-    def _get_entities_at(self, x: int, y: int):
-        entities = []
-        for ent, (pos, *_) in self.world.get_components(PositionComponent):
-            if pos.xy() == (x, y):
-                entities.append(ent)
-        return entities

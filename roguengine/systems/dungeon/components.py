@@ -200,6 +200,7 @@ class PositionComponent:
         self._x += dx
         self._y += dy
 
+
 class MovableComponent:
 
     def __init__(self):

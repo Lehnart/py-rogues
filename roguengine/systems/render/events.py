@@ -25,6 +25,15 @@ class SetSpriteEvent(Event):
         self.is_invisible = is_invisible
 
 
+class MoveSpriteEvent(Event):
+
+    def __init__(self, ent: int, dx: int, dy: int):
+        super().__init__()
+        self.ent = ent
+        self.dx = dx
+        self.dy = dy
+
+
 class UpdateSpritePositionEvent(Event):
 
     def __init__(self, ent: int, x: int, y: int):
@@ -32,6 +41,7 @@ class UpdateSpritePositionEvent(Event):
         self.ent = ent
         self.x = x
         self.y = y
+
 
 class FlipEvent(Event):
 

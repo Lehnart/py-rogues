@@ -8,5 +8,3 @@ class TurnCountComponent:
 
     def next(self):
         self._current_turn += 1
-
-

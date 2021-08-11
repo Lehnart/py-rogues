@@ -12,10 +12,8 @@ from roguengine.systems.fight.events import FightEvent
 from roguengine.systems.fight.tools import is_fighter
 from roguengine.systems.gold.events import GoldPickUpEvent
 from roguengine.systems.gold.tools import is_gold
-from roguengine.systems.player.components import PlayerComponent
-from roguengine.systems.player.tools import is_player
-from roguengine.systems.render.components import VisibleSpriteComponent
-from roguengine.systems.render.events import SetSpriteEvent, CreateSpriteEvent
+from roguengine.systems.player.tools import is_player, get_player_entity
+from roguengine.systems.render.events import SetSpriteEvent, CreateSpriteEvent, MoveSpriteEvent
 from roguengine.systems.turn_count.events import NewTurnEvent
 from roguengine.systems.view.events import TransparentEvent
 
@@ -100,7 +98,7 @@ class DoorProcessor(Processor):
 
             ent, move = msg.entity, msg.movement
 
-            if not self.world.entity_exists(ent) or not msg.is_player:
+            if not self.world.entity_exists(ent) or ent != get_player_entity(self.world):
                 continue
 
             pos = self.world.component_for_entity(ent, PositionComponent)
@@ -406,7 +404,6 @@ class MoveProcessor(Processor):
                 continue
 
             pos = self.world.component_for_entity(ent, PositionComponent)
-            sprite = self.world.component_for_entity(ent, VisibleSpriteComponent)
 
             x, y = pos.xy()
             dx, dy = move.dx_dy()
@@ -436,9 +433,9 @@ class MoveProcessor(Processor):
                 self.world.publish(GoldPickUpEvent(next_ent, ent))
 
             pos.move(dx, dy)
-            sprite.move(dx, dy)
+            self.world.publish(MoveSpriteEvent(ent, dx, dy))
 
-            if self.world.has_component(ent, PlayerComponent):
+            if is_player(self.world, ent):
                 self.world.publish(AIEvent())
                 self.world.publish(NewTurnEvent())
 

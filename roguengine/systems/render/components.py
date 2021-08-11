@@ -12,6 +12,7 @@ class WindowComponent:
     def surface(self) -> pygame.Surface:
         return self._window_surface
 
+
 from typing import Tuple
 
 import pygame
@@ -62,4 +63,3 @@ class VisibleSpriteComponent(_SpriteComponent):
 class InvisibleSpriteComponent(_SpriteComponent):
     def __init__(self, px: int, py: int, sprite: pygame.Surface, layer: int = 0):
         super().__init__(px, py, sprite, layer)
-

@@ -1,8 +1,8 @@
 import pygame
 
+from roguengine.rogue_esper import Processor
 from roguengine.systems.log.events import LogEvent
 from roguengine.systems.render.events import DrawStringEvent
-from roguengine.rogue_esper import Processor
 from roguengine.util.font import Font
 
 

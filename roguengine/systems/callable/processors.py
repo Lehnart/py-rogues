@@ -1,6 +1,6 @@
+from roguengine.rogue_esper import Processor
 from roguengine.systems.callable.components import CallableComponent, KeyCallableComponent
 from roguengine.systems.callable.events import KeyPressedEvent
-from roguengine.rogue_esper import Processor
 
 
 class CallableProcessor(Processor):

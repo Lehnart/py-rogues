@@ -1,7 +1,6 @@
-from roguengine.systems.dungeon.events import MoveEvent
-from roguengine.systems.input.components import InputListenerComponent
-from roguengine.systems.menu.events import MenuSelectEvent
 from roguengine.rogue_esper import Processor
+from roguengine.systems.input.tools import is_listening
+from roguengine.systems.menu.events import MenuSelectEvent, MenuMoveEvent
 from roguengine.systems.ui.components import MenuComponent
 
 
@@ -11,12 +10,14 @@ class MenuProcessor(Processor):
         super().__init__()
 
     def process(self):
-        messages = self.world.receive(MoveEvent)
+        messages = self.world.receive(MenuMoveEvent)
         for msg in messages:
-            _, dy = msg.movement.dx_dy()
+            _, dy = msg.dx, msg.dy
             if dy == 0:
                 continue
 
-            for menu_entity, [menu, _] in self.world.get_components(MenuComponent, InputListenerComponent):
+            for menu_entity, [menu] in self.world.get_components(MenuComponent):
+                if not is_listening(self.world, menu_entity):
+                    continue
                 menu.move_selection(dy)
                 self.world.publish(MenuSelectEvent(menu_entity))

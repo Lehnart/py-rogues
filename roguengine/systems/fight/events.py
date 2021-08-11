@@ -8,6 +8,7 @@ class FightEvent(Event):
         self.attacker = attacker
         self.defender = defender
 
+
 class WearArmorEvent(Event):
 
     def __init__(self, slot_entity: int):

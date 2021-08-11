@@ -111,4 +111,3 @@ class FighterComponent:
 
     def type(self) -> Type:
         return self._type
-

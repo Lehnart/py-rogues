@@ -9,6 +9,11 @@ def is_fighter(world: esper.World, entity: int) -> bool:
     return world.has_component(entity, FighterComponent)
 
 
+def get_last_attacker(world: esper.World, entity: int) -> Optional[int]:
+    fighter_component = world.component_for_entity(entity, FighterComponent)
+    return fighter_component.last_attacker()
+
+
 def get_weapon_at(world: esper.World, x: int, y: int) -> Optional[Tuple[int, WeaponComponent]]:
     weapons = []
     entities = get_entities_at(world, x, y)

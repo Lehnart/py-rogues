@@ -1,7 +1,7 @@
 from typing import Callable, Type
 
-from roguengine.systems.callable.events import KeyPressedEvent
 from roguengine.rogue_esper import Event
+from roguengine.systems.callable.events import KeyPressedEvent
 
 
 class CallableComponent:

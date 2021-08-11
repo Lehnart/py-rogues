@@ -1,8 +1,8 @@
 import random
 
 from roguengine.rogue_esper import Processor
-from roguengine.systems.dungeon.components import PositionComponent
 from roguengine.systems.dungeon.events import SetPositionEvent, RemovePositionEvent
+from roguengine.systems.dungeon.tools import get_position
 from roguengine.systems.fight.components import *
 from roguengine.systems.fight.components import WeaponSlotComponent, WeaponComponent, ArmorSlotComponent, ArmorComponent
 from roguengine.systems.fight.events import *
@@ -78,9 +78,7 @@ class WearWeaponProcessor(Processor):
             if not self.world.has_component(slot_ent, WeaponSlotComponent):
                 continue
 
-            slot_pos: PositionComponent = self.world.component_for_entity(slot_ent, PositionComponent)
-            x, y = slot_pos.xy()
-
+            x, y = get_position(self.world, slot_ent)
             weapon = get_weapon_at(self.world, x, y)
             if not weapon:
                 continue
@@ -113,8 +111,7 @@ class WearArmorProcessor(Processor):
             if not self.world.has_component(slot_ent, ArmorSlotComponent):
                 continue
 
-            slot_pos: PositionComponent = self.world.component_for_entity(slot_ent, PositionComponent)
-            x, y = slot_pos.xy()
+            x, y = get_position(self.world, slot_ent)
 
             armor = get_armor_at(self.world, x, y)
             if not armor:
