@@ -27,7 +27,7 @@ from roguengine.systems.log.processors import LoggerProcessor
 from roguengine.systems.look.processors import LookProcessor
 from roguengine.systems.player.components import PlayerComponent
 from roguengine.systems.render.components import WindowComponent
-from roguengine.systems.render.processors import RenderProcessor
+from roguengine.systems.render.processors import FixRenderProcessor
 from roguengine.systems.text_form.components import TextFormComponent
 from roguengine.systems.text_form.processors import TextFormProcessor
 from roguengine.systems.turn_count.components import TurnCountComponent
@@ -67,7 +67,7 @@ class GameWorld(rogue_esper.RogueWorld):
         self.add_processor(MoveProcessor(), 6)
         self.add_processor(DungeonGenerator(), 5)
         self.add_processor(InputProcessor(), 2)
-        self.add_processor(RenderProcessor(), 1)
+        self.add_processor(FixRenderProcessor(), 1)
 
     def _enter_name(self):
 

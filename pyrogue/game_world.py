@@ -17,7 +17,7 @@ from roguengine.systems.input.processors import InputProcessor
 from roguengine.systems.log.processors import LoggerProcessor
 from roguengine.systems.player.components import PlayerComponent
 from roguengine.systems.render.components import WindowComponent
-from roguengine.systems.render.processors import RenderProcessor
+from roguengine.systems.render.processors import FixRenderProcessor
 from roguengine.systems.time.processors import TimeProcessor
 from roguengine.systems.ui.components import DynamicLabelComponent
 from roguengine.systems.ui.processors import UIProcessor
@@ -179,7 +179,7 @@ class GameWorld(rogue_esper.RogueWorld):
         self.add_processor(DungeonCreator(tile_sprites, tile_invisible_sprites, tile_components, 0, 48), 4)
         self.add_processor(DungeonFiller([player_residents, monster_residents, item_residents], 0, 48), 3)
         self.add_processor(InputProcessor(), 2)
-        self.add_processor(RenderProcessor(), 1)
+        self.add_processor(FixRenderProcessor(), 1)
 
         dungeon = DungeonConfig(5, 25, 5, 10, 50, 47)
         self.publish(DungeonGenerationEvent(dungeon))

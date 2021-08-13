@@ -16,7 +16,7 @@ from roguengine.systems.menu.events import MenuSelectEvent
 from roguengine.systems.menu.processors import MenuProcessor
 
 from roguengine.systems.render.components import WindowComponent
-from roguengine.systems.render.processors import RenderProcessor
+from roguengine.systems.render.processors import FixRenderProcessor
 from roguengine.systems.ui.components import MenuComponent, LabelComponent, DynamicLabelComponent
 from roguengine.systems.ui.processors import UIProcessor
 
@@ -217,7 +217,7 @@ class GameWorld(rogue_esper.RogueWorld):
         self.add_processor(MenuProcessor())
         self.add_processor(UIProcessor(FONT))
         self.add_processor(InputProcessor())
-        self.add_processor(RenderProcessor())
+        self.add_processor(FixRenderProcessor())
 
     def is_running(self) -> bool:
         return self._is_running
