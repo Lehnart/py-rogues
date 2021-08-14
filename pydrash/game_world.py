@@ -1,16 +1,15 @@
 import pygame
 
 from pydrash.font import FONT
-from pydrash.sprites import SPRITE_DICT, UI_FRAME_SPRITE
+from pydrash.sprites import SPRITE_DICT, UI_FRAME_SPRITE, TILE_MAP_SPRITE, RESIDENT_MAP_SPRITE
 from roguengine import rogue_esper
 from roguengine.systems.ai.processors import AIProcessor
 from roguengine.systems.callable.processors import KeyCallableProcessor
 from roguengine.systems.dungeon.components import VWALL_TILE, HWALL_TILE, TLWALL_TILE, BLWALL_TILE, TRWALL_TILE, BRWALL_TILE, GROUND_TILE, \
     CORRIDOR_TILE, \
-    HDOOR_TILE, VDOOR_TILE, VOID_TILE, DungeonResidentComponent, MovableComponent, BlockComponent
-from roguengine.systems.dungeon.events import DungeonGenerationEvent
-from roguengine.systems.dungeon.processors import DungeonGenerator, DungeonResident, DungeonResidents, DungeonCreator, DungeonFiller, \
-    DungeonConfig, MoveProcessor
+    HDOOR_TILE, VDOOR_TILE, VOID_TILE, DungeonResidentComponent, MovableComponent, BlockComponent, FOREST_TILE, GRASS_TILE, WATER_TILE
+from roguengine.systems.dungeon.events import MapCreationEvent
+from roguengine.systems.dungeon.processors import DungeonResident, DungeonResidents, MoveProcessor, MapCreatorProcessor
 from roguengine.systems.fight.components import FighterComponent, Type, CharacterStatComponent
 from roguengine.systems.fight.processors import FightProcessor
 from roguengine.systems.gold.components import GoldBagComponent
@@ -39,6 +38,14 @@ class GameWorld(rogue_esper.RogueWorld):
         self.create_entity(window)
 
         player_sprite = SPRITE_DICT["player"]
+        player_comps = [
+            PlayerComponent(),
+            DungeonResidentComponent(),
+            GoldBagComponent(),
+            InputListenerComponent(),
+            FighterComponent(20, 15, 60, Type.HUMAN),
+            CharacterStatComponent(10, 10, 10, 10, 10, 10)
+        ]
         player_resident = DungeonResident(
             [
                 PlayerComponent(),
@@ -65,7 +72,10 @@ class GameWorld(rogue_esper.RogueWorld):
             CORRIDOR_TILE: SPRITE_DICT["corridor"],
             HDOOR_TILE: SPRITE_DICT["corridor"],
             VDOOR_TILE: SPRITE_DICT["corridor"],
-            VOID_TILE: SPRITE_DICT["void"]
+            VOID_TILE: SPRITE_DICT["void"],
+            FOREST_TILE: SPRITE_DICT["forest"],
+            GRASS_TILE: SPRITE_DICT["grass"],
+            WATER_TILE: SPRITE_DICT["water"]
         }
 
         tile_invisible_sprites = {
@@ -79,7 +89,10 @@ class GameWorld(rogue_esper.RogueWorld):
             CORRIDOR_TILE: SPRITE_DICT["corridor"],
             HDOOR_TILE: SPRITE_DICT["corridor"],
             VDOOR_TILE: SPRITE_DICT["corridor"],
-            VOID_TILE: SPRITE_DICT["void"]
+            VOID_TILE: SPRITE_DICT["void"],
+            FOREST_TILE: SPRITE_DICT["forest"],
+            GRASS_TILE: SPRITE_DICT["grass"],
+            WATER_TILE: SPRITE_DICT["water"]
         }
 
         tile_components = {
@@ -93,11 +106,26 @@ class GameWorld(rogue_esper.RogueWorld):
             CORRIDOR_TILE: [MovableComponent],
             HDOOR_TILE: [MovableComponent],
             VDOOR_TILE: [MovableComponent],
-            VOID_TILE: [OpaqueComponent]
+            VOID_TILE: [OpaqueComponent],
+            FOREST_TILE: [BlockComponent, OpaqueComponent],
+            GRASS_TILE: [MovableComponent],
+            WATER_TILE: [BlockComponent],
+        }
+
+        tile_dict = {
+            (0, 85, 28): FOREST_TILE,
+            (0, 127, 14): GRASS_TILE,
+            (127, 51, 0): CORRIDOR_TILE,
+            (28, 27, 84): WATER_TILE,
+            (64, 64, 64): VWALL_TILE,
+            (128, 128, 128): GROUND_TILE
         }
 
         self.create_entity(UISpriteComponent(UI_FRAME_SPRITE))
 
+        self.add_processor(
+            MapCreatorProcessor(TILE_MAP_SPRITE, RESIDENT_MAP_SPRITE, tile_dict, player_sprite, player_comps, tile_components, tile_sprites,
+                                tile_invisible_sprites), 17)
         self.add_processor(AIProcessor(), 17)
         self.add_processor(FightProcessor(), 16)
         self.add_processor(TextFormProcessor(), 15)
@@ -109,15 +137,16 @@ class GameWorld(rogue_esper.RogueWorld):
         self.add_processor(UIProcessor(FONT), 9)
         self.add_processor(FOVViewProcessor(), 7)
         self.add_processor(MoveProcessor(), 6)
-        self.add_processor(DungeonCreator(tile_sprites, tile_invisible_sprites, tile_components, 0, 48), 4)
-        self.add_processor(DungeonFiller([player_residents], 0, 48), 3)
-        self.add_processor(DungeonGenerator(), 5)
+        # self.add_processor(DungeonCreator(tile_sprites, tile_invisible_sprites, tile_components, 0, 48), 4)
+        # self.add_processor(DungeonFiller([player_residents], 0, 48), 3)
+        # self.add_processor(DungeonGenerator(), 5)
         self.add_processor(InputProcessor(), 2)
         self.add_processor(CenteredViewRenderProcessor(16, 16, 608, 720), 1)
 
-        dungeon = DungeonConfig(4, 10, 8, 16, 40, 40)
-        self.publish(DungeonGenerationEvent(dungeon))
+        # dungeon = DungeonConfig(4, 10, 8, 16, 40, 40)
+        # self.publish(DungeonGenerationEvent(dungeon))
 
+        self.publish(MapCreationEvent())
         self.publish(LogEvent("Welcome to the dungeon of Drash!"))
 
     def is_running(self) -> bool:

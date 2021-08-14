@@ -6,7 +6,7 @@ from roguengine.rogue_esper import Processor
 from roguengine.systems.ai.events import AIEvent
 from roguengine.systems.dungeon.components import *
 from roguengine.systems.dungeon.events import DungeonCreationEvent, DungeonFillingEvent, DungeonGenerationEvent, MoveEvent, SetPositionEvent, \
-    RemovePositionEvent
+    RemovePositionEvent, MapCreationEvent
 from roguengine.systems.dungeon.tools import get_entities_at, is_movable
 from roguengine.systems.fight.events import FightEvent
 from roguengine.systems.fight.tools import is_fighter
@@ -390,6 +390,77 @@ class DungeonFiller(Processor):
                     resident.created()
                     room.set_occupied(rx, ry)
                     break
+
+
+class MapCreatorProcessor(Processor):
+
+    def __init__(
+            self,
+            tile_surf: pygame.Surface,
+            resident_surf: pygame.Surface,
+            tile_map: Dict[Tuple[int, int, int], Tile],
+            resident_sprite: pygame.Surface,
+            resident_comps: List,
+            tile_components: Dict[Tile, List],
+            tile_sprites: Dict[Tile, pygame.Surface],
+            tile_invisible_sprites: Dict[Tile, pygame.Surface] = None,
+
+    ):
+        super().__init__()
+        self.tile_surf = tile_surf
+        self.resident_surf = resident_surf
+        self.tile_map = tile_map
+        self.tile_components = tile_components
+        self.tile_sprites = tile_sprites
+        self.tile_invisible_sprites = tile_invisible_sprites
+        self.resident_sprite = resident_sprite
+        self.resident_comps = resident_comps
+
+    def process(self):
+
+        messages: List[MapCreationEvent] = self.world.receive(MapCreationEvent)
+        for _ in messages:
+            self._create_map()
+
+    def _create_map(self):
+        tile_array = pygame.surfarray.pixels3d(self.tile_surf)
+        w, h, _ = tile_array.shape
+        grid = []
+        for i in range(0, w):
+            grid.append([])
+
+            for j in range(0, h):
+
+                c = tile_array[i, j]
+                c = tuple([int(p) for p in c])
+                tile = self.tile_map[c]
+
+                sprite = self.tile_sprites[tile]
+                invisible_sprite = None
+                if self.tile_invisible_sprites and tile in self.tile_invisible_sprites:
+                    invisible_sprite = self.tile_invisible_sprites[tile]
+
+                pos = PositionComponent(i, j)
+                components = [*[c() for c in self.tile_components[tile]], pos]
+                ent = self.world.create_entity(*components)
+
+                grid[-1].append(tile)
+
+                px = (i * sprite.get_width())
+                py = (j * sprite.get_height())
+                self.world.publish(CreateSpriteEvent(ent, px, py, sprite))
+                if invisible_sprite:
+                    self.world.publish(CreateSpriteEvent(ent, px, py, invisible_sprite, is_invisible=True))
+
+        self.world.create_entity(DungeonComponent(grid, []))
+
+        pos = PositionComponent(32, 8)
+        components = [*deepcopy(self.resident_comps), pos]
+
+        new_ent = self.world.create_entity(*components)
+        px = (32 * self.resident_sprite.get_width())
+        py = (8 * self.resident_sprite.get_height())
+        self.world.publish(CreateSpriteEvent(new_ent, px, py, self.resident_sprite, 3))
 
 
 class MoveProcessor(Processor):

@@ -38,20 +38,23 @@ class WallType(Enum):
     TOP_RIGHT_CORNER_WALL = 3,
     BOTTOM_LEFT_CORNER_WALL = 4,
     BOTTOM_RIGHT_CORNER_WALL = 5,
+    FOREST = 6,
+    WATER = 7
 
 
 class DoorType(Enum):
     HDOOR = 0,
-    VDOOR = 1,
+    VDOOR = 1
 
 
 class GroundType(Enum):
     GROUND = 0,
     CORRIDOR = 1,
+    GRASS = 2
 
 
 class VoidType(Enum):
-    VOID = 0,
+    VOID = 0
 
 
 class Tile:
@@ -91,9 +94,12 @@ TLWALL_TILE = WallTile(WallType.TOP_LEFT_CORNER_WALL)
 BLWALL_TILE = WallTile(WallType.BOTTOM_LEFT_CORNER_WALL)
 TRWALL_TILE = WallTile(WallType.TOP_RIGHT_CORNER_WALL)
 BRWALL_TILE = WallTile(WallType.BOTTOM_RIGHT_CORNER_WALL)
+FOREST_TILE = WallTile(WallType.FOREST)
+WATER_TILE = WallTile(WallType.WATER)
 
 GROUND_TILE = GroundTile(GroundType.GROUND)
 CORRIDOR_TILE = GroundTile(GroundType.CORRIDOR)
+GRASS_TILE = GroundTile(GroundType.GRASS)
 
 HDOOR_TILE = DoorTile(DoorType.HDOOR)
 VDOOR_TILE = DoorTile(DoorType.VDOOR)

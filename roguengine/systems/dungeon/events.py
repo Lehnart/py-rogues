@@ -4,6 +4,12 @@ from roguengine.rogue_esper import Event
 from roguengine.systems.dungeon.components import DungeonComponent
 
 
+class MapCreationEvent(Event):
+
+    def __init__(self):
+        super().__init__()
+
+
 class DungeonCreationEvent(Event):
 
     def __init__(self, dungeon: DungeonComponent):
