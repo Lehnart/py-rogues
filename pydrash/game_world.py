@@ -1,7 +1,7 @@
 import pygame
 
 from pydrash.font import FONT
-from pydrash.sprites import SPRITE_DICT
+from pydrash.sprites import SPRITE_DICT, UI_FRAME_SPRITE
 from roguengine import rogue_esper
 from roguengine.systems.ai.processors import AIProcessor
 from roguengine.systems.callable.processors import KeyCallableProcessor
@@ -16,6 +16,7 @@ from roguengine.systems.fight.processors import FightProcessor
 from roguengine.systems.gold.components import GoldBagComponent
 from roguengine.systems.input.components import InputListenerComponent
 from roguengine.systems.input.processors import InputProcessor
+from roguengine.systems.log.events import LogEvent
 from roguengine.systems.log.processors import LoggerProcessor
 from roguengine.systems.look.processors import LookProcessor
 from roguengine.systems.player.components import PlayerComponent
@@ -23,6 +24,7 @@ from roguengine.systems.render.components import WindowComponent
 from roguengine.systems.render.processors import CenteredViewRenderProcessor
 from roguengine.systems.text_form.processors import TextFormProcessor
 from roguengine.systems.turn_count.processors import TurnCounterProcessor
+from roguengine.systems.ui.components import UISpriteComponent
 from roguengine.systems.ui.processors import BlinkProcessor, UIProcessor
 from roguengine.systems.view.components import OpaqueComponent
 from roguengine.systems.view.processors import FOVViewProcessor
@@ -94,13 +96,15 @@ class GameWorld(rogue_esper.RogueWorld):
             VOID_TILE: [OpaqueComponent]
         }
 
+        self.create_entity(UISpriteComponent(UI_FRAME_SPRITE))
+
         self.add_processor(AIProcessor(), 17)
         self.add_processor(FightProcessor(), 16)
         self.add_processor(TextFormProcessor(), 15)
         self.add_processor(KeyCallableProcessor(), 14)
         self.add_processor(BlinkProcessor(), 13)
         self.add_processor(LookProcessor(640, 0, 160, 800, FONT), 12)
-        self.add_processor(LoggerProcessor(0, 0, FONT, 3, pygame.Color(255, 255, 255), pygame.Color(128, 128, 128)), 11)
+        self.add_processor(LoggerProcessor(16, 738, FONT, 4, pygame.Color(255, 255, 255), pygame.Color(128, 128, 128)), 11)
         self.add_processor(TurnCounterProcessor(), 10)
         self.add_processor(UIProcessor(FONT), 9)
         self.add_processor(FOVViewProcessor(), 7)
@@ -109,10 +113,12 @@ class GameWorld(rogue_esper.RogueWorld):
         self.add_processor(DungeonFiller([player_residents], 0, 48), 3)
         self.add_processor(DungeonGenerator(), 5)
         self.add_processor(InputProcessor(), 2)
-        self.add_processor(CenteredViewRenderProcessor(32, 32, 640, 640), 1)
+        self.add_processor(CenteredViewRenderProcessor(16, 16, 608, 720), 1)
 
         dungeon = DungeonConfig(4, 10, 8, 16, 40, 40)
         self.publish(DungeonGenerationEvent(dungeon))
+
+        self.publish(LogEvent("Welcome to the dungeon of Drash!"))
 
     def is_running(self) -> bool:
         return self._is_running

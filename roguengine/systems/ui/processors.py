@@ -1,5 +1,5 @@
 from roguengine.rogue_esper import Processor
-from roguengine.systems.render.events import DrawStringEvent
+from roguengine.systems.render.events import DrawStringEvent, DrawSpriteEvent
 from roguengine.systems.ui.components import *
 from roguengine.util.font import Font
 
@@ -73,3 +73,7 @@ class UIProcessor(Processor):
             w = int((r * gauge.width) / self.font.get_char_width())
             s = gauge.label
             self.world.publish(DrawStringEvent(s[:w].ljust(w), x, y, gauge.font_color, bkgd_color, self.font))
+
+        sprite_components = self.world.get_component(UISpriteComponent)
+        for _, sprite_component in sprite_components:
+            self.world.publish(DrawSpriteEvent(0, 0, sprite_component.sprite))

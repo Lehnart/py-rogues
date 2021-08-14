@@ -16,6 +16,15 @@ class DrawStringEvent(Event):
         self.bkgd_color = bkgd_color
 
 
+class DrawSpriteEvent(Event):
+
+    def __init__(self, x0: int, y0: int, sprite: pygame.Surface):
+        super().__init__()
+        self.x0 = x0
+        self.y0 = y0
+        self.sprite = sprite
+
+
 class SetSpriteEvent(Event):
 
     def __init__(self, ent: int, sprite: pygame.Surface, is_invisible: bool = False):

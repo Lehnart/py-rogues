@@ -8,6 +8,12 @@ import pygame
 from roguengine import rogue_esper
 
 
+class UISpriteComponent:
+
+    def __init__(self, sprite: pygame.Surface):
+        self.sprite = sprite
+
+
 class BlinkingComponent:
 
     def __init__(self, period: float):

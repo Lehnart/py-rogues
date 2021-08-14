@@ -6,7 +6,8 @@ import pygame
 from roguengine.rogue_esper import Processor
 from roguengine.systems.player.tools import get_player_entity
 from roguengine.systems.render.components import WindowComponent, InvisibleSpriteComponent, VisibleSpriteComponent, _SpriteComponent
-from roguengine.systems.render.events import DrawStringEvent, UpdateSpritePositionEvent, FlipEvent, MoveSpriteEvent, CreateSpriteEvent, SetSpriteEvent
+from roguengine.systems.render.events import DrawStringEvent, UpdateSpritePositionEvent, FlipEvent, MoveSpriteEvent, CreateSpriteEvent, \
+    SetSpriteEvent, DrawSpriteEvent
 from roguengine.systems.view.tools import has_been_viewed, is_visible
 
 FRAME_PER_SECONDS = 60
@@ -92,7 +93,11 @@ class _RenderProcessor(Processor):
         sprite_components = [s for s in sprite_components if s.is_shown()]
         return sprite_components
 
-    def _draw_strings(self, window_surface: pygame.Surface):
+    def _draw_ui(self, window_surface: pygame.Surface):
+
+        for msg in self.world.receive(DrawSpriteEvent):
+            window_surface.blit(msg.sprite, (msg.x0, msg.y0))
+
         for msg in self.world.receive(DrawStringEvent):
             font = msg.font
             font.draw_string(msg.s, msg.x, msg.y, window_surface, msg.font_color, msg.bkgd_color)
@@ -108,7 +113,7 @@ class _RenderProcessor(Processor):
         for sprite_component in sprite_components:
             window_surface.blit(sprite_component.sprite(), sprite_component.top_left_pixel_position())
 
-        self._draw_strings(window_surface)
+        self._draw_ui(window_surface)
         pygame.display.flip()
         window_surface.fill((0, 0, 0))
 
@@ -157,7 +162,7 @@ class CenteredViewRenderProcessor(_RenderProcessor):
             px, py = sprite_component.top_left_pixel_position()
             window_surface.blit(sprite_component.sprite(), (px - x_off + (self.width // 2), py - y_off + (self.height // 2)))
 
-        super()._draw_strings(window_surface)
+        super()._draw_ui(window_surface)
 
         pygame.display.flip()
         window_surface.fill((0, 0, 0))

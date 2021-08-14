@@ -5,6 +5,7 @@ pygame.init()
 SPRITE_WIDTH = 16
 SPRITE_HEIGHT = 16
 SPRITE_SHEET: pygame.Surface = pygame.image.load("res/sprites.png")
+UI_FRAME_SPRITE: pygame.Surface = pygame.image.load("res/ui.png")
 
 
 def get_sprite(px: int, py: int) -> pygame.Surface:
