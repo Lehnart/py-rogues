@@ -19,11 +19,12 @@ from roguengine.systems.log.events import LogEvent
 from roguengine.systems.log.processors import LoggerProcessor
 from roguengine.systems.look.processors import LookProcessor
 from roguengine.systems.player.components import PlayerComponent
+from roguengine.systems.player.tools import get_player_entity
 from roguengine.systems.render.components import WindowComponent
 from roguengine.systems.render.processors import CenteredViewRenderProcessor
 from roguengine.systems.text_form.processors import TextFormProcessor
 from roguengine.systems.turn_count.processors import TurnCounterProcessor
-from roguengine.systems.ui.components import UISpriteComponent
+from roguengine.systems.ui.components import UISpriteComponent, DynamicLabelComponent
 from roguengine.systems.ui.processors import BlinkProcessor, UIProcessor
 from roguengine.systems.view.components import OpaqueComponent
 from roguengine.systems.view.processors import FOVViewProcessor
@@ -126,7 +127,7 @@ class GameWorld(rogue_esper.RogueWorld):
         self.add_processor(
             MapCreatorProcessor(
                 TILE_MAP_SPRITE, tile_dict, tile_components, tile_sprites,
-                RESIDENT_MAP_SPRITE, { (255,0,0) :"player" }, {"player" : player_sprite},  {"player" : player_comps},
+                RESIDENT_MAP_SPRITE, {(255, 0, 0): "player"}, {"player": player_sprite}, {"player": player_comps},
                 tile_invisible_sprites
             ), 17
         )
@@ -147,8 +148,39 @@ class GameWorld(rogue_esper.RogueWorld):
         self.publish(MapCreationEvent())
         self.publish(LogEvent("Welcome to the dungeon of Drash!"))
 
+        label = DynamicLabelComponent(650, 32, get_player_state, pygame.Color(254, 254, 254), pygame.Color(1, 1, 1))
+        self.create_entity(label)
+
     def is_running(self) -> bool:
         return self._is_running
+
+
+def get_player_state(world: rogue_esper.RogueWorld) -> str:
+    player_ent = get_player_entity(world)
+
+    if not player_ent:
+        return ""
+
+    ui_str = "lvl:"
+
+    player_component = world.component_for_entity(player_ent, PlayerComponent)
+    ui_str += str(player_component.level()) + "   \n"
+
+    if world.has_component(player_ent, GoldBagComponent):
+        goldbag_component = world.component_for_entity(player_ent, GoldBagComponent)
+        ui_str += "$:" + str(goldbag_component.amount()) + " \n"
+
+    if world.has_component(player_ent, FighterComponent):
+        fighter_component = world.component_for_entity(player_ent, FighterComponent)
+        hp = fighter_component.hp()
+        hp_max = fighter_component.hp_max()
+        atk = fighter_component.attack()
+        arm = fighter_component.defense()
+        exp = player_component.exp()
+
+        ui_str += "HP:{}({})\nPw:{}({})\nAC:{}\nXp:{} ".format(hp, hp_max, atk, atk, arm, exp)
+
+    return ui_str
 
 
 def run():
