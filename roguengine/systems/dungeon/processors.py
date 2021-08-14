@@ -397,23 +397,25 @@ class MapCreatorProcessor(Processor):
     def __init__(
             self,
             tile_surf: pygame.Surface,
-            resident_surf: pygame.Surface,
             tile_map: Dict[Tuple[int, int, int], Tile],
-            resident_sprite: pygame.Surface,
-            resident_comps: List,
             tile_components: Dict[Tile, List],
             tile_sprites: Dict[Tile, pygame.Surface],
-            tile_invisible_sprites: Dict[Tile, pygame.Surface] = None,
+            resident_surf: pygame.Surface,
+            resident_map: Dict[Tuple[int, int, int], str],
+            resident_sprites: Dict[str, pygame.Surface],
+            resident_comps: Dict[str, List],
+            tile_invisible_sprites:  Dict[Tile, pygame.Surface] = None,
 
     ):
         super().__init__()
         self.tile_surf = tile_surf
-        self.resident_surf = resident_surf
         self.tile_map = tile_map
         self.tile_components = tile_components
         self.tile_sprites = tile_sprites
         self.tile_invisible_sprites = tile_invisible_sprites
-        self.resident_sprite = resident_sprite
+        self.resident_surf = resident_surf
+        self.resident_map = resident_map
+        self.resident_sprites = resident_sprites
         self.resident_comps = resident_comps
 
     def process(self):
@@ -454,13 +456,26 @@ class MapCreatorProcessor(Processor):
 
         self.world.create_entity(DungeonComponent(grid, []))
 
-        pos = PositionComponent(32, 8)
-        components = [*deepcopy(self.resident_comps), pos]
+        resident_array = pygame.surfarray.pixels3d(self.resident_surf)
 
-        new_ent = self.world.create_entity(*components)
-        px = (32 * self.resident_sprite.get_width())
-        py = (8 * self.resident_sprite.get_height())
-        self.world.publish(CreateSpriteEvent(new_ent, px, py, self.resident_sprite, 3))
+        for i in range(0, w):
+            for j in range(0, h):
+
+                c = resident_array[i, j]
+                c = tuple([int(p) for p in c])
+
+                if c not in self.resident_map :
+                    continue
+
+                resident_str = self.resident_map[c]
+
+                pos = PositionComponent(i, j)
+                components = [*deepcopy(self.resident_comps[resident_str]), pos]
+
+                new_ent = self.world.create_entity(*components)
+                px = (i * self.resident_sprites[resident_str].get_width())
+                py = (j * self.resident_sprites[resident_str].get_height())
+                self.world.publish(CreateSpriteEvent(new_ent, px, py, self.resident_sprites[resident_str], 3))
 
 
 class MoveProcessor(Processor):

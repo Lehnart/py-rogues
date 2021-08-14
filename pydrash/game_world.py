@@ -124,8 +124,12 @@ class GameWorld(rogue_esper.RogueWorld):
         self.create_entity(UISpriteComponent(UI_FRAME_SPRITE))
 
         self.add_processor(
-            MapCreatorProcessor(TILE_MAP_SPRITE, RESIDENT_MAP_SPRITE, tile_dict, player_sprite, player_comps, tile_components, tile_sprites,
-                                tile_invisible_sprites), 17)
+            MapCreatorProcessor(
+                TILE_MAP_SPRITE, tile_dict, tile_components, tile_sprites,
+                RESIDENT_MAP_SPRITE, { (255,0,0) :"player" }, {"player" : player_sprite},  {"player" : player_comps},
+                tile_invisible_sprites
+            ), 17
+        )
         self.add_processor(AIProcessor(), 17)
         self.add_processor(FightProcessor(), 16)
         self.add_processor(TextFormProcessor(), 15)
@@ -137,14 +141,8 @@ class GameWorld(rogue_esper.RogueWorld):
         self.add_processor(UIProcessor(FONT), 9)
         self.add_processor(FOVViewProcessor(), 7)
         self.add_processor(MoveProcessor(), 6)
-        # self.add_processor(DungeonCreator(tile_sprites, tile_invisible_sprites, tile_components, 0, 48), 4)
-        # self.add_processor(DungeonFiller([player_residents], 0, 48), 3)
-        # self.add_processor(DungeonGenerator(), 5)
         self.add_processor(InputProcessor(), 2)
         self.add_processor(CenteredViewRenderProcessor(16, 16, 608, 720), 1)
-
-        # dungeon = DungeonConfig(4, 10, 8, 16, 40, 40)
-        # self.publish(DungeonGenerationEvent(dungeon))
 
         self.publish(MapCreationEvent())
         self.publish(LogEvent("Welcome to the dungeon of Drash!"))
