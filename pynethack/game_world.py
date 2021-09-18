@@ -88,9 +88,9 @@ class GameWorld(rogue_esper.RogueWorld):
         player_name = t.get()
 
         for e, _ in self.get_component(LabelComponent):
-            self.delete_entity(e)
+            self.delete_entity(e,True)
         for e, _ in self.get_component(DynamicLabelComponent):
-            self.delete_entity(e)
+            self.delete_entity(e,True)
 
         player_sprite = SPRITE_DICT["player"]
         player_resident = DungeonResident(
@@ -170,7 +170,7 @@ class GameWorld(rogue_esper.RogueWorld):
 
         self.create_ui(player_name)
 
-        self.add_processor(DoorProcessor(door_sprites), 8)
+        self.add_processor(DoorProcessor(door_sprites), 18)
         self.add_processor(DungeonCreator(tile_sprites, tile_invisible_sprites, tile_components, 0, 48), 4)
         self.add_processor(DungeonFiller([player_residents, monster_residents], 0, 48), 3)
 
