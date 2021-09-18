@@ -8,6 +8,7 @@ from roguengine.systems.fight.components import WeaponSlotComponent, WeaponCompo
 from roguengine.systems.fight.events import *
 from roguengine.systems.fight.tools import get_weapon_at, get_armor_at
 from roguengine.systems.log.events import LogEvent
+from roguengine.systems.player.tools import is_player
 from roguengine.systems.render.events import UpdateSpritePositionEvent, FlipEvent
 from roguengine.systems.render.tools import get_sprite_position
 
@@ -20,6 +21,8 @@ class FightProcessor(Processor):
     def process(self):
         for msg in self.world.receive(FightEvent):
             attacker_ent, defender_ent = msg.attacker, msg.defender
+
+            is_attacker_player = is_player(self.world, attacker_ent)
 
             try:
                 attacker = self.world.component_for_entity(attacker_ent, FighterComponent)
@@ -50,21 +53,29 @@ class FightProcessor(Processor):
 
             roll_need = 20 - attacker.attack() - attack_bonus + defender.defense() + defense_bonus
             roll = random.randint(1, 20)
+
+            log_message = ""
             if roll >= roll_need:
-                msg = "You have hit."
                 damage = random.randint(1, 4)
-                msg += "You did " + str(damage) + " damage."
                 defender.damage(damage)
                 if defender.hp() > 0:
-                    msg += "Enemy has " + str(defender.hp()) + " left."
+                    if is_attacker_player:
+                        log_message += "You have hit."
+                        log_message += "You did " + str(damage) + " damage."
+                        log_message += "Enemy has " + str(defender.hp()) + " left."
                 else:
-                    msg += "Enemy is dead."
+                    if is_attacker_player:
+                        log_message += "You have hit."
+                        log_message += "You did " + str(damage) + " damage."
+                        log_message += "Enemy is dead."
                     self.world.delete_entity(defender_ent, True)
 
-                self.world.publish(LogEvent(msg))
+                if log_message != "" :
+                    self.world.publish(LogEvent(log_message))
 
             else:
-                self.world.publish(LogEvent("You have miss."))
+                if is_attacker_player:
+                    self.world.publish(LogEvent("You have miss."))
 
 
 class WearWeaponProcessor(Processor):
