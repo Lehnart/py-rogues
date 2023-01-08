@@ -1,3 +1,6 @@
 [submodule "roguengine/esper"]
 	path = roguengine/esper
 	url = https://github.com/benmoran56/esper.git
+[submodule "mesper"]
+	path = mesper
+	url = https://github.com/Lehnart/mesper
